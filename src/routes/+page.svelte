@@ -124,7 +124,7 @@
 <button on:click={() => (showModal = true)}>Create New</button>
 
 <section>
-	<Calendar transactionsEvents={transactions} on:edit={editTransactionHandler}></Calendar>
+	<Calendar {transactions} on:edit={editTransactionHandler}></Calendar>
 </section>
 
 <Modal bind:showModal on:close={clean}>

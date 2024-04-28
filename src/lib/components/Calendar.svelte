@@ -2,25 +2,60 @@
 	import type { Transaction } from './types';
 	import Slot from './Slot.svelte';
 	import TransactionEvent from './TransactionEvent.svelte';
+	import { createEventDispatcher } from 'svelte';
 
-	export let transactionsEvents: Transaction[] = [];
+	export let transactions: Transaction[] = [];
+
+	const dispatch = createEventDispatcher();
 
 	let year = new Date().getFullYear();
 	let month = new Date().getMonth();
 	let currentDay = new Date().getDate();
 
-	let firsDateOfMonth;
-	let lastDateOfMonth;
-	let lastDayOfMonth: number;
-	let firstWeekDayOfMonth: number;
-	let lastWeekDayOfMonth: number;
+	$: calendarSlots = getCalendarSlots(month, year, transactions);
 
-	function updateCalendar() {
-		firsDateOfMonth = new Date(year, month, 1);
-		lastDateOfMonth = new Date(year, month + 1, 0);
-		lastDayOfMonth = lastDateOfMonth.getDate();
-		firstWeekDayOfMonth = firsDateOfMonth.getDay();
-		lastWeekDayOfMonth = lastDateOfMonth.getDay();
+	function getCalendarSlots(month: number, year: number, transactions: Transaction[]) {
+		const firsDateOfMonth = new Date(year, month, 1);
+		const lastDateOfMonth = new Date(year, month + 1, 0);
+		const lastDayOfMonth = lastDateOfMonth.getDate();
+		const firstWeekDayOfMonth = firsDateOfMonth.getDay();
+		const lastWeekDayOfMonth = lastDateOfMonth.getDay();
+		return [
+			...Array.from({ length: firstWeekDayOfMonth }, (_, i) => ({
+				day: new Date(year, month, 1 - firstWeekDayOfMonth + i).getDate(),
+				month: month - 1,
+				disabled: true,
+				events: transactions.filter(
+					(transaction) =>
+						transaction.startDate.getFullYear() === year &&
+						transaction.startDate.getMonth() === month - 1 &&
+						transaction.startDate.getDate() ===
+							new Date(year, month, 1 - firstWeekDayOfMonth + i).getDate()
+				)
+			})),
+			...Array.from({ length: lastDayOfMonth }, (_, i) => ({
+				day: i + 1,
+				month: month,
+				disabled: false,
+				events: transactions.filter(
+					(transaction) =>
+						transaction.startDate.getFullYear() === year &&
+						transaction.startDate.getMonth() === month &&
+						transaction.startDate.getDate() === i + 1
+				)
+			})),
+			...Array.from({ length: 6 - lastWeekDayOfMonth }, (_, i) => ({
+				day: i + 1,
+				month: month + 1,
+				disabled: true,
+				events: transactions.filter(
+					(transaction) =>
+						transaction.startDate.getFullYear() === year &&
+						transaction.startDate.getMonth() === month + 1 &&
+						transaction.startDate.getDate() === i + 1
+				)
+			}))
+		];
 	}
 
 	function prevMonth() {
@@ -29,7 +64,10 @@
 			month = 11;
 			year -= 1;
 		}
-		updateCalendar();
+		dispatch('change', {
+			month,
+			year
+		});
 	}
 
 	function nextMonth() {
@@ -38,23 +76,20 @@
 			month = 0;
 			year += 1;
 		}
-		updateCalendar();
+		dispatch('change', {
+			month,
+			year
+		});
 	}
 
 	function today() {
 		year = new Date().getFullYear();
 		month = new Date().getMonth();
-		updateCalendar();
-	}
-
-	function getAllDayEvents(day: number) {
-		return transactionsEvents.filter((transactionEvent) => {
-			const date = transactionEvent.startDate;
-			return date.getFullYear() === year && date.getMonth() === month && date.getDate() === day;
+		dispatch('change', {
+			month,
+			year
 		});
 	}
-
-	updateCalendar();
 </script>
 
 <section>
@@ -73,31 +108,21 @@
 			<span class="p-2 font-bold">Sat</span>
 		</div>
 		<div class="grid grid-cols-7 gap-0.5">
-			{#if firstWeekDayOfMonth > 0}
-				{#each Array.from({ length: firstWeekDayOfMonth }, (_, i) => i + 1) as day}
-					<Slot disabled>{new Date(year, month, day - firstWeekDayOfMonth).getDate()}</Slot>
-				{/each}
-			{/if}
-			{#each Array.from({ length: lastDayOfMonth }, (_, i) => i + 1) as day}
+			{#each calendarSlots as calendarSlot}
 				<Slot
-					active={day === currentDay &&
-						month === new Date().getMonth() &&
+					active={calendarSlot.day === currentDay &&
+						calendarSlot.month === new Date().getMonth() &&
 						year === new Date().getFullYear()}
+					disabled={calendarSlot.disabled}
 				>
-					<span slot="day">{day}</span>
+					<span slot="day">{calendarSlot.day}</span>
 					<div class="flex flex-wrap gap-1">
-						{#each getAllDayEvents(day) as transactionEvent}<TransactionEvent
-								{transactionEvent}
-								on:edit
-							></TransactionEvent>{/each}
-					</div></Slot
-				>
+						{#each calendarSlot.events as event}
+							<TransactionEvent transactionEvent={event} on:edit></TransactionEvent>
+						{/each}
+					</div>
+				</Slot>
 			{/each}
-			{#if lastWeekDayOfMonth < 6}
-				{#each Array.from({ length: 6 - lastWeekDayOfMonth }, (_, i) => i + 1) as day}
-					<Slot disabled>{day}</Slot>
-				{/each}
-			{/if}
 		</div>
 	</div>
 </section>
