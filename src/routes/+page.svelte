@@ -4,6 +4,7 @@
 	import Modal from '../lib/components/Modal.svelte';
 	import type { Category, Transaction } from '../lib/components/types';
 	import dayjs from 'dayjs';
+	import { convertUTCDateToLocalDate } from '$lib/utils/date';
 
 	let transactions: Transaction[] = [];
 	let activeTransaction: Transaction | null = null;
@@ -20,7 +21,6 @@
 		: dayjs().format('YYYY-MM-DD');
 
 	function editTransactionHandler(event: ComponentEvents<Calendar>['edit']) {
-		console.log(event.detail);
 		activeTransaction = event.detail;
 		categoryId = activeTransaction?.category.id ?? '';
 		categoryName = activeTransaction?.category.name ?? '';
@@ -61,8 +61,16 @@
 	async function saveTransaction(event: SubmitEvent) {
 		const formData = new FormData(event.target as HTMLFormElement);
 		const data = Object.fromEntries(formData);
-		data.category = categoryId;
-
+		const transaction = {
+			transactionType: data.transactionType,
+			amount: data.amount,
+			currencyCode: data.currencyCode,
+			startDate: convertUTCDateToLocalDate(dayjs(data.startDate as string)).format(),
+			endDate: data.endDate && convertUTCDateToLocalDate(dayjs(data.endDate as string)).format(),
+			repeatType: data.repeatType,
+			description: data.description,
+			category: categoryId
+		};
 		const response = await fetch(
 			`http://localhost:3000/transactions${activeTransaction ? `/${activeTransaction.id}` : ''}`,
 			{
@@ -70,13 +78,14 @@
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(data)
+				body: JSON.stringify(transaction)
 			}
 		);
 		const newTransaction = await response.json();
-		newTransaction.amount = Math.abs(newTransaction.amount);
-		newTransaction.startDate = new Date(newTransaction.startDate);
-		newTransaction.endDate = newTransaction.endDate ? new Date(newTransaction.endDate) : undefined;
+		newTransaction.amount = Math.abs(newTransaction.amount); // TODO should be retrieved as a no negative number
+		newTransaction.startDate = convertUTCDateToLocalDate(dayjs(newTransaction.startDate)).toDate();
+		newTransaction.endDate =
+			newTransaction.endDate && convertUTCDateToLocalDate(dayjs(newTransaction.endDate)).toDate();
 		transactions = [
 			...transactions.filter((transaction) => transaction.id !== newTransaction.id),
 			newTransaction
@@ -98,8 +107,9 @@
 		transactions = await responseTransactions.json();
 		transactions.forEach((transaction) => {
 			transaction.amount = Math.abs(transaction.amount);
-			transaction.startDate = new Date(transaction.startDate);
-			transaction.endDate = transaction.endDate ? new Date(transaction.endDate) : undefined;
+			transaction.startDate = convertUTCDateToLocalDate(dayjs(transaction.startDate)).toDate();
+			transaction.endDate =
+				transaction.endDate && convertUTCDateToLocalDate(dayjs(transaction.endDate)).toDate();
 		});
 		const responseCategories = await fetch(`http://localhost:3000/categories`);
 		categories = await responseCategories.json();
@@ -119,7 +129,6 @@
 
 <Modal bind:showModal on:close={clean}>
 	<h2 slot="header" class="font-bold">Transaction Details</h2>
-	<p>{activeTransaction?.description ?? 'empty'}</p>
 	<form
 		class="grid grid-cols-2 gap-4"
 		id="transactionForm"
@@ -153,6 +162,7 @@
 			<label for="amount" class="mb-3 block text-base font-medium">Amount</label>
 			<input
 				type="number"
+				step=".01"
 				id="amount"
 				name="amount"
 				placeholder="Amount"
@@ -179,6 +189,8 @@
 				name="endDate"
 				placeholder="End Date"
 				class="w-full rounded-md border border-neutral-300 bg-white p-3 text-base font-normal text-gray-500 outline-none focus:border-sky-400 focus:shadow-md"
+				value={activeTransaction?.endDate &&
+					dayjs(activeTransaction.startDate).format('YYYY-MM-DD')}
 			/>
 		</div>
 		<div>
