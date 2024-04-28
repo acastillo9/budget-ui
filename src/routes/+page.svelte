@@ -189,8 +189,9 @@
 				name="endDate"
 				placeholder="End Date"
 				class="w-full rounded-md border border-neutral-300 bg-white p-3 text-base font-normal text-gray-500 outline-none focus:border-sky-400 focus:shadow-md"
-				value={activeTransaction?.endDate &&
-					dayjs(activeTransaction.startDate).format('YYYY-MM-DD')}
+				value={activeTransaction?.endDate
+					? dayjs(activeTransaction.startDate).format('YYYY-MM-DD')
+					: ''}
 			/>
 		</div>
 		<div>
