@@ -15,7 +15,7 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions a11y-autofocus -->
+<!-- svelte-ignore a11y-click-events-have-key-events a11y-autofocus -->
 <dialog class="overflow-visible" bind:this={dialog} on:close={onCloseHandler}>
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div class="p-4 w-[50rem]" on:click|stopPropagation>
