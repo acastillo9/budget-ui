@@ -8,6 +8,7 @@ export interface Transaction {
 	repeatType: string;
 	description: string;
 	category: Category;
+	paid: boolean;
 }
 
 export interface Category {

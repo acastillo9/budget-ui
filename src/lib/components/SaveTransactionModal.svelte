@@ -28,7 +28,8 @@
 				endDate: '',
 				repeatType: 'NEVER',
 				description: '',
-				category: ''
+				category: '',
+				paid: false
 			};
 	$: categoryId = transaction ? transaction.category.id : '';
 	$: categoryName = transaction ? transaction.category.name : '';
@@ -54,7 +55,8 @@
 			endDate: '',
 			repeatType: 'NEVER',
 			description: '',
-			category: ''
+			category: '',
+			paid: false
 		};
 		categoryId = '';
 		categoryName = '';
@@ -228,6 +230,10 @@
 					</ul>
 				{/if}
 			</div>
+		</div>
+		<div>
+			<input type="checkbox" id="paid" name="paid" bind:checked={activeTransaction.paid} />
+			<label for="paid" class="ml-2 text-base font-medium">is paid?</label>
 		</div>
 	</form>
 	<div slot="buttons">
