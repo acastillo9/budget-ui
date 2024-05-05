@@ -20,3 +20,12 @@ export enum TransactionType {
 	EXPENSE = 'EXPENSE',
 	INCOME = 'INCOME'
 }
+
+export interface Balance {
+	[currency: string]: number;
+}
+
+export interface CalendarChangeEvent {
+	year: number;
+	month: number;
+}
