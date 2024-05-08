@@ -52,14 +52,14 @@
 	}
 
 	onMount(async () => {
-		const responseTransactions = await fetch(`${import.meta.env.VITE_API_URL}/transactions`);
-		transactions = await responseTransactions.json();
-		transactions.forEach((transaction) => {
-			transaction.amount = Math.abs(transaction.amount);
-			transaction.startDate = convertUTCDateToLocalDate(dayjs(transaction.startDate)).toDate();
-			transaction.endDate =
-				transaction.endDate && convertUTCDateToLocalDate(dayjs(transaction.endDate)).toDate();
-		});
+		// const responseTransactions = await fetch(`${import.meta.env.VITE_API_URL}/transactions`);
+		// transactions = await responseTransactions.json();
+		// transactions.forEach((transaction) => {
+		// 	transaction.amount = Math.abs(transaction.amount);
+		// 	transaction.startDate = convertUTCDateToLocalDate(dayjs(transaction.startDate)).toDate();
+		// 	transaction.endDate =
+		// 		transaction.endDate && convertUTCDateToLocalDate(dayjs(transaction.endDate)).toDate();
+		// });
 	});
 </script>
 

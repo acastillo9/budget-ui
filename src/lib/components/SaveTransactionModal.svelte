@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount } from 'svelte';
 	import Modal from './Modal.svelte';
-	import type { Category, Transaction } from './types';
+	import type { Category, Transaction } from '$lib/types';
 	import dayjs from 'dayjs';
 	import { convertUTCDateToLocalDate } from '$lib/utils/date';
 
@@ -94,8 +94,8 @@
 	}
 
 	onMount(async () => {
-		const responseCategories = await fetch(`http://localhost:3000/categories`);
-		categories = await responseCategories.json();
+		// const responseCategories = await fetch(`http://localhost:3000/categories`);
+		// categories = await responseCategories.json();
 	});
 </script>
 

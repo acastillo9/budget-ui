@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { TransactionType, type Transaction } from './types';
+	import { TransactionType, type Transaction } from '$lib/types';
 
 	export let transactionEvent: Transaction;
 

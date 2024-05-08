@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Transaction } from './types';
+	import type { Transaction } from '$lib/types';
 	import Slot from './Slot.svelte';
 	import TransactionEvent from './TransactionEvent.svelte';
 	import { createEventDispatcher } from 'svelte';
