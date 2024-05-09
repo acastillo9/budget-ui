@@ -25,6 +25,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 			const sessionUser: SessionUser = {
 				id: user.sub,
+				name: user.name,
 				email: user.username,
 				access_token: token
 			};
