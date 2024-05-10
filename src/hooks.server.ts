@@ -8,7 +8,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const cookies = parse(headers.get('cookie') ?? '');
 
 	if (cookies.AuthorizationToken) {
-		const token = cookies.AuthorizationToken.split(' ')[1];
+		const token = cookies.AuthorizationToken;
 
 		try {
 			const response = await fetch(`${API_URL}/auth/profile`, {

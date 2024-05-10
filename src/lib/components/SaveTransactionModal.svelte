@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	import Modal from './Modal.svelte';
 	import type { Category, Transaction } from '$lib/types';
 	import dayjs from 'dayjs';
@@ -7,10 +7,10 @@
 
 	export let showModal: boolean;
 	export let transaction: Transaction | null = null;
+	export let categories: Category[] = [];
 
 	const dispatch = createEventDispatcher();
 
-	let categories: Category[] = [];
 	let categoriesFiltered: Category[] = [];
 	let showConfirmationModal = false;
 
@@ -76,7 +76,7 @@
 	}
 
 	async function addCategory(categoryName: string) {
-		const response = await fetch(`http://localhost:3000/categories`, {
+		const response = await fetch('/categories', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -92,11 +92,6 @@
 		dispatch('delete', transaction!.id);
 		showConfirmationModal = false;
 	}
-
-	onMount(async () => {
-		// const responseCategories = await fetch(`http://localhost:3000/categories`);
-		// categories = await responseCategories.json();
-	});
 </script>
 
 <Modal bind:showModal on:close={close}>

@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import Calendar from '$lib/components/Calendar.svelte';
-	import type { Transaction } from '$lib/components/types';
+	import type { Category, Transaction } from '$lib/types';
 	import SaveTransactionModal from '$lib/components/SaveTransactionModal.svelte';
 	import dayjs from 'dayjs';
 	import { convertUTCDateToLocalDate } from '$lib/utils/date';
+
+	export let data: { transactions: Transaction[]; categories: Category[] };
 
 	let transactions: Transaction[] = [];
 	let activeTransaction: Transaction | null = null;
@@ -21,18 +22,15 @@
 	}
 
 	async function saveTransaction(transaction: Transaction) {
-		const response = await fetch(
-			`${import.meta.env.VITE_API_URL}/transactions${transaction.id ? `/${transaction.id}` : ''}`,
-			{
-				method: transaction.id ? 'PATCH' : 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(transaction)
-			}
-		);
+		const response = await fetch(`/transactions${transaction.id ? `/${transaction.id}` : ''}`, {
+			method: transaction.id ? 'PATCH' : 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(transaction)
+		});
 		const newTransaction = await response.json();
-		newTransaction.amount = Math.abs(newTransaction.amount); // TODO should be retrieved as a no negative number
+		newTransaction.amount = Math.abs(newTransaction.amount);
 		newTransaction.startDate = convertUTCDateToLocalDate(dayjs(newTransaction.startDate)).toDate();
 		newTransaction.endDate =
 			newTransaction.endDate && convertUTCDateToLocalDate(dayjs(newTransaction.endDate)).toDate();
@@ -44,22 +42,20 @@
 	}
 
 	async function deleteTransaction(id: string) {
-		await fetch(`${import.meta.env.VITE_API_URL}/transactions/${id}`, {
+		const response = await fetch(`/transactions/${id}`, {
 			method: 'DELETE'
 		});
-		transactions = transactions.filter((transaction) => transaction.id !== activeTransaction!.id);
+		const deletedTransaction = await response.json();
+		transactions = transactions.filter((transaction) => transaction.id !== deletedTransaction.id);
 		closeModal();
 	}
 
-	onMount(async () => {
-		// const responseTransactions = await fetch(`${import.meta.env.VITE_API_URL}/transactions`);
-		// transactions = await responseTransactions.json();
-		// transactions.forEach((transaction) => {
-		// 	transaction.amount = Math.abs(transaction.amount);
-		// 	transaction.startDate = convertUTCDateToLocalDate(dayjs(transaction.startDate)).toDate();
-		// 	transaction.endDate =
-		// 		transaction.endDate && convertUTCDateToLocalDate(dayjs(transaction.endDate)).toDate();
-		// });
+	transactions = data.transactions;
+	transactions.forEach((transaction) => {
+		transaction.amount = Math.abs(transaction.amount);
+		transaction.startDate = convertUTCDateToLocalDate(dayjs(transaction.startDate)).toDate();
+		transaction.endDate =
+			transaction.endDate && convertUTCDateToLocalDate(dayjs(transaction.endDate)).toDate();
 	});
 </script>
 
@@ -70,6 +66,7 @@
 
 <SaveTransactionModal
 	transaction={activeTransaction}
+	categories={data.categories}
 	{showModal}
 	on:save={(e) => saveTransaction(e.detail)}
 	on:delete={(e) => deleteTransaction(e.detail)}
