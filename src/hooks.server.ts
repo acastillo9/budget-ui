@@ -1,6 +1,6 @@
 import { API_URL } from '$env/static/private';
 import type { SessionUser } from '$lib/types';
-import type { Handle } from '@sveltejs/kit';
+import type { Handle, HandleFetch } from '@sveltejs/kit';
 import { parse } from 'cookie';
 
 export const handle: Handle = async ({ event, resolve }) => {
@@ -37,4 +37,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	return await resolve(event);
+};
+
+export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
+	if (event.locals.user) {
+		request.headers.set('Authorization', `Bearer ${event.locals.user.access_token}`);
+	}
+
+	return fetch(request);
 };
