@@ -2,6 +2,7 @@ export interface SessionUser {
 	id: string;
 	name: string;
 	email: string;
+	account: string;
 	access_token: string;
 }
 
@@ -35,4 +36,10 @@ export interface Balance {
 export interface CalendarChangeEvent {
 	year: number;
 	month: number;
+}
+
+export interface Account {
+	id: string;
+	balance: number;
+	monthBalance: number;
 }

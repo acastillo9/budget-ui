@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Calendar from '$lib/components/Calendar.svelte';
+	import Balance from '$lib/components/Balance.svelte';
 	import type { Category, Transaction } from '$lib/types';
 	import SaveTransactionModal from '$lib/components/SaveTransactionModal.svelte';
 	import dayjs from 'dayjs';
@@ -60,6 +61,7 @@
 </script>
 
 <section class="w-full">
+	<Balance />
 	<button on:click={() => (showModal = true)}>Create New</button>
 	<Calendar {transactions} on:edit={(e) => editTransaction(e.detail)}></Calendar>
 </section>
