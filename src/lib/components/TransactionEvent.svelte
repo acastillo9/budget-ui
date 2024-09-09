@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import { TransactionType, type Transaction } from '$lib/types';
 
-	export let transactionEvent: Transaction;
-
-	const dispatch = createEventDispatcher();
+	let { transactionEvent, onEdit } = $props<{
+		transactionEvent: Transaction;
+		onEdit(): Transaction;
+	}>();
 
 	function getEventColor(type: string, paid: boolean) {
 		if (type === TransactionType.INCOME) {
@@ -21,11 +21,13 @@
 		}
 	}
 
-	$: eventColor = getEventColor(transactionEvent.transactionType, transactionEvent.paid);
+	const eventColor = $derived(
+		getEventColor(transactionEvent.transactionType, transactionEvent.paid)
+	);
 </script>
 
 <button
 	class={`w-4 h-4 rounded-full border ${eventColor}`}
 	title={transactionEvent.description}
-	on:click={() => dispatch('edit', transactionEvent)}
+	onclick={() => onEdit(transactionEvent)}
 ></button>

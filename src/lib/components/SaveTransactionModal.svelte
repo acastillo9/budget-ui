@@ -1,78 +1,118 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import Modal from './Modal.svelte';
-	import type { Category, Transaction } from '$lib/types';
+	import type { Account, Category, CreateTransaction, Transaction } from '$lib/types';
 	import dayjs from 'dayjs';
 	import { convertUTCDateToLocalDate } from '$lib/utils/date';
+	import Autocomplete from './Autocomplete.svelte';
+	import Select from './Select.svelte';
 
-	export let showModal: boolean;
-	export let transaction: Transaction | null = null;
-	export let categories: Category[] = [];
-
-	const dispatch = createEventDispatcher();
+	let {
+		showModal = $bindable(),
+		transaction = null,
+		categories = [],
+		accounts = [],
+		onSave,
+		onDelete,
+		onClose
+	} = $props<{
+		showModal: boolean;
+		transaction: Transaction | null;
+		categories: Category[];
+		accounts: Account[];
+		onSave(transaction: CreateTransaction): void;
+		onDelete(transaction: Transaction): void;
+		onClose?(): void;
+	}>();
 
 	let categoriesFiltered: Category[] = [];
-	let showConfirmationModal = false;
 
-	$: activeTransaction = transaction
-		? {
-				...transaction,
-				startDate: dayjs(transaction.startDate).format('YYYY-MM-DD'),
-				endDate: transaction.endDate && dayjs(transaction.endDate).format('YYYY-MM-DD')
-			}
-		: {
-				transactionType: '',
-				amount: 0,
-				currencyCode: 'COP',
-				startDate: dayjs().format('YYYY-MM-DD'),
-				endDate: '',
-				repeatType: 'NEVER',
-				description: '',
-				category: '',
-				paid: false
-			};
-	$: categoryId = transaction ? transaction.category.id : '';
-	$: categoryName = transaction ? transaction.category.name : '';
+	// const activeTransaction = $state(
+	// 	transaction
+	// 		? {
+	// 				...transaction,
+	// 				amount: Math.abs(transaction.amount),
+	// 				startDate: dayjs(transaction.startDate).format('YYYY-MM-DD'),
+	// 				endDate: transaction.endDate && dayjs(transaction.endDate).format('YYYY-MM-DD')
+	// 			}
+	// 		: {
+	// 				transactionType: '',
+	// 				amount: 0,
+	// 				startDate: dayjs().format('YYYY-MM-DD'),
+	// 				endDate: '',
+	// 				repeatType: 'NEVER',
+	// 				description: '',
+	// 				category: '',
+	// 				paid: false,
+	// 				account: null
+	// 			}
+	// );
+	// const categoryId = $derived(transaction ? transaction.category.id : '');
+	// const categoryName = $derived(transaction ? transaction.category.name : '');
+	// const accountId = $derived(transaction ? transaction.account?.id : '');
 
-	function saveTransaction() {
-		const newTransaction = {
-			...activeTransaction,
-			startDate: convertUTCDateToLocalDate(dayjs(activeTransaction.startDate)).format(),
-			endDate:
-				activeTransaction.endDate &&
-				convertUTCDateToLocalDate(dayjs(activeTransaction.endDate)).format(),
-			category: categoryId
+	function saveTransaction(event: SubmitEvent) {
+		event.preventDefault();
+
+		const target = event.target as HTMLFormElement;
+		const formData = new FormData(target);
+
+		const description = formData.get('description') as string | null;
+		const transactionType = formData.get('transactionType') as string | null;
+		const amountString = formData.get('amount') as string | null;
+		const startDateString = formData.get('startDate') as string | null;
+		const endDateString = formData.get('endDate') as string | null;
+		const repeatType = formData.get('repeatType') as string | null;
+		const paid = formData.get('paid') === 'on';
+		const account = formData.get('account') as string | null;
+
+		if (
+			!description ||
+			!transactionType ||
+			!amountString ||
+			!startDateString ||
+			!repeatType ||
+			!account
+		) {
+			return;
+		}
+
+		const amount = parseFloat(amountString);
+		if (isNaN(amount)) {
+			return;
+		}
+
+		const startDate = convertUTCDateToLocalDate(dayjs(startDateString)).format();
+		const endDate = endDateString
+			? convertUTCDateToLocalDate(dayjs(endDateString)).format()
+			: undefined;
+
+		const transaction: CreateTransaction = {
+			description,
+			transactionType,
+			amount,
+			startDate,
+			endDate,
+			repeatType,
+			paid: !!paid,
+			account,
+			category: ''
 		};
-		dispatch('save', newTransaction);
-	}
 
-	function close() {
-		activeTransaction = {
-			transactionType: '',
-			amount: 0,
-			currencyCode: 'COP',
-			startDate: dayjs().format('YYYY-MM-DD'),
-			endDate: '',
-			repeatType: 'NEVER',
-			description: '',
-			category: '',
-			paid: false
-		};
-		categoryId = '';
-		categoryName = '';
-		dispatch('close');
+		console.log(transaction);
+
+		// onSave(transaction);
 	}
 
 	function filterCategories() {
-		categoriesFiltered = categories
-			.filter((category) => category.name.toLowerCase().includes(categoryName.toLowerCase()))
-			.slice(0, 5);
+		// categoriesFiltered = categories
+		// 	.filter((category: Category) => category.name.toLowerCase().includes(categoryName.toLowerCase()))
+		// 	.slice(0, 5);
 	}
 
 	function selectCategory(category: Category) {
-		categoryId = category.id;
-		categoryName = category.name;
-		categoriesFiltered = [];
+		// categoryId = category.id;
+		// categoryName = category.name;
+		// categoriesFiltered = [];
 	}
 
 	async function addCategory(categoryName: string) {
@@ -88,20 +128,24 @@
 		selectCategory(newCategory);
 	}
 
-	function deleteTransaction() {
-		dispatch('delete', transaction!.id);
-		showConfirmationModal = false;
+	function close() {
+		if (onClose) {
+			onClose();
+		}
 	}
 </script>
 
-<Modal bind:showModal on:close={close}>
-	<h2 slot="header" class="font-bold">Transaction Details</h2>
+{#snippet header()}
+	<h2 class="font-bold">Transaction Details</h2>
+{/snippet}
+
+{#snippet body()}
 	<form
-		class="grid grid-cols-2 gap-4"
+		class="grid grid-cols-1 gap-4 sm:grid-cols-2"
 		id="transactionForm"
-		on:submit|preventDefault={saveTransaction}
+		onsubmit={saveTransaction}
 	>
-		<div class="col-span-2">
+		<div class="sm:col-span-2">
 			<label for="description" class="mb-3 block text-base font-medium">Description</label>
 			<input
 				type="text"
@@ -109,7 +153,7 @@
 				name="description"
 				placeholder="Description"
 				class="w-full rounded-md border border-neutral-300 bg-white p-3 text-base font-normal text-gray-500 outline-none focus:border-sky-400 focus:shadow-md"
-				bind:value={activeTransaction.description}
+				value={transaction?.description || ''}
 			/>
 		</div>
 		<div>
@@ -118,7 +162,7 @@
 				id="transactionType"
 				name="transactionType"
 				class="w-full rounded-md border border-neutral-300 bg-white p-3 text-base font-normal text-gray-500 outline-none focus:border-sky-400 focus:shadow-md"
-				bind:value={activeTransaction.transactionType}
+				value={transaction?.transactionType || ''}
 			>
 				<option value="" selected>Choose a type</option>
 				<option value="INCOME">Income</option>
@@ -134,7 +178,7 @@
 				name="amount"
 				placeholder="Amount"
 				class="w-full rounded-md border border-neutral-300 bg-white p-3 text-base font-normal text-gray-500 outline-none focus:border-sky-400 focus:shadow-md"
-				bind:value={activeTransaction.amount}
+				value={transaction?.amount || 0}
 			/>
 		</div>
 		<div>
@@ -145,7 +189,9 @@
 				name="startDate"
 				placeholder="Start Date"
 				class="w-full rounded-md border border-neutral-300 bg-white p-3 text-base font-normal text-gray-500 outline-none focus:border-sky-400 focus:shadow-md"
-				bind:value={activeTransaction.startDate}
+				value={transaction
+					? dayjs(transaction.startDate).format('YYYY-MM-DD')
+					: dayjs().format('YYYY-MM-DD')}
 			/>
 		</div>
 		<div>
@@ -156,7 +202,7 @@
 				name="endDate"
 				placeholder="End Date"
 				class="w-full rounded-md border border-neutral-300 bg-white p-3 text-base font-normal text-gray-500 outline-none focus:border-sky-400 focus:shadow-md"
-				bind:value={activeTransaction.endDate}
+				value={transaction?.endDate ? dayjs(transaction.endDate).format('YYYY-MM-DD') : ''}
 			/>
 		</div>
 		<div>
@@ -165,7 +211,7 @@
 				id="repeatType"
 				name="repeatType"
 				class="w-full rounded-md border border-neutral-300 bg-white p-3 text-base font-normal text-gray-500 outline-none focus:border-sky-400 focus:shadow-md"
-				bind:value={activeTransaction.repeatType}
+				value={transaction?.repeatType || 'NEVER'}
 			>
 				<option value="NEVER" selected>Never</option>
 				<option value="DAILY">Daily</option>
@@ -175,71 +221,49 @@
 				<option value="YEARLY">Yearly</option>
 			</select>
 		</div>
-		<div>
-			<label for="currency" class="mb-3 block text-base font-medium">Currency</label>
-			<select
-				id="currencyCode"
-				name="currencyCode"
-				class="w-full rounded-md border border-neutral-300 bg-white p-3 text-base font-normal text-gray-500 outline-none focus:border-sky-400 focus:shadow-md"
-				bind:value={activeTransaction.currencyCode}
-			>
-				<option value="COP" selected>COP</option>
-				<option value="USD">USD</option>
-			</select>
-		</div>
-		<div class="col-span-2">
+		<div class="sm:col-span-2">
 			<label for="category" class="mb-3 block text-base font-medium">Category</label>
-			<input
-				type="text"
+			<Autocomplete
 				id="category"
 				name="category"
-				placeholder="Category"
-				class="w-full rounded-md border border-neutral-300 bg-white p-3 text-base font-normal text-gray-500 outline-none focus:border-sky-400 focus:shadow-md"
-				bind:value={categoryName}
-				on:focus={filterCategories}
-				on:input={filterCategories}
-				on:blur={() => setTimeout(() => (categoriesFiltered = []), 100)}
-			/>
-			<div class="relative">
-				{#if categoriesFiltered.length > 0}
-					<ul class="absolute w-full rounded-md border">
-						{#each categoriesFiltered as category}
-							<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
-							<li
-								class="bg-white border-b px-4 py-2 cursor-pointer hover:bg-neutral-100"
-								on:click={() => selectCategory(category)}
-							>
-								{category.name}
-							</li>
-						{/each}
-					</ul>
-				{:else if !categoryId && categoryName}
-					<ul class="absolute w-full rounded-md border">
-						<!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
-						<li
-							class="bg-white border-b px-4 py-2 cursor-pointer hover:bg-neutral-100"
-							on:click={() => addCategory(categoryName)}
-						>
-							Add {categoryName}
-						</li>
-					</ul>
-				{/if}
-			</div>
+				value={transaction?.category?.id || null}
+				options={categories.map((category: Category) => ({
+					value: category.id,
+					label: category.name
+				}))}
+			></Autocomplete>
+		</div>
+		<div class="sm:col-span-2">
+			<label for="account" class="mb-3 block text-base font-medium">Account</label>
+			<Select
+				id="account"
+				name="account"
+				value={transaction?.account?.id || ''}
+				options={accounts.map((account: Account) => ({
+					value: account.id,
+					label: account.name
+				}))}
+			></Select>
 		</div>
 		<div>
-			<input type="checkbox" id="paid" name="paid" bind:checked={activeTransaction.paid} />
+			<input type="checkbox" id="paid" name="paid" checked={!!transaction?.paid} />
 			<label for="paid" class="ml-2 text-base font-medium">is paid?</label>
 		</div>
 	</form>
-	<div slot="buttons">
+{/snippet}
+
+{#snippet buttons()}
+	<div>
 		{#if transaction}
 			<button
-				class="py-2 px-4 rounded-lg border border-red-500 text-red-500"
-				on:click={() => (showConfirmationModal = true)}
+				class="py-2 px-4 bg-red-500 text-white rounded-lg border"
+				type="button"
+				onclick={() => onDelete(transaction)}
 			>
 				Delete
 			</button>
 		{/if}
+
 		<button
 			class="py-2 px-4 bg-black text-white rounded-lg border"
 			type="submit"
@@ -248,15 +272,6 @@
 			Save
 		</button>
 	</div>
-</Modal>
-<Modal bind:showModal={showConfirmationModal}>
-	<h2 slot="header" class="font-bold">Confirmation Modal</h2>
-	<p>Are you sure to delete this transaction?</p>
-	<button
-		slot="buttons"
-		class="py-2 px-4 rounded-lg border border-red-500 text-white bg-red-500"
-		on:click={deleteTransaction}
-	>
-		Delete
-	</button>
-</Modal>
+{/snippet}
+
+<Modal bind:showModal {header} {body} {buttons} onClose={close}></Modal>

@@ -1,34 +1,51 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import type { Snippet } from 'svelte';
 	import FaXMark from '../icons/FaXMark.svelte';
 
-	export let showModal: boolean;
+	let {
+		showModal = $bindable(),
+		header,
+		body,
+		buttons,
+		onClose
+	} = $props<{
+		showModal: boolean;
+		header: Snippet;
+		body: Snippet;
+		buttons: Snippet;
+		onClose?(): void;
+	}>();
 
 	let dialog: HTMLDialogElement;
 
-	$: dialog && showModal ? dialog.showModal() : dialog?.close();
+	$effect(() => {
+		if (dialog) {
+			if (showModal) {
+				dialog.showModal();
+			} else {
+				dialog.close();
+			}
+		}
+	});
 
-	const dispatch = createEventDispatcher();
 	function onCloseHandler() {
 		showModal = false;
-		dispatch('close');
+		if (onClose) {
+			onClose();
+		}
 	}
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events a11y-autofocus -->
-<dialog class="overflow-visible" bind:this={dialog} on:close={onCloseHandler}>
-	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div class="p-4 w-[50rem]" on:click|stopPropagation>
+<dialog class="overflow-visible" bind:this={dialog} onclose={onCloseHandler}>
+	<div class="p-4 w-[50rem] max-w-full">
 		<div class="flex gap-4 pb-4 mb-4 items-center justify-between border-b">
-			<slot name="header" />
-			<button on:click={() => dialog.close()}><FaXMark width="30" height="30"></FaXMark></button>
+			{@render header()}
+			<button onclick={() => dialog.close()}><FaXMark width="30" height="30"></FaXMark></button>
 		</div>
-		<slot />
+		{@render body()}
 		<div class="flex gap-2 pt-4 mt-4 border-t items-center justify-end">
-			<button class="py-2 px-4 rounded-lg border" autofocus on:click={() => dialog.close()}
-				>Close</button
-			>
-			<slot name="buttons" />
+			<button class="py-2 px-4 rounded-lg border" onclick={() => dialog.close()}>Close</button>
+			{@render buttons()}
 		</div>
 	</div>
 </dialog>

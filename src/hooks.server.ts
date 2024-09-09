@@ -27,7 +27,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 				id: user.id,
 				name: user.name,
 				email: user.email,
-				account: user.account.id,
 				access_token: token
 			};
 

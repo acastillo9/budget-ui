@@ -2,7 +2,6 @@ export interface SessionUser {
 	id: string;
 	name: string;
 	email: string;
-	account: string;
 	access_token: string;
 }
 
@@ -10,13 +9,13 @@ export interface Transaction {
 	id?: string;
 	transactionType: string;
 	amount: number;
-	currencyCode: string;
 	startDate: Date;
 	endDate?: Date;
 	repeatType: string;
 	description: string;
 	category: Category;
 	paid: boolean;
+	account: Account;
 }
 
 export interface Category {
@@ -39,7 +38,33 @@ export interface CalendarChangeEvent {
 }
 
 export interface Account {
-	id: string;
+	id?: string;
+	name: string;
 	balance: number;
-	monthBalance: number;
+	currencyCode: string;
+	user?: User;
+}
+
+export interface User {
+	id: string;
+	name: string;
+	email: string;
+}
+
+export interface SelectOption {
+	value: string;
+	label: string;
+}
+
+export interface CreateTransaction {
+	id?: string;
+	transactionType: string;
+	amount: number;
+	startDate: string;
+	endDate?: string;
+	repeatType: string;
+	description: string;
+	category: string;
+	paid: boolean;
+	account: string;
 }

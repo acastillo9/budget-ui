@@ -16,7 +16,7 @@ export const actions: Actions = {
 		const user = formData as { name: string; email: string; password: string };
 
 		try {
-			await fetch(`${API_URL}/users`, {
+			await fetch(`${API_URL}/users/register`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'

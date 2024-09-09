@@ -21,7 +21,7 @@ export const actions: Actions = {
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ username: email, password })
+				body: JSON.stringify({ email, password })
 			});
 
 			if (!response.ok) {
@@ -46,6 +46,6 @@ export const actions: Actions = {
 			maxAge: 60 * 60 * 24 // 1 day
 		});
 
-		throw redirect(302, '/calendar');
+		throw redirect(302, '/dashboard');
 	}
 };

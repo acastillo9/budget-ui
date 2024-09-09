@@ -1,6 +1,17 @@
 <script lang="ts">
-	export let disabled = false;
-	export let active = false;
+	import type { Snippet } from 'svelte';
+
+	let {
+		disabled = false,
+		active = false,
+		day,
+		children
+	} = $props<{
+		disabled: boolean;
+		active: boolean;
+		day: Snippet;
+		children: Snippet;
+	}>();
 </script>
 
 <div
@@ -8,7 +19,7 @@
 >
 	<span
 		class={`w-7 h-7 flex justify-center items-center ${active ? 'text-white font-bold bg-sky-400 rounded-full' : ''}`}
-		><slot name="day" /></span
+		>{@render day()}</span
 	>
-	<slot />
+	{@render children()}
 </div>
