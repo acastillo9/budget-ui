@@ -12,6 +12,10 @@ export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
 	if (token) {
 		request.headers.set('Authorization', `Bearer ${token}`);
 	}
-
-	return fetch(request);
+	return fetch(request).then((response) => {
+		if (!response.ok) {
+			throw new Error(response.statusText, { cause: response });
+		}
+		return response;
+	});
 };

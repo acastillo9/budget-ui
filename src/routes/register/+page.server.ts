@@ -3,8 +3,8 @@ import { API_URL } from '$env/static/private';
 import type { Actions } from './$types';
 
 export const actions: Actions = {
-	default: async (event) => {
-		const formData = Object.fromEntries(await event.request.formData());
+	default: async ({ request, fetch }) => {
+		const formData = Object.fromEntries(await request.formData());
 
 		// Data validation
 		if (!formData.name || !formData.email || !formData.password) {
