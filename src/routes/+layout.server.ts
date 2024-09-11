@@ -4,11 +4,11 @@ import type { LayoutServerLoad } from './$types';
 export const load: LayoutServerLoad = async ({ locals, url }) => {
 	const allowed = ['/login', '/register'];
 
-	if (!locals.user && !allowed.includes(url.pathname)) {
+	if (!allowed.includes(url.pathname) && !locals.user) {
 		throw redirect(302, '/login');
 	}
 
-	if (locals.user && allowed.includes(url.pathname)) {
+	if (url.pathname === '/') {
 		throw redirect(302, '/dashboard');
 	}
 
