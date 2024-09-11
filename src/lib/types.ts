@@ -1,10 +1,3 @@
-export interface SessionUser {
-	id: string;
-	name: string;
-	email: string;
-	access_token: string;
-}
-
 export interface Transaction {
 	id?: string;
 	transactionType: string;
