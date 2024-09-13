@@ -14,6 +14,7 @@
 		"test:unit": "vitest"
 	},
 	"devDependencies": {
+		"@fontsource/leckerli-one": "^5.0.21",
 		"@fontsource-variable/inter": "^5.0.17",
 		"@neoconfetti/svelte": "^1.0.0",
 		"@playwright/test": "^1.28.1",
@@ -24,6 +25,7 @@
 		"@typescript-eslint/eslint-plugin": "^7.0.0",
 		"@typescript-eslint/parser": "^7.0.0",
 		"autoprefixer": "^10.4.19",
+		"dayjs": "^1.11.10",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.36.0-next.4",
@@ -39,9 +41,5 @@
 		"vite": "^5.0.3",
 		"vitest": "^1.2.0"
 	},
-	"type": "module",
-	"dependencies": {
-		"@fontsource/leckerli-one": "^5.0.21",
-		"dayjs": "^1.11.10"
-	}
+	"type": "module"
 }

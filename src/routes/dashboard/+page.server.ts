@@ -11,16 +11,17 @@ export const load: PageServerLoad = async ({ fetch }) => {
 	// const categories = await responseCategories.json();
 
 	let accounts = [];
-	try {
-		const responseAccounts = await fetch(`${API_URL}/accounts`);
-		accounts = await responseAccounts.json();
-	} catch (error) {
-		console.error(error);
+	let accountsError = '';
+	const responseAccounts = await fetch(`${API_URL}/accounts`);
+	if (!responseAccounts.ok) {
+		accountsError = 'Failed to load accounts';
 	}
+	accounts = await responseAccounts.json();
 
 	return {
 		// transactions,
 		// categories,
-		accounts
+		accounts,
+		accountsError
 	};
 };

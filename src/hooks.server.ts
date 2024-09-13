@@ -1,5 +1,5 @@
 import { authenticateUser } from '$lib/server/auth';
-import type { Handle, HandleFetch } from '@sveltejs/kit';
+import { redirect, type Handle, type HandleFetch } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.user = await authenticateUser(event);
@@ -13,8 +13,8 @@ export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
 		request.headers.set('Authorization', `Bearer ${token}`);
 	}
 	return fetch(request).then((response) => {
-		if (!response.ok) {
-			throw new Error(response.statusText, { cause: response });
+		if (response.status === 401) {
+			redirect(302, '/logout');
 		}
 		return response;
 	});

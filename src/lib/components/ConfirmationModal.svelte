@@ -1,15 +1,18 @@
 <script lang="ts">
+	import ButtonWithSpinner from './ButtonWithSpinner.svelte';
 	import Modal from './Modal.svelte';
 
 	let {
 		showModal = $bindable(),
 		contentText,
 		okButtonText,
+		isLoading = false,
 		onOk
 	} = $props<{
 		showModal: boolean;
 		contentText: string;
 		okButtonText: string;
+		isLoading?: boolean;
 		onOk(): void;
 	}>();
 </script>
@@ -23,9 +26,13 @@
 {/snippet}
 
 {#snippet buttons()}
-	<button class="py-2 px-4 rounded-lg border border-red-500 text-white bg-red-500" onclick={onOk}>
+	<ButtonWithSpinner
+		className="px-4 border-red-600 bg-red-600 hover:bg-red-500 hover:border-red-500 disabled:bg-red-400 disabled:border-red-400"
+		{isLoading}
+		onClick={onOk}
+	>
 		{okButtonText}
-	</button>
+	</ButtonWithSpinner>
 {/snippet}
 
 <Modal bind:showModal {header} {body} {buttons}></Modal>

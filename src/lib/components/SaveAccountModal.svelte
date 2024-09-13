@@ -1,16 +1,21 @@
 <script lang="ts">
 	import Modal from './Modal.svelte';
 	import type { Account } from '$lib/types';
+	import ButtonWithSpinner from './ButtonWithSpinner.svelte';
 
 	let {
 		showModal = $bindable(),
 		account = null,
+		saving = false,
+		deleting = false,
 		onSave,
 		onDelete,
 		onClose
 	} = $props<{
 		showModal: boolean;
 		account: Account | null;
+		saving: boolean;
+		deleting: boolean;
 		onSave(account: Account): void;
 		onDelete(account: Account): void;
 		onClose?(): void;
@@ -96,24 +101,18 @@
 {/snippet}
 
 {#snippet buttons()}
-	<div>
+	<div class="flex gap-2">
 		{#if account}
-			<button
-				class="py-2 px-4 bg-red-500 text-white rounded-lg border"
-				type="button"
-				onclick={() => onDelete(account)}
+			<ButtonWithSpinner
+				className="px-4 border-red-600 bg-red-600 hover:bg-red-500 hover:border-red-500 disabled:bg-red-400 disabled:border-red-400"
+				isLoading={deleting}
+				onClick={() => onDelete(account)}>Save</ButtonWithSpinner
 			>
-				Delete
-			</button>
 		{/if}
 
-		<button
-			class="py-2 px-4 bg-black text-white rounded-lg border"
-			type="submit"
-			form="accountForm"
+		<ButtonWithSpinner className="px-4" type="submit" form="accountForm" isLoading={saving}
+			>Save</ButtonWithSpinner
 		>
-			Save
-		</button>
 	</div>
 {/snippet}
 

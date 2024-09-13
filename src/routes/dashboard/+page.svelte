@@ -3,6 +3,8 @@
 	// import dayjs from 'dayjs';
 	// import { convertUTCDateToLocalDate } from '$lib/utils/date';
 	import Accounts from '$lib/components/Accounts.svelte';
+	import { toast } from '$lib/utils/toast';
+	import { browser } from '$app/environment';
 	// import Transactions from '$lib/components/Transactions.svelte';
 
 	let { data } = $props<{
@@ -12,6 +14,10 @@
 			categories: Category[];
 		};
 	}>();
+
+	if (browser && data.accountsError) {
+		toast.showError(data.accountsError);
+	}
 
 	// let transactions: Transaction[] = data.transactions.map((transaction: Transaction) => {
 	// 	transaction.startDate = convertUTCDateToLocalDate(dayjs(transaction.startDate)).toDate();

@@ -2,16 +2,28 @@
 	import type { Snippet } from 'svelte';
 
 	let {
+		className = '',
 		type = 'button',
+		form = undefined,
 		isLoading = false,
+		onClick = () => {},
 		children
-	} = $props<{ type: string; isLoading: boolean; children: Snippet }>();
+	} = $props<{
+		className: string;
+		type?: string;
+		form?: string | undefined;
+		isLoading: boolean;
+		onClick?: () => void;
+		children: Snippet;
+	}>();
 </script>
 
 <button
-	class="bg-black text-white font-bold py-2 rounded-lg border flex justify-center hover:bg-neutral-800 disabled:bg-neutral-700"
+	class={`bg-black text-white font-bold py-2 rounded-lg border flex justify-center hover:bg-neutral-800 disabled:bg-neutral-700 ${className}`}
 	{type}
+	{form}
 	disabled={isLoading}
+	onclick={onClick}
 >
 	{#if isLoading}
 		<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"

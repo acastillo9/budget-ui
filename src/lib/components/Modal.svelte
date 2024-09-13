@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import FaXMark from '../icons/FaXMark.svelte';
+	import FaCircleXmark from '../icons/FaCircleXmark.svelte';
 
 	let {
 		showModal = $bindable(),
@@ -40,7 +40,7 @@
 	<div class="p-4 w-[50rem] max-w-full">
 		<div class="flex gap-4 pb-4 mb-4 items-center justify-between border-b">
 			{@render header()}
-			<button onclick={() => dialog.close()}><FaXMark width="30" height="30"></FaXMark></button>
+			<button onclick={() => dialog.close()}><FaCircleXmark width="30" height="30" /></button>
 		</div>
 		{@render body()}
 		<div class="flex gap-2 pt-4 mt-4 border-t items-center justify-end">

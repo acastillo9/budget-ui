@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Toasts from '$lib/components/Toasts.svelte';
 	import FaUser from '$lib/icons/FaUser.svelte';
 	import './styles.scss';
 
@@ -27,7 +28,7 @@
 </svelte:head>
 
 <div class="flex flex-col min-h-screen">
-	<header class="bg-black p-4">
+	<header class="bg-black p-4 shadow">
 		<div class="flex justify-between items-center">
 			<a href="/">
 				<h1 class="text-4xl font-bold text-white font-cursive">Budget</h1>
@@ -78,7 +79,7 @@
 		</div>
 	</header>
 
-	<main class="p-4 flex-1 flex">
+	<main class="p-4 flex-1 flex bg-neutral-100">
 		{@render children()}
 	</main>
 
@@ -86,3 +87,5 @@
 		<p class="text-white text-center">© {new Date().getFullYear()} Budget</p>
 	</footer>
 </div>
+
+<Toasts />

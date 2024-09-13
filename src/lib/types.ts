@@ -61,3 +61,8 @@ export interface CreateTransaction {
 	paid: boolean;
 	account: string;
 }
+
+export interface ToastNotification {
+	type: string;
+	message: string;
+}

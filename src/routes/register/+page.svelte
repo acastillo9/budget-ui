@@ -13,7 +13,7 @@
 </svelte:head>
 
 <div class="w-full flex justify-center items-center">
-	<div class="border p-4 rounded w-96 max-w-full">
+	<div class="border p-4 rounded w-96 max-w-full bg-white">
 		<h2 class="text-2xl font-bold mb-4">Sign up</h2>
 		<form
 			class="flex flex-col gap-4 mb-4"
