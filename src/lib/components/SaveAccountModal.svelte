@@ -106,7 +106,7 @@
 			<ButtonWithSpinner
 				className="px-4 border-red-600 bg-red-600 hover:bg-red-500 hover:border-red-500 disabled:bg-red-400 disabled:border-red-400"
 				isLoading={deleting}
-				onClick={() => onDelete(account)}>Save</ButtonWithSpinner
+				onClick={() => onDelete(account)}>Delete</ButtonWithSpinner
 			>
 		{/if}
 
