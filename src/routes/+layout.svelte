@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Toasts from '$lib/components/Toasts.svelte';
 	import FaUser from '$lib/icons/FaUser.svelte';
 	import './styles.scss';
@@ -27,9 +28,11 @@
 	<meta name="description" content="Budget App" />
 </svelte:head>
 
-<div class="flex flex-col min-h-screen">
-	<header class="bg-black p-4 shadow">
-		<div class="flex justify-between items-center">
+<div class="flex flex-col min-h-screen relative pt-20">
+	<header
+		class="bg-black p-4 shadow fixed top-0 z-10 w-full h-20 flex items-center border-b border-b-neutral-300 border-opacity-30"
+	>
+		<div class="flex justify-between items-center w-full">
 			<a href="/">
 				<h1 class="text-4xl font-bold text-white font-cursive">Budget</h1>
 			</a>
@@ -79,13 +82,22 @@
 		</div>
 	</header>
 
-	<main class="p-4 flex-1 flex bg-neutral-100">
-		{@render children()}
-	</main>
-
-	<footer class="bg-black p-3">
-		<p class="text-white text-center">© {new Date().getFullYear()} Budget</p>
-	</footer>
+	<div class="flex flex-1">
+		{#if data.user}
+			<Sidebar />
+		{/if}
+		<div class="w-full flex flex-col">
+			<main class="p-4 flex-1 flex bg-neutral-100 relative">
+				{@render children()}
+			</main>
+			<footer class="bg-black p-3">
+				<p class="text-white text-center">
+					© {new Date().getFullYear()}
+					<a class="hover:underline" href="https://acastillo.dev" target="_blank">acastillo.dev</a>
+				</p>
+			</footer>
+		</div>
+	</div>
 </div>
 
 <Toasts />
