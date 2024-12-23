@@ -6,7 +6,12 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { setFlash } from 'sveltekit-flash-message/server';
 import { activationSchema, activationWithEmailSchema, checkEmailSchema, passwordSchema, passwordWithTokenSchema, signupFormSchema, type CheckEmailSchema } from '$lib/components/register-form/schema';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals }) => {
+  const { user } = locals
+  if (user) {
+    throw redirect(303, '/dashboard');
+  }
+
   return {
     form: await superValidate(zod(signupFormSchema)),
     activationForm: await superValidate(zod(activationSchema)),
@@ -146,7 +151,7 @@ export const actions: Actions = {
       setFlash({ type: 'error', message: 'Failed to set password, please try again' }, cookies);
       return fail(500, { form });
     }
-    
+
     throw redirect(302, '/dashboard');
   }
 };
