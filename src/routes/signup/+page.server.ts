@@ -9,7 +9,7 @@ import { activationSchema, activationWithEmailSchema, checkEmailSchema, password
 export const load: PageServerLoad = async ({ locals }) => {
   const { user } = locals
   if (user) {
-    throw redirect(303, '/dashboard');
+    throw redirect(302, '/dashboard');
   }
 
   return {

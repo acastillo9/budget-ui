@@ -1,7 +1,6 @@
-import { redirect, type RequestHandler } from "@sveltejs/kit";
+import { json, type RequestHandler } from "@sveltejs/kit";
 
-export const GET: RequestHandler = async ({ cookies, locals }) => {
-	locals.user = null;
+export const POST: RequestHandler = async ({ cookies }) => {
 	cookies.delete('AuthorizationToken', { path: '/' });
-	throw redirect(303, '/signin');
+  return json({ message: 'Signout successfully' })
 };
