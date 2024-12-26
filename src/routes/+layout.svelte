@@ -5,11 +5,16 @@
 	import { page } from '$app/stores';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import { toast } from 'svelte-sonner';
-	import type { ToastMessage } from '$lib/types';
+	import type { ToastMessage, UserSession } from '$lib/types';
 	import Header from '$lib/components/header.svelte';
 	import Footer from '$lib/components/footer.svelte';
+	import { setContext } from 'svelte';
+	import { writable } from 'svelte/store';
 
-	let { children } = $props();
+	let { data, children } = $props();
+
+	const userStore = writable<UserSession | undefined>(data.user);
+	setContext('user', userStore);
 
 	// Show Toasts messages from flash store
 	const flash = getFlash(page);
@@ -17,6 +22,10 @@
 		if (value) {
 			(toast[value.type] || toast)(value.message);
 		}
+	});
+
+	$effect(() => {
+		userStore.set(data.user);
 	});
 </script>
 
