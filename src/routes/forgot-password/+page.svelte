@@ -1,28 +1,27 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
-	import * as Form from '$lib/components/ui/form';
-	import { Checkbox } from '$lib/components/ui/checkbox';
 	import { Button } from '$lib/components/ui/button';
+	import type { PageData } from './$types';
+	import Logo from '$lib/components/logo.svelte';
+	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
-	import { loginFormSchema } from './schema';
+	import { Control } from 'formsnap';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { Control } from 'formsnap';
-	import type { PageData } from './$types';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
-	import Logo from '$lib/components/logo.svelte';
+	import { forgotPasswordFormSchema } from './schema';
 
 	let { data }: { data: PageData } = $props();
 
 	const form = superForm(data.form, {
-		validators: zodClient(loginFormSchema)
+		validators: zodClient(forgotPasswordFormSchema)
 	});
 
 	const { form: formData, enhance, delayed, isTainted, tainted, allErrors } = form;
 </script>
 
 <svelte:head>
-	<title>Budget App - Sign In</title>
+	<title>Budget App - Forgot Password</title>
 </svelte:head>
 
 <div class="container flex h-full items-center justify-center">
@@ -32,10 +31,10 @@
 				<p class="mb-4 flex justify-center">
 					<Logo />
 				</p>
-				<Card.Title class="text-2xl">Sign In</Card.Title>
+				<Card.Title class="text-2xl">Forgot password</Card.Title>
 			</Card.Header>
 			<Card.Content class="grid gap-4">
-				<form id="loginForm" method="POST" use:enhance>
+				<form id="forgotPasswordForm" method="POST" use:enhance>
 					<Form.Field {form} name="email">
 						<Form.Control>
 							{#snippet children({ attrs }: Control)}
@@ -46,24 +45,9 @@
 									{...attrs}
 									bind:value={$formData.email}
 								/>
-							{/snippet}
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.Field>
-					<Form.Field {form} name="password">
-						<Form.Control>
-							{#snippet children({ attrs }: Control)}
-								<Form.Label>Password</Form.Label>
-								<Input type="password" {...attrs} bind:value={$formData.password} />
-							{/snippet}
-						</Form.Control>
-						<Form.FieldErrors />
-					</Form.Field>
-					<Form.Field {form} name="remember">
-						<Form.Control>
-							{#snippet children({ attrs }: Control)}
-								<Checkbox {...attrs} />
-								<Form.Label>Remember me</Form.Label>
+								<Form.Description>
+									Enter your email address and we will send you a link to reset your password.
+								</Form.Description>
 							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />
@@ -74,19 +58,15 @@
 				<Button
 					class="w-full"
 					type="submit"
-					form="loginForm"
-					disabled={$delayed ||
-						!isTainted($tainted?.email) ||
-						!isTainted($tainted?.password) ||
-						$allErrors.length}
+					form="forgotPasswordForm"
+					disabled={$delayed || !isTainted($tainted?.email) || $allErrors.length}
 				>
 					{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
-					Login
+					Send
 				</Button>
-				<Button variant="link" class="w-full" href="/forgot-password">Forgot password?</Button>
 				<div class="flex items-center">
-					<p class="text-sm text-muted-foreground">Don't have an account?</p>
-					<Button variant="link" href="/signup">Sign up</Button>
+					<p class="text-sm text-muted-foreground">Go to</p>
+					<Button class="px-2" variant="link" href="/signin">Sign in</Button>
 				</div>
 			</Card.Footer>
 		</Card.Root>

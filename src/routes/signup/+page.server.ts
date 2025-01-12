@@ -50,7 +50,7 @@ export const actions: Actions = {
 
       if (!response.ok) {
         const { message, statusCode } = await response.json();
-        setFlash({ type: 'error', message: message }, cookies);
+        setFlash({ type: 'error', message }, cookies);
         return fail(statusCode, { form });
       }
 
@@ -100,7 +100,7 @@ export const actions: Actions = {
 
       if (!response.ok) {
         const { message, statusCode } = await response.json();
-        setFlash({ type: 'error', message: message }, cookies);
+        setFlash({ type: 'error', message }, cookies);
         return fail(statusCode, { form });
       }
       const { access_token } = await response.json();
@@ -133,7 +133,7 @@ export const actions: Actions = {
 
       if (!response.ok) {
         const { message, statusCode } = await response.json();
-        setFlash({ type: 'error', message: message }, cookies);
+        setFlash({ type: 'error', message }, cookies);
         return fail(statusCode, { form });
       }
 

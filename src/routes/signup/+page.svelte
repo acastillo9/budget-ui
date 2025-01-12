@@ -56,7 +56,7 @@
 			<Card.Footer>
 				<div class="flex items-center">
 					<p class="text-sm text-muted-foreground">Have an account already?</p>
-					<Button variant="link" href="/signin">Log in</Button>
+					<Button variant="link" href="/signin">Sign in</Button>
 				</div>
 			</Card.Footer>
 		</Card.Root>
