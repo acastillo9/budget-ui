@@ -38,6 +38,7 @@ export const actions: Actions = {
     }
 
     let userEmail;
+    let userActivationCodeResendAt;
     try {
       const response = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
@@ -53,8 +54,9 @@ export const actions: Actions = {
         return fail(statusCode, { form });
       }
 
-      const { email } = await response.json();
+      const { email, activationCodeResendAt } = await response.json();
       userEmail = email;
+      userActivationCodeResendAt = activationCodeResendAt;
 
       setFlash({ type: 'success', message: 'User registered successfully, a verification code was sent please check your email' }, cookies);
     } catch {
@@ -62,7 +64,7 @@ export const actions: Actions = {
       return fail(500, { form });
     }
 
-    return { form, step: 2, email: userEmail };
+    return { form, step: 2, email: userEmail, activationCodeResendAt: userActivationCodeResendAt };
   },
   check: async ({ request }) => {
     const form = await superValidate(request, zod(checkEmailSchema));

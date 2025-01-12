@@ -8,8 +8,13 @@
 	import { activationSchema } from './schema';
 	import { REGEXP_ONLY_DIGITS } from 'bits-ui';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+	import Countdown from '../countdown.svelte';
+	import type { CountdownData } from '$lib/types';
+	import { toast } from 'svelte-sonner';
 
-	let { data, email, goToNextStep } = $props();
+	let { data, email, activationCodeResendAt, goToNextStep } = $props();
+	let remainingTime = $state(activationCodeResendAt);
+	let resendingActivationCode = $state(false);
 
 	const form = superForm(data, {
 		validators: zodClient(activationSchema),
@@ -27,6 +32,24 @@
 	});
 
 	const { form: formData, isTainted, tainted, allErrors, delayed, enhance } = form;
+
+	async function resendActivationCode() {
+		resendingActivationCode = true;
+		try {
+			const response = await fetch('/api/resend-activation-code', {
+				method: 'POST',
+				body: JSON.stringify({ email })
+			});
+
+			const { activationCodeResendAt } = await response.json();
+			remainingTime = new Date(activationCodeResendAt);
+			toast.success('Activation code sent successfully, please check your email.');
+		} catch {
+			toast.error('Failed to send activation code, please try again later.');
+		} finally {
+			resendingActivationCode = false;
+		}
+	}
 </script>
 
 <form method="POST" action="?/activate" use:enhance>
@@ -49,11 +72,38 @@
 						</InputOTP.Group>
 					{/snippet}
 				</InputOTP.Root>
-				<Form.Description>Please enter the one-time password sent to your email.</Form.Description>
+				<Form.Description>Please enter the one-time code sent to your email.</Form.Description>
 			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
+
+	<Countdown from={remainingTime}>
+		{#snippet remaining(data: CountdownData)}
+			<div class="leading-none">
+				<Button
+					class={[
+						'h-auto p-0',
+						(resendingActivationCode || !data.done) && 'pointer-events-none text-muted'
+					]}
+					variant="link"
+					onclick={resendActivationCode}>Resend activation code</Button
+				>
+				{#if !data.done}
+					<small class="text-muted">
+						in
+						{#if data.hours}
+							<span>{data.hours} hours</span>
+						{/if}
+						{#if data.minutes}
+							<span>{data.minutes} minutes</span>
+						{/if}
+						<span>{data.seconds} seconds</span>
+					</small>
+				{/if}
+			</div>
+		{/snippet}
+	</Countdown>
 
 	<Button
 		class="mt-5 w-full"

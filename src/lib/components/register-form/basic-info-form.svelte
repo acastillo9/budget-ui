@@ -20,8 +20,8 @@
 			}
 		},
 		onUpdate({ form, result }) {
-			if (form.valid && result.data.step === 2 && result.data.email) {
-				goToNextStep(result.data.email);
+			if (form.valid && result.data.step === 2) {
+				goToNextStep(result.data.email, result.data.activationCodeResendAt);
 			}
 		}
 	});

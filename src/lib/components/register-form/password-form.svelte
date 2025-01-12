@@ -29,10 +29,7 @@
 			{#snippet children({ attrs }: Control)}
 				<Form.Label>Password</Form.Label>
 				<Input type="password" {...attrs} bind:value={$formData.password} />
-				<Form.Description>
-					Create a password for your account. Password must contain at least 8 characters, including
-					at least one letter and one number.
-				</Form.Description>
+				<Form.Description>Create a password for your account.</Form.Description>
 			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />

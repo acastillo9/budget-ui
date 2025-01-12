@@ -10,3 +10,10 @@ export type UserSession = {
   email: string,
   name: string
 }
+
+export type CountdownData = {
+  hours: number
+  minutes: number
+  seconds: number
+  done: boolean
+}

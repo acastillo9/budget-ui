@@ -11,11 +11,13 @@
 
 	let step = $state(1);
 	let email: string | undefined = $state(undefined);
+	let activationCodeResendAt: Date | undefined = $state(undefined);
 	let accessToken: string | undefined = $state(undefined);
 
-	function setEmail(userEmail: string) {
+	function setDataForActivationStep(userEmail: string, userActivationCodeResendAt: Date) {
 		step = 2;
 		email = userEmail;
+		activationCodeResendAt = new Date(userActivationCodeResendAt);
 	}
 
 	function setAccessToken(token: string) {
@@ -39,9 +41,13 @@
 			</Card.Header>
 			<Card.Content class="grid gap-4">
 				{#if step === 1}
-					<BasicInfoForm data={data.form} goToNextStep={setEmail}></BasicInfoForm>
+					<BasicInfoForm data={data.form} goToNextStep={setDataForActivationStep}></BasicInfoForm>
 				{:else if step === 2}
-					<ActivationForm data={data.activationForm} {email} goToNextStep={setAccessToken}
+					<ActivationForm
+						data={data.activationForm}
+						{email}
+						{activationCodeResendAt}
+						goToNextStep={setAccessToken}
 					></ActivationForm>
 				{:else if step === 3}
 					<PasswordForm data={data.passwordForm} {accessToken}></PasswordForm>

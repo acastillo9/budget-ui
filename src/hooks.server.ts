@@ -21,7 +21,7 @@ export const handle: Handle = async ({ event, resolve }) => {
       const user = await response.json();
       event.locals.user = user
     } catch {
-      event.locals.user = null
+      event.locals.user = undefined
     }
   }
 
