@@ -31,7 +31,11 @@ export const actions: Actions = {
 
       if (!response.ok) {
         const { message, statusCode } = await response.json();
-        setFlash({ type: 'error', message }, cookies);
+        if (statusCode === 429) {
+          setFlash({ type: 'error', message: 'Reset password limit reached, please try again tomorrow' }, cookies);
+        } else {
+          setFlash({ type: 'error', message }, cookies);
+        }
         return fail(statusCode, { form });
       }
 
