@@ -7,8 +7,11 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Control } from 'formsnap';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+	import Eye from 'lucide-svelte/icons/eye';
+	import EyeOff from 'lucide-svelte/icons/eye-off';
 
 	let { data, accessToken } = $props();
+	let showPassword = $state(false);
 
 	const form = superForm(data, {
 		validators: zodClient(passwordSchema),
@@ -28,7 +31,25 @@
 		<Form.Control>
 			{#snippet children({ attrs }: Control)}
 				<Form.Label>Password</Form.Label>
-				<Input type="password" {...attrs} bind:value={$formData.password} />
+				<div class="relative">
+					<Input
+						type={showPassword ? 'text' : 'password'}
+						{...attrs}
+						bind:value={$formData.password}
+					/>
+					<Button
+						class="absolute right-0 top-0 border-none bg-transparent hover:bg-transparent"
+						variant="outline"
+						size="icon"
+						onclick={() => (showPassword = !showPassword)}
+					>
+						{#if showPassword}
+							<EyeOff />
+						{:else}
+							<Eye />
+						{/if}
+					</Button>
+				</div>
 				<Form.Description>Create a password for your account.</Form.Description>
 			{/snippet}
 		</Form.Control>

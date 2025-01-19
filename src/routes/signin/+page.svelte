@@ -11,8 +11,11 @@
 	import type { PageData } from './$types';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import Logo from '$lib/components/logo.svelte';
+	import Eye from 'lucide-svelte/icons/eye';
+	import EyeOff from 'lucide-svelte/icons/eye-off';
 
 	let { data }: { data: PageData } = $props();
+	let showPassword = $state(false);
 
 	const form = superForm(data.form, {
 		validators: zodClient(loginFormSchema)
@@ -54,7 +57,25 @@
 						<Form.Control>
 							{#snippet children({ attrs }: Control)}
 								<Form.Label>Password</Form.Label>
-								<Input type="password" {...attrs} bind:value={$formData.password} />
+								<div class="relative">
+									<Input
+										type={showPassword ? 'text' : 'password'}
+										{...attrs}
+										bind:value={$formData.password}
+									/>
+									<Button
+										class="absolute right-0 top-0 border-none bg-transparent hover:bg-transparent"
+										variant="outline"
+										size="icon"
+										onclick={() => (showPassword = !showPassword)}
+									>
+										{#if showPassword}
+											<EyeOff />
+										{:else}
+											<Eye />
+										{/if}
+									</Button>
+								</div>
 							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />

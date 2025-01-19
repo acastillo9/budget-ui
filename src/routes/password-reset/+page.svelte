@@ -11,8 +11,11 @@
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import { passwordSchema } from '$lib/components/register-form/schema';
 	import { onMount } from 'svelte';
+	import Eye from 'lucide-svelte/icons/eye';
+	import EyeOff from 'lucide-svelte/icons/eye-off';
 
 	let { data }: { data: PageData } = $props();
+	let showPassword = $state(false);
 	let accessToken: string;
 
 	const form = superForm(data.form, {
@@ -53,7 +56,25 @@
 						<Form.Control>
 							{#snippet children({ attrs }: Control)}
 								<Form.Label>Password</Form.Label>
-								<Input type="password" {...attrs} bind:value={$formData.password} />
+								<div class="relative">
+									<Input
+										type={showPassword ? 'text' : 'password'}
+										{...attrs}
+										bind:value={$formData.password}
+									/>
+									<Button
+										class="absolute right-0 top-0 border-none bg-transparent hover:bg-transparent"
+										variant="outline"
+										size="icon"
+										onclick={() => (showPassword = !showPassword)}
+									>
+										{#if showPassword}
+											<EyeOff />
+										{:else}
+											<Eye />
+										{/if}
+									</Button>
+								</div>
 								<Form.Description>Create a password for your account.</Form.Description>
 							{/snippet}
 						</Form.Control>
@@ -65,7 +86,7 @@
 				<Button
 					class="w-full"
 					type="submit"
-          form="passwordResetForm"
+					form="passwordResetForm"
 					disabled={$delayed || !isTainted($tainted?.password) || $allErrors.length}
 				>
 					{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
