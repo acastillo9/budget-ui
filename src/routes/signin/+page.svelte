@@ -59,7 +59,7 @@
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>
-					<Form.Field {form} name="remember">
+					<Form.Field {form} name="rememberMe">
 						<Form.Control>
 							{#snippet children({ attrs }: Control)}
 								<Checkbox {...attrs} />
