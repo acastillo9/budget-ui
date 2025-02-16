@@ -39,7 +39,7 @@
 				</p>
 				<Card.Title class="text-2xl">Create your account</Card.Title>
 			</Card.Header>
-			<Card.Content class="grid gap-4">
+			<Card.Content class="grid gap-4 pb-0">
 				{#if step === 1}
 					<BasicInfoForm data={data.form} goToNextStep={setDataForActivationStep}></BasicInfoForm>
 				{:else if step === 2}
@@ -53,10 +53,10 @@
 					<PasswordForm data={data.passwordForm} {accessToken}></PasswordForm>
 				{/if}
 			</Card.Content>
-			<Card.Footer>
+			<Card.Footer class="flex-col">
 				<div class="flex items-center">
 					<p class="text-sm text-muted-foreground">Have an account already?</p>
-					<Button variant="link" href="/signin">Sign in</Button>
+					<Button class="p-0 ml-1" variant="link" href="/signin">Sign in</Button>
 				</div>
 			</Card.Footer>
 		</Card.Root>

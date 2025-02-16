@@ -39,7 +39,7 @@
 			</Card.Header>
 			<Card.Content class="grid gap-4">
 				<form id="loginForm" method="POST" use:enhance>
-					<Form.Field {form} name="email">
+					<Form.Field {form} class="mb-4" name="email">
 						<Form.Control>
 							{#snippet children({ attrs }: Control)}
 								<Form.Label>Email</Form.Label>
@@ -53,10 +53,15 @@
 						</Form.Control>
 						<Form.FieldErrors />
 					</Form.Field>
-					<Form.Field {form} name="password">
+					<Form.Field {form} name="password" class="mb-4">
 						<Form.Control>
 							{#snippet children({ attrs }: Control)}
-								<Form.Label>Password</Form.Label>
+								<div class="flex items-center justify-between">
+									<Form.Label>Password</Form.Label>
+									<Button variant="link" class="h-auto p-0" href="/forgot-password"
+										>Forgot your password?</Button
+									>
+								</div>
 								<div class="relative">
 									<Input
 										type={showPassword ? 'text' : 'password'}
@@ -93,7 +98,7 @@
 			</Card.Content>
 			<Card.Footer class="flex-col">
 				<Button
-					class="w-full"
+					class="mb-4 w-full"
 					type="submit"
 					form="loginForm"
 					disabled={$delayed ||
@@ -104,10 +109,12 @@
 					{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
 					Login
 				</Button>
-				<Button variant="link" class="w-full" href="/forgot-password">Forgot password?</Button>
+				<Button variant="outline" class="mb-4 w-full" href="/auth-google"
+					>Login with Google</Button
+				>
 				<div class="flex items-center">
 					<p class="text-sm text-muted-foreground">Don't have an account?</p>
-					<Button variant="link" href="/signup">Sign up</Button>
+					<Button class="ml-1 p-0" variant="link" href="/signup">Sign up</Button>
 				</div>
 			</Card.Footer>
 		</Card.Root>
