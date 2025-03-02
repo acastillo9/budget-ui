@@ -36,6 +36,7 @@
 					<Logo />
 				</p>
 				<Card.Title class="text-2xl">Sign In</Card.Title>
+				<Card.Description>Sign in to your account to continue</Card.Description>
 			</Card.Header>
 			<Card.Content class="grid gap-4">
 				<form id="loginForm" method="POST" use:enhance>

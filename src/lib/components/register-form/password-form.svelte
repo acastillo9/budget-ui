@@ -50,7 +50,6 @@
 						{/if}
 					</Button>
 				</div>
-				<Form.Description>Create a password for your account.</Form.Description>
 			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />

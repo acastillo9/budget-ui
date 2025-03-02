@@ -6,6 +6,7 @@
 	import ActivationForm from '$lib/components/register-form/activation-form.svelte';
 	import PasswordForm from '$lib/components/register-form/password-form.svelte';
 	import Logo from '$lib/components/logo.svelte';
+	import Google from '$lib/components/icons/google.svelte';
 
 	let { data }: { data: PageData } = $props();
 
@@ -37,10 +38,29 @@
 				<p class="mb-4 flex justify-center">
 					<Logo />
 				</p>
-				<Card.Title class="text-2xl">Create your account</Card.Title>
+				<Card.Title class="text-2xl">Create an account</Card.Title>
+				{#if step === 1}
+					<Card.Description>Sign up to create your account</Card.Description>
+				{:else if step === 2}
+					<Card.Description>Enter the activation code sent to your email</Card.Description>
+				{:else if step === 3}
+					<Card.Description>Set a password for your account</Card.Description>
+				{/if}
 			</Card.Header>
 			<Card.Content class="grid gap-4 pb-0">
 				{#if step === 1}
+					<Button variant="outline" class="mb-4 w-full" href="/auth/google">
+						<Google class="mr-2 h-4 w-4" />
+						Google
+					</Button>
+					<div class="relative">
+						<div class="absolute inset-0 flex items-center">
+							<span class="w-full border-t"></span>
+						</div>
+						<div class="relative flex justify-center text-xs uppercase">
+							<span class="bg-card px-2 text-muted-foreground"> Or continue with </span>
+						</div>
+					</div>
 					<BasicInfoForm data={data.form} goToNextStep={setDataForActivationStep}></BasicInfoForm>
 				{:else if step === 2}
 					<ActivationForm
@@ -56,7 +76,7 @@
 			<Card.Footer class="flex-col">
 				<div class="flex items-center">
 					<p class="text-sm text-muted-foreground">Have an account already?</p>
-					<Button class="p-0 ml-1" variant="link" href="/signin">Sign in</Button>
+					<Button class="ml-1 p-0" variant="link" href="/signin">Sign in</Button>
 				</div>
 			</Card.Footer>
 		</Card.Root>

@@ -72,7 +72,6 @@
 						</InputOTP.Group>
 					{/snippet}
 				</InputOTP.Root>
-				<Form.Description>Please enter the one-time code sent to your email.</Form.Description>
 			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />
