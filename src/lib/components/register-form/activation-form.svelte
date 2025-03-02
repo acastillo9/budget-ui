@@ -36,7 +36,7 @@
 	async function resendActivationCode() {
 		resendingActivationCode = true;
 		try {
-			const response = await fetch('/api/resend-activation-code', {
+			const response = await fetch('/resend-activation-code', {
 				method: 'POST',
 				body: JSON.stringify({ email })
 			});

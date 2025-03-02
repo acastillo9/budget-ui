@@ -109,9 +109,7 @@
 					{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
 					Login
 				</Button>
-				<Button variant="outline" class="mb-4 w-full" href="/auth-google"
-					>Login with Google</Button
-				>
+				<Button variant="outline" class="mb-4 w-full" href="/auth/google">Login with Google</Button>
 				<div class="flex items-center">
 					<p class="text-sm text-muted-foreground">Don't have an account?</p>
 					<Button class="ml-1 p-0" variant="link" href="/signup">Sign up</Button>
