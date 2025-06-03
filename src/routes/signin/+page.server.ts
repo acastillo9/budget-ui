@@ -6,12 +6,12 @@ import { loginFormSchema } from './schema';
 import { zod } from "sveltekit-superforms/adapters";
 import { setFlash } from 'sveltekit-flash-message/server';
 
-export const load: PageServerLoad = async ({ locals  }) => {
+export const load: PageServerLoad = async ({ locals }) => {
   const { user } = locals
   if (user) {
     throw redirect(302, '/dashboard');
   }
-  
+
   return {
     form: await superValidate(zod(loginFormSchema)),
   };
@@ -39,7 +39,7 @@ export const actions: Actions = {
         return fail(401, { form });
       }
 
-      const { access_token } = await response.json();
+      const { access_token, refresh_token } = await response.json();
 
       // Set the cookie
       cookies.set('AuthorizationToken', `${access_token}`, {
@@ -47,8 +47,18 @@ export const actions: Actions = {
         path: '/',
         secure: true,
         sameSite: 'strict',
-        maxAge: 60 * 60 * 24 // 1 day
       });
+
+      if (refresh_token) {
+        cookies.set('RefreshToken', `${refresh_token}`, {
+          httpOnly: true,
+          path: '/',
+          secure: true,
+          sameSite: 'strict',
+          maxAge: form.data.rememberMe ? 60 * 60 * 24 * 30 : 60 * 60 * 2 // 30 days for long-lived, 2 hours for short-lived
+        })
+      }
+
     } catch {
       setFlash({ type: 'error', message: 'Login failed, please verify your email and password' }, cookies);
       return fail(401, { form });

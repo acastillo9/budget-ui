@@ -6,14 +6,29 @@ import { setFlash } from 'sveltekit-flash-message/server';
 import { API_URL } from '$env/static/private';
 import { passwordSchema, passwordWithTokenSchema } from '$lib/components/register-form/schema';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ params, cookies }) => {
+
+  const { token } = params;
+  try {
+    const response = await fetch(`${API_URL}/auth/verify-set-password-token/${token}`);
+    if (!response.ok) {
+      const { message } = await response.json();
+      setFlash({ type: 'error', message }, cookies);
+      throw redirect(302, '/forgot-password');
+    }
+  } catch {
+    setFlash({ type: 'error', message: 'Invalid or expired reset token' }, cookies);
+    throw redirect(302, '/forgot-password');
+  }
+
   return {
+    accessToken: token,
     form: await superValidate(zod(passwordSchema)),
   };
 };
 
 export const actions: Actions = {
-  default: async ({ request, cookies }) => {
+  password: async ({ request, cookies }) => {
     const form = await superValidate(request, zod(passwordWithTokenSchema));
 
     if (!form.valid) {
@@ -21,11 +36,10 @@ export const actions: Actions = {
     }
 
     try {
-      const response = await fetch(`${API_URL}/auth/set-password`, {
+      const response = await fetch(`${API_URL}/auth/set-password/${form.data.accessToken}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${form.data.accessToken}`
         },
         body: JSON.stringify(form.data)
       });

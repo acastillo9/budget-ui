@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { superForm } from 'sveltekit-superforms';
+	import { superForm, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { passwordSchema } from './schema';
 	import * as Form from '$lib/components/ui/form';
@@ -10,7 +10,15 @@
 	import Eye from 'lucide-svelte/icons/eye';
 	import EyeOff from 'lucide-svelte/icons/eye-off';
 
-	let { data, accessToken } = $props();
+	interface Props {
+		data: SuperValidated<{
+			password: string;
+		}>;
+		accessToken: string;
+		saveButtonText?: string;
+	}
+
+	let { data, accessToken, saveButtonText }: Props = $props();
 	let showPassword = $state(false);
 
 	const form = superForm(data, {
@@ -61,6 +69,6 @@
 		disabled={$delayed || !isTainted($tainted?.password) || $allErrors.length}
 	>
 		{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
-		Next
+		{saveButtonText || 'Save'}
 	</Button>
 </form>

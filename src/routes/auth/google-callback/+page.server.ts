@@ -5,6 +5,7 @@ export const load: PageServerLoad = ({ request, cookies }) => {
   const url = new URL(request.url);
   const searchParams = url.searchParams;
   const access_token = searchParams.get('access_token');
+  const refresh_token = searchParams.get('refresh_token');
 
   // Set the cookie
   cookies.set('AuthorizationToken', `${access_token}`, {
@@ -12,7 +13,14 @@ export const load: PageServerLoad = ({ request, cookies }) => {
     path: '/',
     secure: true,
     sameSite: 'lax',
-    maxAge: 60 * 60 * 24 // 1 day
+  });
+
+  cookies.set('RefreshToken', `${refresh_token}`, {
+    httpOnly: true,
+    path: '/',
+    secure: true,
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 24 * 30 // 30 days
   });
 
   throw redirect(302, '/dashboard');

@@ -30,7 +30,7 @@ async function checkEmail(form: SuperValidated<Infer<CheckEmailSchema>>) {
 }
 
 export const actions: Actions = {
-  post: async ({ request, cookies }) => {
+  post: async ({ request, cookies, fetch }) => {
     const form = await superValidate(request, zod(signupFormSchema));
 
     if (!form.valid) {
@@ -50,7 +50,13 @@ export const actions: Actions = {
 
       if (!response.ok) {
         const { message, statusCode } = await response.json();
-        setFlash({ type: 'error', message }, cookies);
+
+        if (statusCode === 429) {
+          setFlash({ type: 'error', message: 'Too many requests, please try again later' }, cookies);
+        } else {
+          setFlash({ type: 'error', message }, cookies);
+        }
+
         return fail(statusCode, { form });
       }
 
@@ -122,11 +128,10 @@ export const actions: Actions = {
     }
 
     try {
-      const response = await fetch(`${API_URL}/auth/set-password`, {
+      const response = await fetch(`${API_URL}/auth/set-password/${form.data.accessToken}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${form.data.accessToken}`
         },
         body: JSON.stringify(form.data)
       });
@@ -134,6 +139,9 @@ export const actions: Actions = {
       if (!response.ok) {
         const { message, statusCode } = await response.json();
         setFlash({ type: 'error', message }, cookies);
+        if (statusCode === 401) {
+          throw redirect(302, '/signup');
+        }
         return fail(statusCode, { form });
       }
 

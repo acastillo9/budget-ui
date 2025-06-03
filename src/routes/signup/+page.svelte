@@ -8,12 +8,16 @@
 	import Logo from '$lib/components/logo.svelte';
 	import Google from '$lib/components/icons/google.svelte';
 
-	let { data }: { data: PageData } = $props();
+  interface Props {
+    data: PageData;
+  }
+
+	let { data }: Props = $props();
 
 	let step = $state(1);
 	let email: string | undefined = $state(undefined);
 	let activationCodeResendAt: Date | undefined = $state(undefined);
-	let accessToken: string | undefined = $state(undefined);
+	let accessToken: string = $state('');
 
 	function setDataForActivationStep(userEmail: string, userActivationCodeResendAt: Date) {
 		step = 2;
@@ -70,7 +74,7 @@
 						goToNextStep={setAccessToken}
 					></ActivationForm>
 				{:else if step === 3}
-					<PasswordForm data={data.passwordForm} {accessToken}></PasswordForm>
+					<PasswordForm data={data.passwordForm} {accessToken} saveButtonText="Next"></PasswordForm>
 				{/if}
 			</Card.Content>
 			<Card.Footer class="flex-col">
