@@ -13,6 +13,7 @@
 	import Logo from '$lib/components/logo.svelte';
 	import Eye from 'lucide-svelte/icons/eye';
 	import EyeOff from 'lucide-svelte/icons/eye-off';
+	import { t } from 'svelte-i18n';
 
 	let { data }: { data: PageData } = $props();
 	let showPassword = $state(false);
@@ -35,8 +36,8 @@
 				<p class="mb-4 flex justify-center">
 					<Logo />
 				</p>
-				<Card.Title class="text-2xl">Sign In</Card.Title>
-				<Card.Description>Sign in to your account to continue</Card.Description>
+				<Card.Title class="text-2xl">{$t('signIn')}</Card.Title>
+				<Card.Description>{$t('signInDescription')}</Card.Description>
 			</Card.Header>
 			<Card.Content class="grid gap-4">
 				<form id="loginForm" method="POST" use:enhance>

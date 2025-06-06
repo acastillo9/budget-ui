@@ -1,5 +1,6 @@
 <script lang="ts">
 	import '../app.css';
+	import '$lib/i18n';
 	import { ModeWatcher } from 'mode-watcher';
 	import { getFlash } from 'sveltekit-flash-message';
 	import { page } from '$app/state';
@@ -10,6 +11,7 @@
 	import Footer from '$lib/components/footer.svelte';
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
+	import { isLoading } from 'svelte-i18n';
 
 	let { data, children } = $props();
 
@@ -37,12 +39,14 @@
 
 <ModeWatcher />
 
-<div class="flex h-screen flex-col">
-	<Header borderless></Header>
+{#if !$isLoading}
+	<div class="flex h-screen flex-col">
+		<Header borderless></Header>
 
-	<div class="flex-grow">
-		{@render children()}
+		<div class="flex-grow">
+			{@render children()}
+		</div>
+
+		<Footer></Footer>
 	</div>
-
-	<Footer></Footer>
-</div>
+{/if}
