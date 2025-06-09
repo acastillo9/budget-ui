@@ -1,4 +1,72 @@
 {
-  "signIn": "Sign In",
-  "signInDescription": "Sign in to your account to continue"
+  "common": {
+    "email": "Email",
+    "goTo": "Go to",
+    "name": "Name",
+    "next": "Next",
+    "password": "Password",
+    "save": "Save",
+    "send": "Send",
+    "signIn": "Sign In"
+  },
+  "forgotPassword": {
+    "description": "Enter your email to receive a password reset link.",
+    "emailNotFound": "Email not found. Please check and try again.",
+    "emailSent": "A password reset link has been sent to your email.",
+    "resetPasswordLimitReached": "You have reached the limit for password reset requests. Please try again later.",
+    "title": "Forgot Password"
+  },
+  "header": {
+    "toggleTheme": "Toggle Theme"
+  },
+  "resetPassword": {
+    "description": "Please enter your new password.",
+    "invalidToken": "The reset password token is invalid or has expired.",
+    "passwordResetError": "Error resetting password. Please try again.",
+    "passwordResetSuccess": "Your password has been reset successfully. You can now sign in.",
+    "title": "Reset Password"
+  },
+  "signIn": {
+    "description": "Sign in to your account to continue",
+    "dontHaveAccount": "Don't have an account?",
+    "forgotPassword": "Forgot Password?",
+    "login": "Login",
+    "loginWithGoogle": "Login with Google",
+    "rememberMe": "Remember Me",
+    "signInError": "Error signing in. Please check your credentials and try again.",
+    "signUp": "Sign Up",
+    "title": "Sign In"
+  },
+  "signOut": {
+    "signOutError": "Error signing out. Please try again.",
+    "signOutSuccess": "You have been signed out successfully."
+  },
+  "signUp": {
+    "activationCode": "Activation Code",
+    "activationCodeSent": "An activation code has been sent to your email",
+    "activationCodeSentError": "Error sending activation code. Please try again.",
+    "activationError": "Error activating account. Please check your activation code and try again.",
+    "activationSuccess": "Activation successful. You can now set your password.",
+    "description": "Create a new account to get started",
+    "descriptionActivationCode": "Enter the activation code sent to your email",
+    "descriptionSetPassword": "Set your password to complete the registration",
+    "haveAccount": "Already have an account?",
+    "hours": "hours",
+    "in": "in",
+    "minutes": "minutes",
+    "orContinueWith": "Or continue with",
+    "resendActivationCode": "Resend Activation Code",
+    "seconds": "seconds",
+    "setPasswordError": "Error setting password. Please check your details and try again.",
+    "setPasswordSuccess": "Password set successfully. You can now sign in.",
+    "title": "Create an Account",
+    "tooManyRequests": "Too many requests. Please try again later.",
+    "validation": {
+      "activationCodeMinLength": "Your one-time password must be at least 6 digits.",
+      "emailAlreadyExists": "An account with this email already exists.",
+      "nameIsRequired": "Name is required",
+      "passwordMinLength": "Password must be at least 8 characters long.",
+      "passwordMustContainUppercase": "Password must contain at least one uppercase letter."
+    }
+  }
 }

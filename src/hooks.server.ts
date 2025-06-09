@@ -1,5 +1,6 @@
 import { API_URL } from '$env/static/private';
 import { type Handle, type HandleFetch } from '@sveltejs/kit';
+import { locale } from 'svelte-i18n'
 
 const getUserFromToken = async (token: string) => {
   const res = await fetch(`${API_URL}/auth/me`, {
@@ -38,6 +39,11 @@ const refreshTokens = async (refreshToken: string) => {
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
+  const lang = event.request.headers.get('accept-language')?.split(',')[0]
+  if (lang) {
+		locale.set(lang)
+	}
+
   const { cookies } = event;
   const accessToken = cookies.get('AuthorizationToken');
 
@@ -96,9 +102,5 @@ export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
   if (token) {
     request.headers.set('Authorization', `Bearer ${token}`);
   }
-
-  const lang = event.request.headers.get('accept-language')?.split(',')[0]
-  request.headers.set('accept-language', lang || 'en')
-
   return fetch(request);
 };

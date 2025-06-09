@@ -8,14 +8,14 @@
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { Control } from 'formsnap';
-	import type { PageData } from './$types';
+	import type { PageProps } from './$types';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import Logo from '$lib/components/logo.svelte';
 	import Eye from 'lucide-svelte/icons/eye';
 	import EyeOff from 'lucide-svelte/icons/eye-off';
 	import { t } from 'svelte-i18n';
 
-	let { data }: { data: PageData } = $props();
+	let { data }: PageProps = $props();
 	let showPassword = $state(false);
 
 	const form = superForm(data.form, {
@@ -26,7 +26,7 @@
 </script>
 
 <svelte:head>
-	<title>Budget App - Sign In</title>
+	<title>Budget App - {$t('signIn.title')}</title>
 </svelte:head>
 
 <div class="container flex h-full items-center justify-center">
@@ -36,15 +36,15 @@
 				<p class="mb-4 flex justify-center">
 					<Logo />
 				</p>
-				<Card.Title class="text-2xl">{$t('signIn')}</Card.Title>
-				<Card.Description>{$t('signInDescription')}</Card.Description>
+				<Card.Title class="text-2xl">{$t('signIn.title')}</Card.Title>
+				<Card.Description>{$t('signIn.description')}</Card.Description>
 			</Card.Header>
 			<Card.Content class="grid gap-4">
 				<form id="loginForm" method="POST" use:enhance>
 					<Form.Field {form} class="mb-4" name="email">
 						<Form.Control>
 							{#snippet children({ attrs }: Control)}
-								<Form.Label>Email</Form.Label>
+								<Form.Label>{$t('common.email')}</Form.Label>
 								<Input
 									type="email"
 									placeholder="email@example.com"
@@ -59,9 +59,9 @@
 						<Form.Control>
 							{#snippet children({ attrs }: Control)}
 								<div class="flex items-center justify-between">
-									<Form.Label>Password</Form.Label>
+									<Form.Label>{$t('common.password')}</Form.Label>
 									<Button variant="link" class="h-auto p-0" href="/forgot-password"
-										>Forgot your password?</Button
+										>{$t('signIn.forgotPassword')}</Button
 									>
 								</div>
 								<div class="relative">
@@ -91,7 +91,7 @@
 						<Form.Control>
 							{#snippet children({ attrs }: Control)}
 								<Checkbox {...attrs} />
-								<Form.Label>Remember me</Form.Label>
+								<Form.Label>{$t('signIn.rememberMe')}</Form.Label>
 							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />
@@ -109,12 +109,14 @@
 						$allErrors.length}
 				>
 					{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
-					Login
+					{$t('signIn.login')}
 				</Button>
-				<Button variant="outline" class="mb-4 w-full" href="/auth/google">Login with Google</Button>
+				<Button variant="outline" class="mb-4 w-full" href="/auth/google"
+					>{$t('signIn.loginWithGoogle')}</Button
+				>
 				<div class="flex items-center">
-					<p class="text-sm text-muted-foreground">Don't have an account?</p>
-					<Button class="ml-1 p-0" variant="link" href="/signup">Sign up</Button>
+					<p class="text-sm text-muted-foreground">{$t('signIn.dontHaveAccount')}</p>
+					<Button class="ml-1 p-0" variant="link" href="/signup">{$t('signIn.signUp')}</Button>
 				</div>
 			</Card.Footer>
 		</Card.Root>

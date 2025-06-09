@@ -5,6 +5,7 @@ import { forgotPasswordFormSchema } from './schema';
 import { fail, redirect } from '@sveltejs/kit';
 import { setFlash } from 'sveltekit-flash-message/server';
 import { API_URL } from '$env/static/private';
+import { $t } from '$lib/i18n';
 
 export const load: PageServerLoad = async () => {
   return {
@@ -33,7 +34,7 @@ export const actions: Actions = {
         const { message, statusCode } = await response.json();
         if (statusCode !== 404) {
           if (statusCode === 429) {
-            setFlash({ type: 'error', message: 'Reset password limit reached, please try again tomorrow' }, cookies);
+            setFlash({ type: 'error', message: $t('forgotPassword.resetPasswordLimitReached') }, cookies);
           } else {
             setFlash({ type: 'error', message }, cookies);
           }
@@ -41,7 +42,7 @@ export const actions: Actions = {
         }
       }
 
-      setFlash({ type: 'success', message: 'An email has been sent to you with instructions on how to reset your password' }, cookies)
+      setFlash({ type: 'success', message: $t('forgotPassword.emailSent') }, cookies)
     } catch {
       return fail(500, { form });
     }

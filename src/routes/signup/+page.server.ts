@@ -5,6 +5,7 @@ import { setError, superValidate, type Infer, type SuperValidated } from 'svelte
 import { zod } from 'sveltekit-superforms/adapters';
 import { setFlash } from 'sveltekit-flash-message/server';
 import { activationSchema, activationWithEmailSchema, checkEmailSchema, passwordSchema, passwordWithTokenSchema, signupFormSchema, type CheckEmailSchema } from '$lib/components/register-form/schema';
+import { $t } from '$lib/i18n';
 
 export const load: PageServerLoad = async ({ locals }) => {
   const { user } = locals
@@ -52,7 +53,7 @@ export const actions: Actions = {
         const { message, statusCode } = await response.json();
 
         if (statusCode === 429) {
-          setFlash({ type: 'error', message: 'Too many requests, please try again later' }, cookies);
+          setFlash({ type: 'error', message: $t('signUp.tooManyRequest') }, cookies);
         } else {
           setFlash({ type: 'error', message }, cookies);
         }
@@ -64,9 +65,9 @@ export const actions: Actions = {
       userEmail = email;
       userActivationCodeResendAt = activationCodeResendAt;
 
-      setFlash({ type: 'success', message: 'User registered successfully, a verification code was sent please check your email' }, cookies);
+      setFlash({ type: 'success', message: $t('signUp.activationCodeSent') }, cookies);
     } catch {
-      setFlash({ type: 'error', message: 'Failed to register user, please try again' }, cookies);
+      setFlash({ type: 'error', message: $t('signUp.activationCodeSentError') }, cookies);
       return fail(500, { form });
     }
 
@@ -81,7 +82,7 @@ export const actions: Actions = {
 
     const isValidEmail = await checkEmail(form);
     if (!isValidEmail) {
-      setError(form, 'email', 'Email is already registered.');
+      setError(form, 'email', $t('signUp.validation.emailAlreadyExists'));
       return fail(400, { form });
     }
 
@@ -112,9 +113,9 @@ export const actions: Actions = {
       const { access_token } = await response.json();
       accessToken = access_token;
 
-      setFlash({ type: 'success', message: 'User activated successfully, please create a secure password.' }, cookies);
+      setFlash({ type: 'success', message: $t('signUp.activationSuccess') }, cookies);
     } catch {
-      setFlash({ type: 'error', message: 'Failed to activate user, please try again' }, cookies);
+      setFlash({ type: 'error', message: $t('signUp.activationError') }, cookies);
       return fail(500, { form });
     }
 
@@ -156,9 +157,9 @@ export const actions: Actions = {
         maxAge: 60 * 60 * 24 // 1 day
       });
 
-      setFlash({ type: 'success', message: 'Password set successfully.' }, cookies)
+      setFlash({ type: 'success', message: $t('signUp.setPasswordSuccess') }, cookies)
     } catch {
-      setFlash({ type: 'error', message: 'Failed to set password, please try again' }, cookies);
+      setFlash({ type: 'error', message: $t('signUp.setPasswordError') }, cookies);
       return fail(500, { form });
     }
 

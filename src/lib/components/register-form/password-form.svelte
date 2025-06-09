@@ -9,6 +9,7 @@
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import Eye from 'lucide-svelte/icons/eye';
 	import EyeOff from 'lucide-svelte/icons/eye-off';
+	import { t } from 'svelte-i18n';
 
 	interface Props {
 		data: SuperValidated<{
@@ -38,7 +39,7 @@
 	<Form.Field {form} name="password">
 		<Form.Control>
 			{#snippet children({ attrs }: Control)}
-				<Form.Label>Password</Form.Label>
+				<Form.Label>{$t('common.password')}</Form.Label>
 				<div class="relative">
 					<Input
 						type={showPassword ? 'text' : 'password'}
@@ -69,6 +70,6 @@
 		disabled={$delayed || !isTainted($tainted?.password) || $allErrors.length}
 	>
 		{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
-		{saveButtonText || 'Save'}
+		{saveButtonText || $t('common.save')}
 	</Button>
 </form>

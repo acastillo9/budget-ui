@@ -5,4 +5,3 @@ export const load: LayoutServerLoad = loadFlash(async ({ locals }) => {
   const { user } = locals
   return { user };
 });
-

@@ -1,3 +1,72 @@
 {
-  "signIn": "Iniciar sesión"
+  "common": {
+    "email": "Correo electrónico",
+    "goTo": "Ir a",
+    "name": "Nombre",
+    "next": "Siguiente",
+    "password": "Contraseña",
+    "save": "Guardar",
+    "send": "Enviar",
+    "signIn": "Iniciar sesión"
+  },
+  "forgotPassword": {
+    "description": "Ingresa tu correo electrónico para recibir un enlace para restablecer la contraseña.",
+    "emailNotFound": "Correo no encontrado. Por favor, verifica e inténtalo de nuevo.",
+    "emailSent": "Se ha enviado un enlace de restablecimiento de contraseña a tu correo.",
+    "resetPasswordLimitReached": "Has alcanzado el límite de solicitudes para restablecer la contraseña. Inténtalo más tarde.",
+    "title": "¿Olvidaste tu contraseña?"
+  },
+  "header": {
+    "toggleTheme": "Cambiar tema"
+  },
+  "resetPassword": {
+    "description": "Por favor, ingresa tu nueva contraseña.",
+    "invalidToken": "El token de restablecimiento es inválido o ha expirado.",
+    "passwordResetError": "Error al restablecer la contraseña. Por favor, inténtalo de nuevo.",
+    "passwordResetSuccess": "Tu contraseña ha sido restablecida exitosamente. Ya puedes iniciar sesión.",
+    "title": "Restablecer contraseña"
+  },
+  "signIn": {
+    "description": "Inicia sesión en tu cuenta para continuar",
+    "dontHaveAccount": "¿No tienes una cuenta?",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "login": "Iniciar sesión",
+    "loginWithGoogle": "Iniciar sesión con Google",
+    "rememberMe": "Recuérdame",
+    "signInError": "Error al iniciar sesión. Verifica tus credenciales e inténtalo de nuevo.",
+    "signUp": "Regístrate",
+    "title": "Iniciar sesión"
+  },
+  "signOut": {
+    "signOutError": "Error al cerrar sesión. Por favor, inténtalo de nuevo.",
+    "signOutSuccess": "Has cerrado sesión exitosamente."
+  },
+  "signUp": {
+    "activationCode": "Código de activación",
+    "activationCodeSent": "Se ha enviado un código de activación a tu correo",
+    "activationCodeSentError": "Error al enviar el código de activación. Por favor, inténtalo de nuevo.",
+    "activationError": "Error al activar la cuenta. Verifica tu código de activación e inténtalo de nuevo.",
+    "activationSuccess": "Activación exitosa. Ahora puedes establecer tu contraseña.",
+    "description": "Crea una nueva cuenta para comenzar",
+    "descriptionActivationCode": "Ingresa el código de activación enviado a tu correo",
+    "descriptionSetPassword": "Establece tu contraseña para completar el registro",
+    "haveAccount": "¿Ya tienes una cuenta?",
+    "hours": "horas",
+    "in": "en",
+    "minutes": "minutos",
+    "orContinueWith": "O continúa con",
+    "resendActivationCode": "Reenviar código de activación",
+    "seconds": "segundos",
+    "setPasswordError": "Error al establecer la contraseña. Verifica tus datos e inténtalo de nuevo.",
+    "setPasswordSuccess": "Contraseña establecida con éxito. Ya puedes iniciar sesión.",
+    "title": "Crear una cuenta",
+    "tooManyRequests": "Demasiadas solicitudes. Inténtalo de nuevo más tarde.",
+    "validation": {
+      "activationCodeMinLength": "Tu código de activación debe tener al menos 6 dígitos.",
+      "emailAlreadyExists": "Ya existe una cuenta con este correo electrónico.",
+      "nameIsRequired": "El nombre es obligatorio",
+      "passwordMinLength": "La contraseña debe tener al menos 8 caracteres.",
+      "passwordMustContainUppercase": "La contraseña debe contener al menos una letra mayúscula."
+    }
+  }
 }

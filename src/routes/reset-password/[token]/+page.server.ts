@@ -5,6 +5,7 @@ import { fail, redirect } from '@sveltejs/kit';
 import { setFlash } from 'sveltekit-flash-message/server';
 import { API_URL } from '$env/static/private';
 import { passwordSchema, passwordWithTokenSchema } from '$lib/components/register-form/schema';
+import { $t } from '$lib/i18n';
 
 export const load: PageServerLoad = async ({ params, cookies }) => {
 
@@ -17,7 +18,7 @@ export const load: PageServerLoad = async ({ params, cookies }) => {
       throw redirect(302, '/forgot-password');
     }
   } catch {
-    setFlash({ type: 'error', message: 'Invalid or expired reset token' }, cookies);
+    setFlash({ type: 'error', message: $t('resetPassword.invalidToken')}, cookies);
     throw redirect(302, '/forgot-password');
   }
 
@@ -50,8 +51,9 @@ export const actions: Actions = {
         return fail(statusCode, { form });
       }
 
-      setFlash({ type: 'success', message: 'Password has been reset successfully, please login with your new password' }, cookies)
+      setFlash({ type: 'success', message: $t('resetPassword.passwordResetSuccess')}, cookies)
     } catch {
+      setFlash({ type: 'error', message: $t('resetPassword.passwordResetError') }, cookies)
       return fail(500, { form });
     }
 

@@ -5,6 +5,7 @@ import { superValidate } from 'sveltekit-superforms';
 import { loginFormSchema } from './schema';
 import { zod } from "sveltekit-superforms/adapters";
 import { setFlash } from 'sveltekit-flash-message/server';
+import { $t } from '$lib/i18n';
 
 export const load: PageServerLoad = async ({ locals }) => {
   const { user } = locals
@@ -35,7 +36,7 @@ export const actions: Actions = {
       });
 
       if (!response.ok) {
-        setFlash({ type: 'error', message: 'Login failed, please verify your email and password' }, cookies);
+        setFlash({ type: 'error', message: $t('signIn.signInError')}, cookies);
         return fail(401, { form });
       }
 
@@ -60,7 +61,7 @@ export const actions: Actions = {
       }
 
     } catch {
-      setFlash({ type: 'error', message: 'Login failed, please verify your email and password' }, cookies);
+      setFlash({ type: 'error', message: $t('signIn.signInError')}, cookies);
       return fail(401, { form });
     }
 

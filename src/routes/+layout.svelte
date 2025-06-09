@@ -11,9 +11,9 @@
 	import Footer from '$lib/components/footer.svelte';
 	import { setContext } from 'svelte';
 	import { writable } from 'svelte/store';
-	import { isLoading } from 'svelte-i18n';
+	import type { LayoutProps } from './$types';
 
-	let { data, children } = $props();
+	let { data, children }: LayoutProps = $props();
 
 	const userStore = writable<UserSession | undefined>(data.user);
 	setContext('user', userStore);
@@ -39,14 +39,12 @@
 
 <ModeWatcher />
 
-{#if !$isLoading}
-	<div class="flex h-screen flex-col">
-		<Header borderless></Header>
+<div class="flex h-screen flex-col">
+	<Header borderless></Header>
 
-		<div class="flex-grow">
-			{@render children()}
-		</div>
-
-		<Footer></Footer>
+	<div class="flex-grow">
+		{@render children()}
 	</div>
-{/if}
+
+	<Footer></Footer>
+</div>

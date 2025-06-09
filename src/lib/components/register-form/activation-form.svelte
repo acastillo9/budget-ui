@@ -11,6 +11,7 @@
 	import Countdown from '../countdown.svelte';
 	import type { CountdownData } from '$lib/types';
 	import { toast } from 'svelte-sonner';
+	import { t } from 'svelte-i18n';
 
 	let { data, email, activationCodeResendAt, goToNextStep } = $props();
 	let remainingTime = $state(activationCodeResendAt);
@@ -43,9 +44,9 @@
 
 			const { activationCodeResendAt } = await response.json();
 			remainingTime = new Date(activationCodeResendAt);
-			toast.success('Activation code sent successfully, please check your email.');
+			toast.success($t('signUp.activationCodeSent'));
 		} catch {
-			toast.error('Failed to send activation code, please try again later.');
+			toast.error($t('signUp.activationCodeSentError'));
 		} finally {
 			resendingActivationCode = false;
 		}
@@ -56,7 +57,7 @@
 	<Form.Field {form} name="activationCode">
 		<Form.Control>
 			{#snippet children({ attrs }: Control)}
-				<Form.Label>Activation Code</Form.Label>
+				<Form.Label>{$t('signUp.activationCode')}</Form.Label>
 				<InputOTP.Root
 					minlength={6}
 					maxlength={6}
@@ -86,18 +87,18 @@
 						(resendingActivationCode || !data.done) && 'pointer-events-none text-muted'
 					]}
 					variant="link"
-					onclick={resendActivationCode}>Resend activation code</Button
+					onclick={resendActivationCode}>{$t('signUp.resendActivationCode')}</Button
 				>
 				{#if !data.done}
 					<small class="text-muted">
-						in
+						{$t('signUp.in')}
 						{#if data.hours}
-							<span>{data.hours} hours</span>
+							<span>{data.hours} {$t('signUp.hours')}</span>
 						{/if}
 						{#if data.minutes}
-							<span>{data.minutes} minutes</span>
+							<span>{data.minutes} {$t('signUp.minutes')}</span>
 						{/if}
-						<span>{data.seconds} seconds</span>
+						<span>{data.seconds} {$t('signUp.seconds')}</span>
 					</small>
 				{/if}
 			</div>
@@ -110,6 +111,6 @@
 		disabled={$delayed || !isTainted($tainted?.activationCode) || $allErrors.length}
 	>
 		{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
-		Next
+		{$t('common.next')}
 	</Button>
 </form>

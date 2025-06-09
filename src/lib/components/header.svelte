@@ -9,6 +9,7 @@
 	import type { UserSession } from '$lib/types';
 	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
+	import { t } from 'svelte-i18n';
 
 	let { borderless = false } = $props();
 
@@ -25,9 +26,9 @@
 			}
 
 			user.set(undefined);
-      goto('/signin')
+			goto('/signin');
 		} catch {
-      toast['error']('An error occurred while signing out');
+			toast['error']($t('signOut.signOutError'));
 		}
 	}
 </script>
@@ -51,7 +52,7 @@
 				<Moon
 					class="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
 				/>
-				<span class="sr-only">Toggle theme</span>
+				<span class="sr-only">{$t('header.toggleTheme')}</span>
 			</Button>
 		</div>
 	</div>

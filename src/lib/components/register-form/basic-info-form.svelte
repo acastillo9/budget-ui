@@ -8,6 +8,7 @@
 	import { signupFormSchema } from './schema';
 	import { debounce } from 'throttle-debounce';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+	import { t } from 'svelte-i18n';
 
 	let { data, goToNextStep } = $props();
 
@@ -59,7 +60,7 @@
 	<Form.Field {form} name="name">
 		<Form.Control>
 			{#snippet children({ attrs }: Control)}
-				<Form.Label>Name</Form.Label>
+				<Form.Label>{$t('common.name')}</Form.Label>
 				<Input placeholder="John Doe" {...attrs} bind:value={$formData.name} />
 			{/snippet}
 		</Form.Control>
@@ -68,7 +69,7 @@
 	<Form.Field {form} name="email">
 		<Form.Control>
 			{#snippet children({ attrs }: Control)}
-				<Form.Label>Email</Form.Label>
+				<Form.Label>{$t('common.email')}</Form.Label>
 				<Input
 					form="check"
 					type="email"
@@ -93,7 +94,7 @@
 			$allErrors.length}
 	>
 		{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
-		Next
+		{$t('common.next')}
 	</Button>
 </form>
 

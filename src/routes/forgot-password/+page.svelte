@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
-	import type { PageData } from './$types';
+	import type { PageProps } from './$types';
 	import Logo from '$lib/components/logo.svelte';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
@@ -10,8 +10,9 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
 	import { forgotPasswordFormSchema } from './schema';
+	import { t } from 'svelte-i18n';
 
-	let { data }: { data: PageData } = $props();
+	let { data }: PageProps = $props();
 
 	const form = superForm(data.form, {
 		validators: zodClient(forgotPasswordFormSchema)
@@ -21,7 +22,7 @@
 </script>
 
 <svelte:head>
-	<title>Budget App - Forgot Password</title>
+	<title>Budget App - {$t('forgotPassword.title')}</title>
 </svelte:head>
 
 <div class="container flex h-full items-center justify-center">
@@ -31,23 +32,21 @@
 				<p class="mb-4 flex justify-center">
 					<Logo />
 				</p>
-				<Card.Title class="text-2xl">Forgot password</Card.Title>
+				<Card.Title class="text-2xl">{$t('forgotPassword.title')}</Card.Title>
 			</Card.Header>
 			<Card.Content class="grid gap-4">
 				<form id="forgotPasswordForm" method="POST" use:enhance>
 					<Form.Field {form} name="email">
 						<Form.Control>
 							{#snippet children({ attrs }: Control)}
-								<Form.Label>Email</Form.Label>
+								<Form.Label>{$t('common.email')}</Form.Label>
 								<Input
 									type="email"
 									placeholder="email@example.com"
 									{...attrs}
 									bind:value={$formData.email}
 								/>
-								<Form.Description>
-									Enter your email address and we will send you a link to reset your password.
-								</Form.Description>
+								<Form.Description>{$t('forgotPassword.description')}</Form.Description>
 							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />
@@ -62,11 +61,11 @@
 					disabled={$delayed || !isTainted($tainted?.email) || $allErrors.length}
 				>
 					{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
-					Send
+					{$t('common.send')}
 				</Button>
 				<div class="flex items-center">
-					<p class="text-sm text-muted-foreground">Go to</p>
-					<Button class="px-2" variant="link" href="/signin">Sign in</Button>
+					<p class="text-sm text-muted-foreground">{$t('common.goTo')}</p>
+					<Button class="px-2" variant="link" href="/signin">{$t('common.signIn')}</Button>
 				</div>
 			</Card.Footer>
 		</Card.Root>

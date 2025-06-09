@@ -1,19 +1,16 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
-	import type { PageData } from './$types';
+	import type { PageProps } from './$types';
 	import Logo from '$lib/components/logo.svelte';
 	import PasswordForm from '$lib/components/register-form/password-form.svelte';
+  import { t } from 'svelte-i18n';
 
-	interface Props {
-		data: PageData;
-	}
-
-	let { data }: Props = $props();
+	let { data }: PageProps = $props();
 </script>
 
 <svelte:head>
-	<title>Budget App - Password Reset</title>
+	<title>Budget App - {$t('resetPassword.title')}</title>
 </svelte:head>
 
 <div class="container flex h-full items-center justify-center">
@@ -23,16 +20,16 @@
 				<p class="mb-4 flex justify-center">
 					<Logo />
 				</p>
-				<Card.Title class="text-2xl">Password reset</Card.Title>
-				<Card.Description>Please enter your new password.</Card.Description>
+				<Card.Title class="text-2xl">{$t('resetPassword.title')}</Card.Title>
+				<Card.Description>{$t('resetPassword.description')}</Card.Description>
 			</Card.Header>
 			<Card.Content class="grid gap-4">
 				<PasswordForm data={data.form} accessToken={data.accessToken}></PasswordForm>
 			</Card.Content>
 			<Card.Footer class="flex-col">
 				<div class="flex items-center">
-					<p class="text-sm text-muted-foreground">Go to</p>
-					<Button class="px-2" variant="link" href="/signin">Sign in</Button>
+					<p class="text-sm text-muted-foreground">{$t('common.goTo')}</p>
+					<Button class="px-2" variant="link" href="/signin">{$t('common.signIn')}</Button>
 				</div>
 			</Card.Footer>
 		</Card.Root>

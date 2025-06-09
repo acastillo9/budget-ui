@@ -1,4 +1,5 @@
 import { register, init, getLocaleFromNavigator } from 'svelte-i18n';
+import { t, unwrapFunctionStore } from 'svelte-i18n';
 
 // Register your locale dictionaries
 register('en', () => import('./locales/en.json'));
@@ -11,3 +12,5 @@ init({
   loadingDelay: 200,
   warnOnMissingMessages: true
 });
+
+export const $t = unwrapFunctionStore(t);
