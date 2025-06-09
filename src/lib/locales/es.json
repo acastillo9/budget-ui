@@ -58,7 +58,7 @@
     "resendActivationCode": "Reenviar código de activación",
     "seconds": "segundos",
     "setPasswordError": "Error al establecer la contraseña. Verifica tus datos e inténtalo de nuevo.",
-    "setPasswordSuccess": "Contraseña establecida con éxito. Ya puedes iniciar sesión.",
+    "setPasswordSuccess": "Contraseña establecida con éxito.",
     "title": "Crear una cuenta",
     "tooManyRequests": "Demasiadas solicitudes. Inténtalo de nuevo más tarde.",
     "validation": {

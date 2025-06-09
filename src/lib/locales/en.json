@@ -58,7 +58,7 @@
     "resendActivationCode": "Resend Activation Code",
     "seconds": "seconds",
     "setPasswordError": "Error setting password. Please check your details and try again.",
-    "setPasswordSuccess": "Password set successfully. You can now sign in.",
+    "setPasswordSuccess": "Password set successfully.",
     "title": "Create an Account",
     "tooManyRequests": "Too many requests. Please try again later.",
     "validation": {

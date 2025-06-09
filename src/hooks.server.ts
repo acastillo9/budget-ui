@@ -102,5 +102,9 @@ export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
   if (token) {
     request.headers.set('Authorization', `Bearer ${token}`);
   }
+
+  const lang = event.request.headers.get('accept-language')?.split(',')[0]
+  request.headers.set('Accept-Language', lang || 'en');
+
   return fetch(request);
 };
