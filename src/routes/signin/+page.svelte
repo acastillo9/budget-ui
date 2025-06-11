@@ -7,12 +7,11 @@
 	import { loginFormSchema } from './schema';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { Control } from 'formsnap';
 	import type { PageProps } from './$types';
-	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Logo from '$lib/components/logo.svelte';
-	import Eye from 'lucide-svelte/icons/eye';
-	import EyeOff from 'lucide-svelte/icons/eye-off';
+	import Eye from '@lucide/svelte/icons/eye';
+	import EyeOff from '@lucide/svelte/icons/eye-off';
 	import { t } from 'svelte-i18n';
 
 	let { data }: PageProps = $props();
@@ -43,12 +42,12 @@
 				<form id="loginForm" method="POST" use:enhance>
 					<Form.Field {form} class="mb-4" name="email">
 						<Form.Control>
-							{#snippet children({ attrs }: Control)}
+							{#snippet children({ props })}
 								<Form.Label>{$t('common.email')}</Form.Label>
 								<Input
 									type="email"
 									placeholder="email@example.com"
-									{...attrs}
+									{...props}
 									bind:value={$formData.email}
 								/>
 							{/snippet}
@@ -57,7 +56,7 @@
 					</Form.Field>
 					<Form.Field {form} name="password" class="mb-4">
 						<Form.Control>
-							{#snippet children({ attrs }: Control)}
+							{#snippet children({ props })}
 								<div class="flex items-center justify-between">
 									<Form.Label>{$t('common.password')}</Form.Label>
 									<Button variant="link" class="h-auto p-0" href="/forgot-password"
@@ -67,7 +66,7 @@
 								<div class="relative">
 									<Input
 										type={showPassword ? 'text' : 'password'}
-										{...attrs}
+										{...props}
 										bind:value={$formData.password}
 									/>
 									<Button
@@ -89,8 +88,8 @@
 					</Form.Field>
 					<Form.Field {form} name="rememberMe">
 						<Form.Control>
-							{#snippet children({ attrs }: Control)}
-								<Checkbox {...attrs} />
+							{#snippet children({ props })}
+								<Checkbox {...props} />
 								<Form.Label>{$t('signIn.rememberMe')}</Form.Label>
 							{/snippet}
 						</Form.Control>
@@ -106,7 +105,7 @@
 					disabled={$delayed ||
 						!isTainted($tainted?.email) ||
 						!isTainted($tainted?.password) ||
-						$allErrors.length}
+						!!$allErrors.length}
 				>
 					{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
 					{$t('signIn.login')}

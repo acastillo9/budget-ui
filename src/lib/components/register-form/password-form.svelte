@@ -5,10 +5,9 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
-	import { Control } from 'formsnap';
-	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
-	import Eye from 'lucide-svelte/icons/eye';
-	import EyeOff from 'lucide-svelte/icons/eye-off';
+	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
+	import Eye from '@lucide/svelte/icons/eye';
+	import EyeOff from '@lucide/svelte/icons/eye-off';
 	import { t } from 'svelte-i18n';
 
 	interface Props {
@@ -38,12 +37,12 @@
 <form method="POST" action="?/password" use:enhance>
 	<Form.Field {form} name="password">
 		<Form.Control>
-			{#snippet children({ attrs }: Control)}
+			{#snippet children({ props })}
 				<Form.Label>{$t('common.password')}</Form.Label>
 				<div class="relative">
 					<Input
 						type={showPassword ? 'text' : 'password'}
-						{...attrs}
+						{...props}
 						bind:value={$formData.password}
 					/>
 					<Button
@@ -67,7 +66,7 @@
 	<Button
 		class="mt-5 w-full"
 		type="submit"
-		disabled={$delayed || !isTainted($tainted?.password) || $allErrors.length}
+		disabled={$delayed || !isTainted($tainted?.password) || !!$allErrors.length}
 	>
 		{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
 		{saveButtonText || $t('common.save')}

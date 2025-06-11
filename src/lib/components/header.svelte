@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Sun from 'lucide-svelte/icons/sun';
-	import Moon from 'lucide-svelte/icons/moon';
-	import LogOut from 'lucide-svelte/icons/log-out';
+	import Sun from '@lucide/svelte/icons/sun';
+	import Moon from '@lucide/svelte/icons/moon';
+	import LogOut from '@lucide/svelte/icons/log-out';
 	import { getContext } from 'svelte';
 	import { toggleMode } from 'mode-watcher';
 	import { Button } from '$lib/components/ui/button/index.js';

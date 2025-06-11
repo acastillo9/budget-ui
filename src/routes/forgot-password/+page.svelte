@@ -5,10 +5,9 @@
 	import Logo from '$lib/components/logo.svelte';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
-	import { Control } from 'formsnap';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import { forgotPasswordFormSchema } from './schema';
 	import { t } from 'svelte-i18n';
 
@@ -38,12 +37,12 @@
 				<form id="forgotPasswordForm" method="POST" use:enhance>
 					<Form.Field {form} name="email">
 						<Form.Control>
-							{#snippet children({ attrs }: Control)}
+							{#snippet children({ props })}
 								<Form.Label>{$t('common.email')}</Form.Label>
 								<Input
 									type="email"
 									placeholder="email@example.com"
-									{...attrs}
+									{...props}
 									bind:value={$formData.email}
 								/>
 								<Form.Description>{$t('forgotPassword.description')}</Form.Description>
@@ -58,7 +57,7 @@
 					class="w-full"
 					type="submit"
 					form="forgotPasswordForm"
-					disabled={$delayed || !isTainted($tainted?.email) || $allErrors.length}
+					disabled={$delayed || !isTainted($tainted?.email) || !!$allErrors.length}
 				>
 					{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
 					{$t('common.send')}

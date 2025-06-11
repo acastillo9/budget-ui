@@ -4,10 +4,9 @@
 	import { Button } from '$lib/components/ui/button';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { Control } from 'formsnap';
 	import { signupFormSchema } from './schema';
 	import { debounce } from 'throttle-debounce';
-	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import { t } from 'svelte-i18n';
 
 	let { data, goToNextStep } = $props();
@@ -59,22 +58,22 @@
 <form id="signupForm" method="POST" action="?/post" use:enhance>
 	<Form.Field {form} name="name">
 		<Form.Control>
-			{#snippet children({ attrs }: Control)}
+			{#snippet children({ props })}
 				<Form.Label>{$t('common.name')}</Form.Label>
-				<Input placeholder="John Doe" {...attrs} bind:value={$formData.name} />
+				<Input placeholder="John Doe" {...props} bind:value={$formData.name} />
 			{/snippet}
 		</Form.Control>
 		<Form.FieldErrors />
 	</Form.Field>
 	<Form.Field {form} name="email">
 		<Form.Control>
-			{#snippet children({ attrs }: Control)}
+			{#snippet children({ props })}
 				<Form.Label>{$t('common.email')}</Form.Label>
 				<Input
 					form="check"
 					type="email"
 					placeholder="email@example.com"
-					{...attrs}
+					{...props}
 					bind:value={$formData.email}
 					oninput={checkEmail}
 				/>
@@ -91,7 +90,7 @@
 		disabled={$delayed ||
 			!isTainted($tainted?.name) ||
 			!isTainted($tainted?.email) ||
-			$allErrors.length}
+			!!$allErrors.length}
 	>
 		{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
 		{$t('common.next')}

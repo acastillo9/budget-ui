@@ -2,12 +2,11 @@
 	import * as Form from '$lib/components/ui/form';
 	import * as InputOTP from '$lib/components/ui/input-otp/index.js';
 	import { Button } from '$lib/components/ui/button';
-	import { Control } from 'formsnap';
 	import { superForm } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { activationSchema } from './schema';
 	import { REGEXP_ONLY_DIGITS } from 'bits-ui';
-	import LoaderCircle from 'lucide-svelte/icons/loader-circle';
+	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Countdown from '../countdown.svelte';
 	import type { CountdownData } from '$lib/types';
 	import { toast } from 'svelte-sonner';
@@ -56,12 +55,12 @@
 <form method="POST" action="?/activate" use:enhance>
 	<Form.Field {form} name="activationCode">
 		<Form.Control>
-			{#snippet children({ attrs }: Control)}
+			{#snippet children({ props })}
 				<Form.Label>{$t('signUp.activationCode')}</Form.Label>
 				<InputOTP.Root
 					minlength={6}
 					maxlength={6}
-					{...attrs}
+					{...props}
 					bind:value={$formData.activationCode}
 					pattern={REGEXP_ONLY_DIGITS}
 				>
@@ -108,7 +107,7 @@
 	<Button
 		class="mt-5 w-full"
 		type="submit"
-		disabled={$delayed || !isTainted($tainted?.activationCode) || $allErrors.length}
+		disabled={$delayed || !isTainted($tainted?.activationCode) || !!$allErrors.length}
 	>
 		{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
 		{$t('common.next')}
