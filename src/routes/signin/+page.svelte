@@ -28,7 +28,7 @@
 	<title>Budget App - {$t('signIn.title')}</title>
 </svelte:head>
 
-<div class="container flex h-full items-center justify-center">
+<div class="p-4 flex h-full w-full items-center justify-center">
 	<div class="w-full md:w-96">
 		<Card.Root>
 			<Card.Header class="space-y-1">

@@ -42,7 +42,7 @@
 <div class="flex h-screen flex-col">
 	<Header borderless></Header>
 
-	<div class="flex-grow">
+	<div class="grow">
 		{@render children()}
 	</div>
 

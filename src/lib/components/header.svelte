@@ -33,7 +33,7 @@
 	}
 </script>
 
-<header class="flex h-20 w-full items-center p-4 backdrop-blur" class:border-b={!borderless}>
+<header class="flex h-20 w-full items-center p-4 backdrop-blur-sm" class:border-b={!borderless}>
 	<div class="flex w-full items-center justify-between">
 		<a href="/">
 			<h1 class="font-cursive text-4xl">Budget</h1>

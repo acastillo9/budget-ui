@@ -24,7 +24,7 @@
 	<title>Budget App - {$t('forgotPassword.title')}</title>
 </svelte:head>
 
-<div class="container flex h-full items-center justify-center">
+<div class="p-4 flex h-full items-center justify-center">
 	<div class="w-full md:w-96">
 		<Card.Root>
 			<Card.Header class="space-y-1">
