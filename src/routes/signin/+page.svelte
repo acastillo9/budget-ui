@@ -28,7 +28,7 @@
 	<title>Budget App - {$t('signIn.title')}</title>
 </svelte:head>
 
-<div class="p-4 flex h-full w-full items-center justify-center">
+<div class="flex h-full w-full items-center justify-center p-4">
 	<div class="w-full md:w-96">
 		<Card.Root>
 			<Card.Header class="space-y-1">
@@ -70,7 +70,7 @@
 										bind:value={$formData.password}
 									/>
 									<Button
-										class="absolute right-0 top-0 border-none bg-transparent hover:bg-transparent"
+										class="absolute top-0 right-0 border-none bg-transparent hover:bg-transparent"
 										variant="outline"
 										size="icon"
 										onclick={() => (showPassword = !showPassword)}
@@ -89,8 +89,10 @@
 					<Form.Field {form} name="rememberMe">
 						<Form.Control>
 							{#snippet children({ props })}
-								<Checkbox {...props} />
-								<Form.Label>{$t('signIn.rememberMe')}</Form.Label>
+								<div class="flex items-center gap-2">
+									<Checkbox {...props} />
+									<Form.Label>{$t('signIn.rememberMe')}</Form.Label>
+								</div>
 							{/snippet}
 						</Form.Control>
 						<Form.FieldErrors />
@@ -114,7 +116,7 @@
 					>{$t('signIn.loginWithGoogle')}</Button
 				>
 				<div class="flex items-center">
-					<p class="text-sm text-muted-foreground">{$t('signIn.dontHaveAccount')}</p>
+					<p class="text-muted-foreground text-sm">{$t('signIn.dontHaveAccount')}</p>
 					<Button class="ml-1 p-0" variant="link" href="/signup">{$t('signIn.signUp')}</Button>
 				</div>
 			</Card.Footer>
