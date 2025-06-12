@@ -1,4 +1,28 @@
 {
+  "account": {
+    "accountBalance": "Saldo de la cuenta",
+    "accountBalancePlaceholder": "0.00",
+    "accountCurrency": "Moneda de la cuenta",
+    "accountCurrencyPlaceholder": "Selecciona la moneda de la cuenta",
+    "accountName": "Nombre de la cuenta",
+    "accountNamePlaceholder": "Ingresa el nombre de la cuenta",
+    "accountType": "Tipo de cuenta",
+    "accountTypePlaceholder": "Selecciona el tipo de cuenta",
+    "accountTypes": {
+      "CHECKING": "Cuenta corriente",
+      "CREDIT": "Tarjeta de crédito",
+      "CASH": "Efectivo"
+    },
+    "addAccount": "Agregar cuenta",
+    "addAccountDescription": "Agrega una nueva cuenta para seguir tus gastos",
+    "addAccountError": "Error al agregar la cuenta. Por favor verifica los datos e intenta de nuevo.",
+    "addAccountSuccess": "Cuenta agregada exitosamente.",
+    "createAccount": "Crear cuenta",
+    "loadAccountsError": "Error al cargar las cuentas. Por favor intenta más tarde.",
+    "noAccounts": "Aún no tienes cuentas. Crea tu primera cuenta para comenzar.",
+    "yourAccounts": "Tus cuentas",
+    "yourAccountsDescription": "Visualiza y administra tus cuentas"
+  },
   "common": {
     "email": "Correo electrónico",
     "goTo": "Ir a",
@@ -8,6 +32,10 @@
     "save": "Guardar",
     "send": "Enviar",
     "signIn": "Iniciar sesión"
+  },
+  "dashboard": {
+    "description": "Gestione sus cuentas y controle sus gastos",
+    "title": "Tablero"
   },
   "forgotPassword": {
     "description": "Ingresa tu correo electrónico para recibir un enlace para restablecer la contraseña.",

@@ -1,4 +1,28 @@
 {
+  "account": {
+    "accountBalance": "Account Balance",
+    "accountBalancePlaceholder": "0.00",
+    "accountCurrency": "Account Currency",
+    "accountCurrencyPlaceholder": "Select account currency",
+    "accountName": "Account Name",
+    "accountNamePlaceholder": "Enter account name",
+    "accountType": "Account Type",
+    "accountTypePlaceholder": "Select account type",
+    "accountTypes": {
+      "CHECKING": "Checking",
+      "CREDIT": "Credit Card",
+      "CASH": "Cash"
+    },
+    "addAccount": "Add Account",
+    "addAccountDescription": "Add a new account to track your spending",
+    "addAccountError": "Error adding account. Please check your details and try again.",
+    "addAccountSuccess": "Account added successfully.",
+    "createAccount": "Create Account",
+    "loadAccountsError": "Error loading accounts. Please try again later.",
+    "noAccounts": "No accounts yet. Create your first account to get started.",
+    "yourAccounts": "Your Accounts",
+    "yourAccountsDescription": "View and manage your accounts"
+  },
   "common": {
     "email": "Email",
     "goTo": "Go to",
@@ -8,6 +32,10 @@
     "save": "Save",
     "send": "Send",
     "signIn": "Sign In"
+  },
+  "dashboard": {
+    "description": "Manage your accounts and track your spending",
+    "title": "Dashboard"
   },
   "forgotPassword": {
     "description": "Enter your email to receive a password reset link.",
