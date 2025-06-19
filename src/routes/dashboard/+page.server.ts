@@ -39,13 +39,26 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
     setFlash({ type: 'error', message: $t('categories.loadCategoriesError') }, cookies);
   }
 
+  // load transactions from the API
+  let transactions = [];
+  try {
+    const response = await fetch(`${API_URL}/transactions`);
+    if (!response.ok) {
+      throw new Error('Failed to load transactions');
+    }
+    transactions = await response.json();
+  } catch {
+    setFlash({ type: 'error', message: $t('transactions.loadTransactionsError') }, cookies);
+  }
+
   return {
     addAccountForm: await superValidate(zod(addAccountSchema)),
     createCategoryForm: await superValidate(zod(createCategorySchema)),
     addTransactionForm: await superValidate(zod(addTransactionSchema)),
     addTransferForm: await superValidate(zod(addTransferSchema)),
     accounts,
-    categories
+    categories,
+    transactions
   }
 };
 

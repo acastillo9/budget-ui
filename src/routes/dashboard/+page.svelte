@@ -2,6 +2,7 @@
 	import AccountList from '$lib/components/account-list.svelte';
 	import AddAccountDialog from '$lib/components/add-account-dialog.svelte';
 	import AddTransactionDialog from '$lib/components/add-transaction-wizard/add-transaction-dialog.svelte';
+	import TransactionList from '$lib/components/transaction-list.svelte';
 	import { t } from 'svelte-i18n';
 	import type { PageProps } from './$types';
 
@@ -24,14 +25,17 @@
 			{#if data.accounts.length > 0}
 				<AddTransactionDialog
 					addTransactionForm={data.addTransactionForm}
-          addTransferForm={data.addTransferForm}
+					addTransferForm={data.addTransferForm}
 					createCategoryForm={data.createCategoryForm}
 					categories={data.categories}
-          accounts={data.accounts}
+					accounts={data.accounts}
 				/>
 			{/if}
 		</div>
 	</div>
 
-	<AccountList accounts={data.accounts} />
+	<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+		<AccountList accounts={data.accounts} />
+		<TransactionList transactions={data.transactions} />
+	</div>
 </section>
