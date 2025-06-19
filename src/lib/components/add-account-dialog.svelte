@@ -12,26 +12,33 @@
 	import { Input } from '$lib/components/ui/input';
 
 	let { data } = $props();
-  let open = $state(false);
+	let open = $state(false);
 
 	const form = superForm(data, {
 		validators: zodClient(addAccountSchema),
-    onUpdate({ form }) {
-      if(form.valid) {
-        open = false;
-      }
-    }
+		onUpdate({ form }) {
+			if (form.valid) {
+				open = false;
+			}
+		}
 	});
 
-	const { form: formData, enhance, isTainted, tainted, allErrors, delayed } = form;
+	const { form: formData, enhance, isTainted, tainted, allErrors, delayed, reset } = form;
 </script>
 
-<Dialog.Root bind:open>
+<Dialog.Root
+	bind:open
+	onOpenChange={(open: boolean) => {
+		if (!open) {
+			reset();
+		}
+	}}
+>
 	<Dialog.Trigger class={buttonVariants({ variant: 'default' })}>
 		<Plus className="h-4 w-4 mr-2" />
 		{$t('account.addAccount')}
 	</Dialog.Trigger>
-	<Dialog.Content>
+	<Dialog.Content escapeKeydownBehavior="ignore" interactOutsideBehavior="ignore">
 		<Dialog.Header>
 			<Dialog.Title>{$t('account.addAccount')}</Dialog.Title>
 			<Dialog.Description>
@@ -74,7 +81,7 @@
 					{#snippet children({ props })}
 						<Form.Label>{$t('account.accountType')}</Form.Label>
 						<Select.Root type="single" bind:value={$formData.accountType} name={props.name}>
-							<Select.Trigger {...props}>
+							<Select.Trigger class="w-full" {...props}>
 								{$formData.accountType
 									? $t(`account.accountTypes.${$formData.accountType}`)
 									: $t('account.accountTypePlaceholder')}
@@ -94,7 +101,7 @@
 					{#snippet children({ props })}
 						<Form.Label>{$t('account.accountCurrency')}</Form.Label>
 						<Select.Root type="single" bind:value={$formData.currencyCode} name={props.name}>
-							<Select.Trigger {...props}>
+							<Select.Trigger class="w-full" {...props}>
 								{$formData.currencyCode
 									? $formData.currencyCode
 									: $t('account.accountCurrencyPlaceholder')}
