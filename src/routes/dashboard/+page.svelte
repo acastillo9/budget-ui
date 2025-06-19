@@ -35,7 +35,11 @@
 	</div>
 
 	<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-		<AccountList accounts={data.accounts} />
-		<TransactionList transactions={data.transactions} />
+		<div>
+			<AccountList accounts={data.accounts} />
+		</div>
+		<div>
+			<TransactionList transactions={data.transactions} />
+		</div>
 	</div>
 </section>
