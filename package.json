@@ -40,7 +40,7 @@
 		"@typeschema/class-validator": "^0.2.0",
 		"@vinejs/vine": "^1.8.0",
 		"arktype": "^2.1.20",
-		"bits-ui": "^2.7.0",
+		"bits-ui": "^2.8.8",
 		"class-validator": "^0.14.2",
 		"eslint": "^9.7.0",
 		"eslint-config-prettier": "^9.1.0",

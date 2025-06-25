@@ -23,14 +23,14 @@
 
 <Card.Root>
 	<Card.Header>
-		<Card.Title>{$t('account.yourAccounts')}</Card.Title>
-		<Card.Description>{$t('account.yourAccountsDescription')}</Card.Description>
+		<Card.Title>{$t('accounts.yourAccounts')}</Card.Title>
+		<Card.Description>{$t('accounts.yourAccountsDescription')}</Card.Description>
 	</Card.Header>
 	<Card.Content>
 		{#if accounts.length === 0}
 			<div class="text-muted-foreground py-8 text-center">
 				<Wallet class="mx-auto mb-4 h-12 w-12 opacity-50" />
-				<p>{$t('account.noAccounts')}</p>
+				<p>{$t('accounts.noAccounts')}</p>
 			</div>
 		{:else}
 			<div class="space-y-4">
@@ -44,7 +44,7 @@
 							<div>
 								<p class="font-medium">{account.name}</p>
 								<p class="text-muted-foreground text-sm">
-									{$t(`account.accountTypes.${account.accountType}`)} • {account.currencyCode}
+									{$t(`accounts.accountTypes.${account.accountType}`)} • {account.currencyCode}
 								</p>
 							</div>
 						</div>

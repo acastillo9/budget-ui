@@ -1,5 +1,5 @@
 {
-  "account": {
+  "accounts": {
     "accountBalance": "Saldo de la cuenta",
     "accountBalancePlaceholder": "0.00",
     "accountCurrency": "Moneda de la cuenta",
@@ -20,8 +20,15 @@
     "createAccount": "Crear cuenta",
     "loadAccountsError": "Error al cargar las cuentas. Por favor intenta más tarde.",
     "noAccounts": "Aún no tienes cuentas. Crea tu primera cuenta para comenzar.",
+    "title": "Cuentas",
     "yourAccounts": "Tus cuentas",
     "yourAccountsDescription": "Visualiza y administra tus cuentas"
+  },
+  "bills": {
+    "title": "Facturas"
+  },
+  "budgets": {
+    "title": "Presupuestos"
   },
   "categories": {
     "addCategoryError": "Error al agregar la categoría. Por favor, verifica los datos e inténtalo de nuevo.",
@@ -92,6 +99,7 @@
     "back": "Atrás",
     "email": "Correo electrónico",
     "goTo": "Ir a",
+    "logOut": "Cerrar sesión",
     "name": "Nombre",
     "next": "Siguiente",
     "password": "Contraseña",

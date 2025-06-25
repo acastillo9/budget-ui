@@ -8,6 +8,8 @@ export type ToastMessage = {
 export type UserSession = {
   id: string
   name: string
+  email: string
+  picture: string
 }
 
 export type CountdownData = {

@@ -35,24 +35,24 @@
 	}}
 >
 	<Dialog.Trigger class={buttonVariants({ variant: 'default' })}>
-		<Plus className="h-4 w-4 mr-2" />
-		{$t('account.addAccount')}
+		<Plus class="h-4 w-4 mr-2" />
+		{$t('accounts.addAccount')}
 	</Dialog.Trigger>
 	<Dialog.Content escapeKeydownBehavior="ignore" interactOutsideBehavior="ignore">
 		<Dialog.Header>
-			<Dialog.Title>{$t('account.addAccount')}</Dialog.Title>
+			<Dialog.Title>{$t('accounts.addAccount')}</Dialog.Title>
 			<Dialog.Description>
-				{$t('account.addAccountDescription')}
+				{$t('accounts.addAccountDescription')}
 			</Dialog.Description>
 		</Dialog.Header>
 		<form id="addAccountForm" class="space-y-4" method="POST" action="?/addAccount" use:enhance>
 			<Form.Field {form} name="name">
 				<Form.Control>
 					{#snippet children({ props })}
-						<Form.Label>{$t('account.accountName')}</Form.Label>
+						<Form.Label>{$t('accounts.accountName')}</Form.Label>
 						<Input
 							type="text"
-							placeholder={$t('account.accountNamePlaceholder')}
+							placeholder={$t('accounts.accountNamePlaceholder')}
 							{...props}
 							bind:value={$formData.name}
 						/>
@@ -64,10 +64,10 @@
 			<Form.Field {form} name="balance">
 				<Form.Control>
 					{#snippet children({ props })}
-						<Form.Label>{$t('account.accountBalance')}</Form.Label>
+						<Form.Label>{$t('accounts.accountBalance')}</Form.Label>
 						<Input
 							type="number"
-							placeholder={$t('account.accountBalancePlaceholder')}
+							placeholder={$t('accounts.accountBalancePlaceholder')}
 							{...props}
 							bind:value={$formData.balance}
 						/>
@@ -79,17 +79,17 @@
 			<Form.Field {form} name="accountType">
 				<Form.Control>
 					{#snippet children({ props })}
-						<Form.Label>{$t('account.accountType')}</Form.Label>
+						<Form.Label>{$t('accounts.accountType')}</Form.Label>
 						<Select.Root type="single" bind:value={$formData.accountType} name={props.name}>
 							<Select.Trigger class="w-full" {...props}>
 								{$formData.accountType
-									? $t(`account.accountTypes.${$formData.accountType}`)
-									: $t('account.accountTypePlaceholder')}
+									? $t(`accounts.accountTypes.${$formData.accountType}`)
+									: $t('accounts.accountTypePlaceholder')}
 							</Select.Trigger>
 							<Select.Content>
-								<Select.Item value="CHECKING">{$t('account.accountTypes.CHECKING')}</Select.Item>
-								<Select.Item value="CREDIT">{$t('account.accountTypes.CREDIT')}</Select.Item>
-								<Select.Item value="CASH">{$t('account.accountTypes.CASH')}</Select.Item>
+								<Select.Item value="CHECKING">{$t('accounts.accountTypes.CHECKING')}</Select.Item>
+								<Select.Item value="CREDIT">{$t('accounts.accountTypes.CREDIT')}</Select.Item>
+								<Select.Item value="CASH">{$t('accounts.accountTypes.CASH')}</Select.Item>
 							</Select.Content>
 						</Select.Root>
 					{/snippet}
@@ -99,12 +99,12 @@
 			<Form.Field {form} name="currencyCode">
 				<Form.Control>
 					{#snippet children({ props })}
-						<Form.Label>{$t('account.accountCurrency')}</Form.Label>
+						<Form.Label>{$t('accounts.accountCurrency')}</Form.Label>
 						<Select.Root type="single" bind:value={$formData.currencyCode} name={props.name}>
 							<Select.Trigger class="w-full" {...props}>
 								{$formData.currencyCode
 									? $formData.currencyCode
-									: $t('account.accountCurrencyPlaceholder')}
+									: $t('accounts.accountCurrencyPlaceholder')}
 							</Select.Trigger>
 							<Select.Content>
 								<Select.Item value="USD">USD</Select.Item>
@@ -126,7 +126,7 @@
 					!!$allErrors.length}
 			>
 				{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
-				{$t('account.createAccount')}
+				{$t('accounts.createAccount')}
 			</Button>
 		</form>
 	</Dialog.Content>

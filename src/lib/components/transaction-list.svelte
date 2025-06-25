@@ -20,7 +20,7 @@
 	<Card.Content>
 		{#if transactions.length === 0}
 			<div class="text-muted-foreground py-8 text-center">
-				<DollarSign className="h-12 w-12 mx-auto mb-4 opacity-50" />
+				<DollarSign class="h-12 w-12 mx-auto mb-4 opacity-50" />
 				<p>{$t('transactions.noTransactions')}</p>
 			</div>
 		{:else}

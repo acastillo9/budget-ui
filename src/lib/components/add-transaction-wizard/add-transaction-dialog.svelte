@@ -107,7 +107,7 @@
 	}}
 >
 	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>
-		<Plus className="h-4 w-4 mr-2" />
+		<Plus class="h-4 w-4 mr-2" />
 		{$t('transactions.addTransaction')}
 	</Dialog.Trigger>
 	<Dialog.Content escapeKeydownBehavior="ignore" interactOutsideBehavior="ignore">
@@ -135,7 +135,7 @@
 						}`}
 					>
 						{#if step < transactionStep}
-							<Check className="h-4 w-4" />
+							<Check class="h-4 w-4" />
 						{:else}
 							{step}
 						{/if}
@@ -194,7 +194,7 @@
 			<div class={`flex w-full pt-4 ${transactionStep > 1 ? 'justify-between' : 'justify-end'}`}>
 				{#if transactionStep > 1}
 					<Button variant="outline" class="flex items-center gap-2" onclick={goToPreviousStep}>
-						<ArrowLeft className="h-4 w-4" />
+						<ArrowLeft class="h-4 w-4" />
 						{$t('common.back')}
 					</Button>
 				{/if}
@@ -206,7 +206,7 @@
 						onclick={goToNextStep}
 					>
 						{$t('common.next')}
-						<ArrowRight className="h-4 w-4" />
+						<ArrowRight class="h-4 w-4" />
 					</Button>
 				{:else if categoryType === 'TRANSFER'}
 					<Button

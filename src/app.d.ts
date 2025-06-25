@@ -7,7 +7,7 @@ declare global {
   namespace App {
     // interface Error {}
 		interface Locals {
-			user: UserSession | undefined;
+			user: UserSession;
 		}
     interface PageData {
       flash?: import('$lib/types').ToastMessage;

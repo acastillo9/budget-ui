@@ -1,5 +1,5 @@
 {
-  "account": {
+  "accounts": {
     "accountBalance": "Account Balance",
     "accountBalancePlaceholder": "0.00",
     "accountCurrency": "Account Currency",
@@ -20,8 +20,15 @@
     "createAccount": "Create Account",
     "loadAccountsError": "Error loading accounts. Please try again later.",
     "noAccounts": "No accounts yet. Create your first account to get started.",
+    "title": "Accounts",
     "yourAccounts": "Your Accounts",
     "yourAccountsDescription": "View and manage your accounts"
+  },
+  "bills": {
+    "title": "Bills"
+  },
+  "budgets": {
+    "title": "Budgets"
   },
   "categories": {
     "addCategoryError": "Error adding category. Please check your details and try again.",
@@ -92,6 +99,7 @@
     "back": "Back",
     "email": "Email",
     "goTo": "Go to",
+    "logOut": "Log out",
     "name": "Name",
     "next": "Next",
     "password": "Password",
