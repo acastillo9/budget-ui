@@ -48,7 +48,6 @@ export const handle: Handle = async ({ event, resolve }) => {
   const accessToken = cookies.get('AuthorizationToken');
 
   if (!accessToken) {
-    event.locals.user = undefined;
     cookies.delete('AuthorizationToken', { path: '/' });
     cookies.delete('RefreshToken', { path: '/' });
     return resolve(event);
@@ -60,7 +59,6 @@ export const handle: Handle = async ({ event, resolve }) => {
   } catch {
     const refreshToken = cookies.get('RefreshToken');
     if (!refreshToken) {
-      event.locals.user = undefined;
       cookies.delete('AuthorizationToken', { path: '/' });
       cookies.delete('RefreshToken', { path: '/' });
       return resolve(event);
@@ -89,7 +87,6 @@ export const handle: Handle = async ({ event, resolve }) => {
       event.locals.user = await getUserFromToken(access_token);
       return resolve(event);
     } catch {
-      event.locals.user = undefined;
       cookies.delete('AuthorizationToken', { path: '/' });
       cookies.delete('RefreshToken', { path: '/' });
       return resolve(event); // User is invalid: proceed without user
