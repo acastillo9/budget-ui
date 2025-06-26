@@ -1,22 +1,37 @@
-	const currencies = [
-		{ code: 'USD', name: 'US Dollar', symbol: '$', locale: 'en-US' },
-		{ code: 'COP', name: 'Colombian Peso', symbol: '$', locale: 'es-CO' },
-		{ code: 'EUR', name: 'Euro', symbol: '€', locale: 'de-DE' },
-		{ code: 'GBP', name: 'British Pound', symbol: '£', locale: 'en-GB' },
-		{ code: 'JPY', name: 'Japanese Yen', symbol: '¥', locale: 'ja-JP' },
-		{ code: 'CAD', name: 'Canadian Dollar', symbol: 'C$', locale: 'en-CA' },
-		{ code: 'AUD', name: 'Australian Dollar', symbol: 'A$', locale: 'en-AU' },
-		{ code: 'MXN', name: 'Mexican Peso', symbol: '$', locale: 'es-MX' }
-	] as const;
+import type { Currency } from "$lib/types/account.types";
+import { $t } from "$lib/i18n";
 
-	export const formatCurrency = (amount: number, currencyCode: string) => {
-		const currency = currencies.find((c) => c.code === currencyCode);
-		if (!currency) return `${amount.toFixed(2)}`;
+export const currencies: Currency[] = [
+  {
+    code: "COP",
+    name: $t("currencies.COP"),
+    symbol: "$",
+    flag: "🇨🇴",
+    locale: "es-CO",
+  },
+  {
+    code: "USD",
+    name: $t("currencies.USD"),
+    symbol: "$",
+    flag: "🇺🇸",
+    locale: "en-US",
+  }
+]
 
-		return new Intl.NumberFormat(currency.locale, {
-			style: 'currency',
-			currency: currencyCode,
-			minimumFractionDigits: currencyCode === 'JPY' ? 0 : 2,
-			maximumFractionDigits: currencyCode === 'JPY' ? 0 : 2
-		}).format(amount);
-	};
+export function getCurrencyByCode(code: string): Currency | undefined {
+  return currencies.find((currency) => currency.code === code)
+}
+
+export function formatCurrencyWithSymbol(amount: number, currencyCode: string): string {
+  const currency = getCurrencyByCode(currencyCode)
+  if (!currency) return amount.toString()
+
+  const formatter = new Intl.NumberFormat(currency.locale, {
+    style: "currency",
+    currency: currencyCode,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  })
+
+  return formatter.format(amount)
+}

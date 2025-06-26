@@ -1,12 +1,13 @@
 <script lang="ts">
 	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
 	import { page } from '$app/state';
+  import { t } from 'svelte-i18n';
 
 	let {
 		items
 	}: {
 		items: {
-      id: string;
+			id: string;
 			title: string;
 			url: string;
 			// this should be `Component` after @lucide/svelte updates types
@@ -15,10 +16,11 @@
 		}[];
 	} = $props();
 
-  let routeId = $derived(page.route.id?.split('/')[2] || 'dashboard');
+	let routeId = $derived(page.route.id?.split('/')[2] || 'dashboard');
 </script>
 
 <Sidebar.Group>
+	<Sidebar.GroupLabel>{$t('sidebar.navigation')}</Sidebar.GroupLabel>
 	<Sidebar.Menu>
 		{#each items as item (item.id)}
 			<Sidebar.MenuItem>

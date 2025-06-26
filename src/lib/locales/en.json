@@ -107,6 +107,10 @@
     "send": "Send",
     "signIn": "Sign In"
   },
+  "currencies": {
+    "COP": "Colombian Peso",
+    "USD": "US Dollar"
+  },
   "dashboard": {
     "description": "Manage your accounts and track your spending",
     "title": "Dashboard"
@@ -127,6 +131,9 @@
     "passwordResetError": "Error resetting password. Please try again.",
     "passwordResetSuccess": "Your password has been reset successfully. You can now sign in.",
     "title": "Reset Password"
+  },
+  "sidebar": {
+    "navigation": "Navigation"
   },
   "signIn": {
     "description": "Sign in to your account to continue",

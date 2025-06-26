@@ -6,7 +6,7 @@
 	import { Badge } from '$lib/components/ui/badge';
 	import Building2 from '@lucide/svelte/icons/building-2';
 	import CreditCard from '@lucide/svelte/icons/credit-card';
-  import { formatCurrency } from '$lib/utils/currency';
+  import { formatCurrencyWithSymbol } from '$lib/utils/currency';
 
 	interface Props {
 		accounts: Account[];
@@ -49,7 +49,7 @@
 							</div>
 						</div>
 						<div class="text-right">
-							<p class="font-semibold">{formatCurrency(account.balance, account.currencyCode)}</p>
+							<p class="font-semibold">{formatCurrencyWithSymbol(account.balance, account.currencyCode)}</p>
 							<Badge variant={account.accountType === 'CREDIT' ? 'destructive' : 'secondary'}>
 								{account.accountType}
 							</Badge>

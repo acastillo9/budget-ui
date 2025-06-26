@@ -12,6 +12,7 @@
 	import Moon from '@lucide/svelte/icons/moon';
 	import { toggleMode } from 'mode-watcher';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import CurrencySelector from '$lib/components/currency-selector.svelte';
 
 	let { data, children } = $props();
 
@@ -48,13 +49,19 @@
 					</Breadcrumb.List>
 				</Breadcrumb.Root>
 			</div>
-			<Button class="mr-4" onclick={toggleMode} variant="outline" size="icon">
-				<Sun class="h-5 w-5 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-				<Moon
-					class="absolute h-5 w-5 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0"
-				/>
-				<span class="sr-only">{$t('header.toggleTheme')}</span>
-			</Button>
+			<div class="flex items-center gap-2 pr-4">
+				<div class="ml-auto flex items-center gap-2">
+					<div class="text-xs text-muted-foreground hidden sm:block">Currency:</div>
+					<CurrencySelector selectedCurrency={'USD'} />
+				</div>
+				<Button class="mr-4" onclick={toggleMode} variant="outline" size="icon">
+					<Sun class="h-5 w-5 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+					<Moon
+						class="absolute h-5 w-5 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0"
+					/>
+					<span class="sr-only">{$t('header.toggleTheme')}</span>
+				</Button>
+			</div>
 		</header>
 		<div class="flex flex-1 flex-col gap-4 p-4 py-0">
 			{@render children()}

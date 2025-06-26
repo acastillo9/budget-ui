@@ -107,6 +107,10 @@
     "send": "Enviar",
     "signIn": "Iniciar sesión"
   },
+  "currencies": {
+    "COP": "Peso colombiano",
+    "USD": "Dólar estadounidense"
+  },
   "dashboard": {
     "description": "Gestione sus cuentas y controle sus gastos",
     "title": "Tablero"
@@ -127,6 +131,9 @@
     "passwordResetError": "Error al restablecer la contraseña. Por favor, inténtalo de nuevo.",
     "passwordResetSuccess": "Tu contraseña ha sido restablecida exitosamente. Ya puedes iniciar sesión.",
     "title": "Restablecer contraseña"
+  },
+  "sidebar": {
+    "navigation": "Navegación"
   },
   "signIn": {
     "description": "Inicia sesión en tu cuenta para continuar",

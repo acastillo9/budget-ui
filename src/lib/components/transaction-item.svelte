@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatCurrency } from '$lib/utils/currency';
+	import { formatCurrencyWithSymbol } from '$lib/utils/currency';
 	import { ArrowDownLeft, ArrowUpRight } from '@lucide/svelte';
 	import CategoryBadge from './category-badge.svelte';
 
@@ -32,7 +32,7 @@
 	<div class="flex items-center gap-2">
 		<div class="text-right">
 			<p class={`font-semibold ${isIncome ? 'text-green-600' : 'text-red-600'}`}>
-				{formatCurrency(transaction.amount, transaction.account.currencyCode)}
+				{formatCurrencyWithSymbol(transaction.amount, transaction.account.currencyCode)}
 			</p>
 		</div>
 	</div>
