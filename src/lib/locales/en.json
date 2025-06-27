@@ -109,7 +109,9 @@
   },
   "currencies": {
     "COP": "Colombian Peso",
-    "USD": "US Dollar"
+    "USD": "US Dollar",
+    "currencyUpdateError": "Error updating currency. Please try again later.",
+    "currencyUpdateSuccess": "Currency updated successfully."
   },
   "dashboard": {
     "description": "Manage your accounts and track your spending",

@@ -1,12 +1,12 @@
 import { getContext, setContext } from 'svelte';
-import type { UserSession } from './types';
+import type { UserState } from './types';
 
-const key = 'user';
+const key = 'userState';
 
-export function setUserContext(user: UserSession) {
-	setContext(key, user);
+export function setUserContext(userState: UserState) {
+	setContext(key, userState);
 }
 
-export function getUserContext(): UserSession {
+export function getUserContext(): UserState {
 	return getContext(key);
 }

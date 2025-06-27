@@ -27,9 +27,13 @@
 
 	const { form: formData, enhance, isTainted, tainted, allErrors, delayed, reset } = form;
 
-	const user = getUserContext();
-	$formData.currencyCode = user?.currencyCode || 'USD';
+	const userState = getUserContext();
+	$formData.currencyCode = userState.user?.currencyCode || 'USD';
 	let selectedCurrencyData = $derived(getCurrencyByCode($formData.currencyCode));
+
+	$effect(() => {
+		$formData.currencyCode = userState.user?.currencyCode || 'USD';
+	});
 </script>
 
 <Dialog.Root
@@ -37,7 +41,7 @@
 	onOpenChange={(open: boolean) => {
 		if (!open) {
 			reset();
-			$formData.currencyCode = user?.currencyCode || 'USD';
+			$formData.currencyCode = userState.user?.currencyCode || 'USD';
 		}
 	}}
 >

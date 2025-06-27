@@ -2,20 +2,24 @@
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import { Check, ChevronDown } from '@lucide/svelte';
-	import Button from './ui/button/button.svelte';
+	import { buttonVariants } from './ui/button/button.svelte';
 	import { currencies, getCurrencyByCode } from '$lib/utils/currency';
 
-	let { selectedCurrency = $bindable() } = $props();
+	let { selectedCurrency = $bindable(), open = $bindable(), onChange } = $props();
 	let selectedCurrencyData = $derived(getCurrencyByCode(selectedCurrency));
 </script>
 
-<Popover.Root>
-	<Popover.Trigger>
-		<Button variant="ghost" size="sm" class="h-8 gap-1 px-2">
-			<span class="text-lg">{selectedCurrencyData?.flag}</span>
-			<span class="font-medium">{selectedCurrency}</span>
-			<ChevronDown className="h-3 w-3 opacity-50" />
-		</Button>
+<Popover.Root bind:open={open}>
+	<Popover.Trigger
+		class={buttonVariants({
+			variant: 'ghost',
+			class: 'h-8 gap-1 px-2',
+      size: 'sm',
+		})}
+	>
+		<span class="text-lg">{selectedCurrencyData?.flag}</span>
+		<span class="font-medium">{selectedCurrency}</span>
+		<ChevronDown className="h-3 w-3 opacity-50" />
 	</Popover.Trigger>
 	<Popover.Content class="w-full p-0">
 		<Command.Root>
@@ -27,6 +31,7 @@
 							value={`${currency.code} ${currency.name}`}
 							onSelect={() => {
 								selectedCurrency = currency.code;
+								onChange(selectedCurrency);
 							}}
 							class="flex items-center gap-2"
 						>

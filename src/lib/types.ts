@@ -13,6 +13,10 @@ export type UserSession = {
   currencyCode: string
 }
 
+export type UserState = {
+  user: UserSession | undefined
+}
+
 export type CountdownData = {
   hours: number
   minutes: number

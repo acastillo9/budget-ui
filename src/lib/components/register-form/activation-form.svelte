@@ -36,7 +36,7 @@
 	async function resendActivationCode() {
 		resendingActivationCode = true;
 		try {
-			const response = await fetch('/resend-activation-code', {
+			const response = await fetch('/api/auth/resend-activation-code', {
 				method: 'POST',
 				body: JSON.stringify({ email })
 			});
@@ -83,7 +83,7 @@
 				<Button
 					class={[
 						'h-auto p-0',
-						(resendingActivationCode || !data.done) && 'pointer-events-none text-muted'
+						(resendingActivationCode || !data.done) && 'text-muted pointer-events-none'
 					]}
 					variant="link"
 					onclick={resendActivationCode}>{$t('signUp.resendActivationCode')}</Button

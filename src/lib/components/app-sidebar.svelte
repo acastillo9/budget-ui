@@ -55,7 +55,7 @@
 		...restProps
 	}: ComponentProps<typeof Sidebar.Root> = $props();
 
-	const user = getUserContext();
+	const userState = getUserContext();
 </script>
 
 <Sidebar.Root {collapsible} {...restProps}>
@@ -83,7 +83,7 @@
 		<NavMain items={data.navMain} />
 	</Sidebar.Content>
 	<Sidebar.Footer>
-		<NavUser {user} />
+		<NavUser user={userState.user!} />
 	</Sidebar.Footer>
 	<Sidebar.Rail />
 </Sidebar.Root>

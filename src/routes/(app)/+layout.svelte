@@ -13,12 +13,41 @@
 	import { toggleMode } from 'mode-watcher';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import CurrencySelector from '$lib/components/currency-selector.svelte';
+	import { userState } from '$lib/states/user.svelte';
+	import { toast } from 'svelte-sonner';
 
 	let { data, children } = $props();
 
-	setUserContext(data.user);
+	userState.user = data.user;
+	setUserContext(userState);
 
 	let breadcrumbs = $derived(getBreadcrumbs(page.route.id || '/'));
+  let currencySelectorOpen = $state(false);
+
+	async function updateCurrencyCode(currencyCode: string) {
+		try {
+			const response = await fetch('/api/users', {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					currencyCode,
+				})
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to update currency code');
+			}
+
+			const updatedUser = await response.json();
+      userState.user = updatedUser;
+      toast.success($t('currencies.currencyUpdateSuccess'));
+      currencySelectorOpen = false;
+		} catch {
+			toast.error($t('currencies.currencyUpdateError'));
+		}
+	}
 </script>
 
 <Sidebar.Provider>
@@ -51,8 +80,12 @@
 			</div>
 			<div class="flex items-center gap-2 pr-4">
 				<div class="ml-auto flex items-center gap-2">
-					<div class="text-xs text-muted-foreground hidden sm:block">Currency:</div>
-					<CurrencySelector selectedCurrency={data.user.currencyCode} />
+					<div class="text-muted-foreground hidden text-xs sm:block">Currency:</div>
+					<CurrencySelector
+						bind:selectedCurrency={userState.user!.currencyCode}
+            bind:open={currencySelectorOpen}
+						onChange={updateCurrencyCode}
+					/>
 				</div>
 				<Button class="mr-4" onclick={toggleMode} variant="outline" size="icon">
 					<Sun class="h-5 w-5 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
