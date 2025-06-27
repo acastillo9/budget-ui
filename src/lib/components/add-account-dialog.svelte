@@ -10,6 +10,8 @@
 	import { addAccountSchema } from '../schemas/add-account.schema';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import { Input } from '$lib/components/ui/input';
+	import { getUserContext } from '$lib/context';
+	import { currencies, getCurrencyByCode } from '$lib/utils/currency';
 
 	let { data } = $props();
 	let open = $state(false);
@@ -24,6 +26,10 @@
 	});
 
 	const { form: formData, enhance, isTainted, tainted, allErrors, delayed, reset } = form;
+
+	const user = getUserContext();
+	$formData.currencyCode = user?.currencyCode || 'USD';
+	let selectedCurrencyData = $derived(getCurrencyByCode($formData.currencyCode));
 </script>
 
 <Dialog.Root
@@ -31,11 +37,12 @@
 	onOpenChange={(open: boolean) => {
 		if (!open) {
 			reset();
+			$formData.currencyCode = user?.currencyCode || 'USD';
 		}
 	}}
 >
 	<Dialog.Trigger class={buttonVariants({ variant: 'default' })}>
-		<Plus class="h-4 w-4 mr-2" />
+		<Plus class="mr-2 h-4 w-4" />
 		{$t('accounts.addAccount')}
 	</Dialog.Trigger>
 	<Dialog.Content escapeKeydownBehavior="ignore" interactOutsideBehavior="ignore">
@@ -102,13 +109,16 @@
 						<Form.Label>{$t('accounts.accountCurrency')}</Form.Label>
 						<Select.Root type="single" bind:value={$formData.currencyCode} name={props.name}>
 							<Select.Trigger class="w-full" {...props}>
-								{$formData.currencyCode
-									? $formData.currencyCode
+								{selectedCurrencyData
+									? `${selectedCurrencyData.flag} ${selectedCurrencyData.code}`
 									: $t('accounts.accountCurrencyPlaceholder')}
 							</Select.Trigger>
 							<Select.Content>
-								<Select.Item value="USD">USD</Select.Item>
-								<Select.Item value="COP">COP</Select.Item>
+								{#each currencies as currency}
+									<Select.Item value={currency.code}
+										>{`${currency.flag} ${currency.code}`}</Select.Item
+									>
+								{/each}
 							</Select.Content>
 						</Select.Root>
 					{/snippet}
