@@ -10,6 +10,7 @@ export type UserSession = {
   name: string
   email: string
   picture: string
+  currencyCode: string
 }
 
 export type CountdownData = {

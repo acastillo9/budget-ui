@@ -52,7 +52,7 @@
 			<div class="flex items-center gap-2 pr-4">
 				<div class="ml-auto flex items-center gap-2">
 					<div class="text-xs text-muted-foreground hidden sm:block">Currency:</div>
-					<CurrencySelector selectedCurrency={'USD'} />
+					<CurrencySelector selectedCurrency={data.user.currencyCode} />
 				</div>
 				<Button class="mr-4" onclick={toggleMode} variant="outline" size="icon">
 					<Sun class="h-5 w-5 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />

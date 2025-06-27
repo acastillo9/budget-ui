@@ -41,8 +41,8 @@ const refreshTokens = async (refreshToken: string) => {
 export const handle: Handle = async ({ event, resolve }) => {
   const lang = event.request.headers.get('accept-language')?.split(',')[0]
   if (lang) {
-		locale.set(lang)
-	}
+    locale.set(lang)
+  }
 
   const { cookies } = event;
   const accessToken = cookies.get('AuthorizationToken');
@@ -100,8 +100,7 @@ export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
     request.headers.set('Authorization', `Bearer ${token}`);
   }
 
-  const lang = event.request.headers.get('accept-language')?.split(',')[0]
-  request.headers.set('Accept-Language', lang || 'en');
+  request.headers.set('Accept-Language', event.request.headers.get('accept-language') || 'en');
 
   return fetch(request);
 };

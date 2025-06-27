@@ -3,7 +3,7 @@ import { API_URL } from "$env/static/private";
 import { redirect } from "@sveltejs/kit";
 import { setFlash } from "sveltekit-flash-message/server";
 
-export const load: PageServerLoad = async ({ url, cookies }) => {
+export const load: PageServerLoad = async ({ url, cookies, fetch }) => {
   let location;
   try {
     const response = await fetch(`${API_URL}/auth/google-redirect${url.search}`, {

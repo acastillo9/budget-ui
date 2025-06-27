@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
   }
 
   if (location) {
-    throw redirect(302, location); // Redirect the user to Google 
+    throw redirect(302, location); // Redirect the user to Google
   }
 
   setFlash({ type: 'error', message: 'Failed to redirect to Google' }, cookies);
