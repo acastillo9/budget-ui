@@ -42,11 +42,12 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
   // load transactions from the API
   let transactions = [];
   try {
-    const response = await fetch(`${API_URL}/transactions`);
+    const response = await fetch(`${API_URL}/transactions?limit=5`);
     if (!response.ok) {
       throw new Error('Failed to load transactions');
     }
-    transactions = await response.json();
+    const { data } = await response.json();
+    transactions = data
   } catch {
     setFlash({ type: 'error', message: $t('transactions.loadTransactionsError') }, cookies);
   }
