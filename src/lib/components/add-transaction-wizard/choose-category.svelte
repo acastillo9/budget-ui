@@ -3,20 +3,27 @@
 	import Button from '../ui/button/button.svelte';
 	import CreateCategoryDialog from './create-category-dialog.svelte';
 	import { iconMap } from '$lib/utils/icons';
+	import { t } from 'svelte-i18n';
 
 	let { categoryType, createCategoryForm, categories, category = $bindable() } = $props();
 </script>
 
 <div class="space-y-4">
 	<div class="flex items-center justify-between">
-		<h3 class="font-medium">Choose {categoryType.toLowerCase()} category</h3>
+		<h3 class="font-medium">
+			{$t('transactions.chooseCategoryWithType', {
+				values: {
+					categoryType: $t(`categories.categoryType.${categoryType}`)
+				}
+			})}
+		</h3>
 		<Badge variant={categoryType === 'INCOME' ? 'default' : 'destructive'}>
-			{categoryType}
+			{$t(`categories.categoryType.${categoryType}`).toUpperCase()}
 		</Badge>
 	</div>
 
 	<div class="grid grid-cols-3 gap-4">
-		{#each categories  as categoryItem (categoryItem.id)}
+		{#each categories as categoryItem (categoryItem.id)}
 			{@const Icon = iconMap[categoryItem.icon as keyof typeof iconMap]}
 			<div class="flex flex-col items-center space-y-2">
 				<Button

@@ -38,6 +38,11 @@
     "categoryIcon": "Category Icon",
     "categoryName": "Category Name",
     "categoryNamePlaceholder": "Enter category name",
+    "categoryType": {
+      "INCOME": "Income",
+      "EXPENSE": "Expense",
+      "TRANSFER": "Transfer"
+    },
     "createNew": "Create New",
     "createNewCategory": "Create New Category",
     "iconCategories": {
@@ -189,6 +194,7 @@
     "amount": "Amount",
     "amountPlaceholder": "0.00",
     "chooseCategory": "Choose Category",
+    "chooseCategoryWithType": "Choose {categoryType} category",
     "date": "Date",
     "datePlaceholder": "Select date",
     "description": "View and manage your transactions",

@@ -38,7 +38,12 @@
     "categoryIcon": "Ícono de categoría",
     "categoryName": "Nombre de la categoría",
     "categoryNamePlaceholder": "Ingresa el nombre de la categoría",
-    "createNew": "Crear nuevo",
+    "categoryType": {
+      "INCOME": "Ingreso",
+      "EXPENSE": "Gasto",
+      "TRANSFER": "Transferencia"
+    },
+    "createNew": "Crear nueva",
     "createNewCategory": "Crear nueva categoría",
     "iconCategories": {
       "foodDining": "Comida y restaurantes",
@@ -187,6 +192,7 @@
     "amount": "Monto",
     "amountPlaceholder": "0.00",
     "chooseCategory": "Elegir categoría",
+    "chooseCategoryWithType": "Elegir categoria de {categoryType}",
     "date": "Fecha",
     "datePlaceholder": "Selecciona una fecha",
     "description": "Ver y gestionar tus transacciones",

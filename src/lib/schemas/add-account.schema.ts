@@ -7,4 +7,4 @@ export const addAccountSchema = z.object({
   currencyCode: z.enum(['USD', 'COP']),
 })
 
-export type AddAccountSchema = typeof addAccountSchema;
+export type AddAccountSchema = z.infer<typeof addAccountSchema>;

@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { formatCurrencyWithSymbol } from '$lib/utils/currency';
-	import { ArrowDownLeft, ArrowUpRight } from '@lucide/svelte';
+	import { ArrowDownLeft, ArrowUpRight, Edit, Trash2 } from '@lucide/svelte';
 	import CategoryBadge from './category-badge.svelte';
+	import Button from './ui/button/button.svelte';
 
-	let { transaction } = $props();
+	let { transaction, editable = false, onEdit } = $props();
 	let isIncome = $derived(transaction.amount > 0);
 </script>
 
@@ -35,5 +36,20 @@
 				{formatCurrencyWithSymbol(transaction.amount, transaction.account.currencyCode)}
 			</p>
 		</div>
+		{#if editable}
+			<div class="flex items-center gap-2">
+				<Button variant="ghost" size="icon" onclick={onEdit}>
+					<Edit class="h-4 w-4" />
+				</Button>
+				<Button
+					variant="ghost"
+					size="icon"
+					onclick={() => {}}
+					class="text-destructive hover:text-destructive"
+				>
+					<Trash2 class="h-4 w-4" />
+				</Button>
+			</div>
+		{/if}
 	</div>
 </div>

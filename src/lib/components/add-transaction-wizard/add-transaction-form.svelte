@@ -2,23 +2,25 @@
 	import * as Form from '$lib/components/ui/form';
 	import * as Select from '$lib/components/ui/select';
 	import { Input } from '$lib/components/ui/input';
-	import { t } from 'svelte-i18n';
+	import { locale, t } from 'svelte-i18n';
 	import type { Account } from '$lib/types/account.types';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { cn } from '$lib/utils';
 	import CalendarIcon from '@lucide/svelte/icons/calendar';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
-	import { DateFormatter, getLocalTimeZone, parseDate } from '@internationalized/date';
+	import { DateFormatter, getLocalTimeZone, parseAbsolute, today } from '@internationalized/date';
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
 	import { formatAccountName } from '$lib/utils/account';
 
 	let { form, formData = $bindable(), enhance, accounts } = $props();
 
-	const df = new DateFormatter('en-US', {
+	const df = new DateFormatter($locale || 'en-US', {
 		dateStyle: 'long'
 	});
-	let date = $derived(formData.date ? parseDate(formData.date) : undefined);
+	let date = $derived(
+		formData.date ? parseAbsolute(formData.date, getLocalTimeZone()) : today(getLocalTimeZone())
+	);
 	let contentRef = $state<HTMLElement | null>(null);
 </script>
 
@@ -80,6 +82,7 @@
 					<Popover.Content bind:ref={contentRef} class="w-auto p-0">
 						<Calendar
 							type="single"
+							locale={$locale || 'en-US'}
 							value={date}
 							onValueChange={(v) => {
 								if (v) {

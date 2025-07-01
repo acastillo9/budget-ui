@@ -6,24 +6,24 @@ export const signupFormSchema = z.object({
   email: z.string().email(),
 });
 
-export type SignupFormSchema = typeof signupFormSchema;
+export type SignupFormSchema = z.infer<typeof signupFormSchema>;
 
 export const checkEmailSchema = signupFormSchema.pick({ email: true });
 
-export type CheckEmailSchema = typeof checkEmailSchema;
+export type CheckEmailSchema = z.infer<typeof checkEmailSchema>;
 
 export const activationSchema = z.object({
   activationCode: z.string().min(6, { message: $t('signUp.validation.activationCodeMinLength') }).max(6),
 });
 
-export type ActivationSchema = typeof activationSchema;
+export type ActivationSchema = z.infer<typeof activationSchema>;
 
 export const activationWithEmailSchema = z.object({
   email: z.string().email(),
   activationCode: z.string().min(6, { message: $t('signUp.validation.activationCodeMinLength') }).max(6),
 });
 
-export type ActivationWithEmailSchema = typeof activationWithEmailSchema;
+export type ActivationWithEmailSchema = z.infer<typeof activationWithEmailSchema>;
 
 export const passwordSchema = z.object({
   password: z.string()
@@ -32,11 +32,11 @@ export const passwordSchema = z.object({
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d\s]).*$/, { message: $t('signUp.validation.passwordMustContainUppercase') }),
 });
 
-export type PasswordSchema = typeof passwordSchema;
+export type PasswordSchema = z.infer<typeof passwordSchema>;
 
 export const passwordWithTokenSchema = z.object({
   accessToken: z.string(),
   password: passwordSchema.shape.password,
 });
 
-export type PasswordWithTokenSchema = typeof passwordWithTokenSchema;
+export type PasswordWithTokenSchema = z.infer<typeof passwordWithTokenSchema>;

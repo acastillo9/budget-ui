@@ -7,26 +7,31 @@
 
 	interface Props {
 		transactions: Transaction[];
+		headless?: boolean;
+		editable?: boolean;
+		onEdit?: (transaction: Transaction) => void;
 	}
 
-	let { transactions }: Props = $props();
+	let { transactions, headless = false, editable = false, onEdit = () => {} }: Props = $props();
 </script>
 
 <Card.Root>
-	<Card.Header>
-		<Card.Title>{$t('transactions.recentTransactions')}</Card.Title>
-		<Card.Description>{$t('transactions.recentTransactionsDescription')}</Card.Description>
-	</Card.Header>
+	{#if !headless}
+		<Card.Header>
+			<Card.Title>{$t('transactions.recentTransactions')}</Card.Title>
+			<Card.Description>{$t('transactions.recentTransactionsDescription')}</Card.Description>
+		</Card.Header>
+	{/if}
 	<Card.Content>
 		{#if transactions.length === 0}
 			<div class="text-muted-foreground py-8 text-center">
-				<DollarSign class="h-12 w-12 mx-auto mb-4 opacity-50" />
+				<DollarSign class="mx-auto mb-4 h-12 w-12 opacity-50" />
 				<p>{$t('transactions.noTransactions')}</p>
 			</div>
 		{:else}
 			<div class="space-y-4">
 				{#each transactions as transaction (transaction.id)}
-					<TransactionItem {transaction} />
+					<TransactionItem {transaction} {editable} onEdit={() => onEdit(transaction)} />
 				{/each}
 			</div>
 		{/if}

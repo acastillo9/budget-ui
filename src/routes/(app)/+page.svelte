@@ -24,6 +24,7 @@
 			<AddAccountDialog data={data.addAccountForm} />
 			{#if data.accounts.length > 0}
 				<AddTransactionDialog
+					buttonVariant="outline"
 					addTransactionForm={data.addTransactionForm}
 					addTransferForm={data.addTransferForm}
 					createCategoryForm={data.createCategoryForm}
@@ -35,11 +36,7 @@
 	</div>
 
 	<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-		<div>
-			<AccountList accounts={data.accounts} />
-		</div>
-		<div>
-			<TransactionList transactions={data.transactions} />
-		</div>
+		<AccountList accounts={data.accounts} />
+		<TransactionList transactions={data.transactions} />
 	</div>
 </section>

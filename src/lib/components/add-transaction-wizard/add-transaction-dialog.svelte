@@ -1,9 +1,9 @@
 <script lang="ts">
 	import * as Dialog from '$lib/components/ui/dialog';
-	import { Button, buttonVariants } from '$lib/components/ui/button';
+	import { Button, buttonVariants, type ButtonVariant } from '$lib/components/ui/button';
 	import Plus from '@lucide/svelte/icons/plus';
 	import { t } from 'svelte-i18n';
-	import { superForm } from 'sveltekit-superforms';
+	import { superForm, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Check from '@lucide/svelte/icons/check';
@@ -11,17 +11,45 @@
 	import ArrowRight from '@lucide/svelte/icons/arrow-right';
 	import SelectTransactionType from './select-transaction-type.svelte';
 	import ChooseCategory from './choose-category.svelte';
-	import { addTransactionSchema, addTransferSchema } from '$lib/schemas/add-transaction.schema';
+	import {
+		addTransactionSchema,
+		addTransferSchema,
+		type AddTransactionSchema,
+		type AddTransferSchema
+	} from '$lib/schemas/add-transaction.schema';
 	import AddTransactionForm from './add-transaction-form.svelte';
 	import type { Category } from '$lib/types/category.types';
 	import { Badge } from '$lib/components/ui/badge';
 	import AddTransferForm from './add-transfer-form.svelte';
+	import type { CreateCategorySchema } from '$lib/schemas/create-category.schema';
+	import type { Account } from '$lib/types/account.types';
+	import type { Transaction } from '$lib/types/transactions.types';
 
-	let { addTransactionForm, addTransferForm, createCategoryForm, categories, accounts } = $props();
-	let open = $state(false);
+	interface Props {
+		addTransactionForm: SuperValidated<AddTransactionSchema>;
+		addTransferForm: SuperValidated<AddTransferSchema>;
+		createCategoryForm: SuperValidated<CreateCategorySchema>;
+		categories: Category[];
+		accounts: Account[];
+		buttonVariant?: ButtonVariant;
+		transaction?: Transaction;
+		open?: boolean;
+	}
+
+	let {
+		addTransactionForm,
+		addTransferForm,
+		createCategoryForm,
+		categories,
+		accounts,
+		buttonVariant = 'default',
+		transaction = undefined,
+		open = $bindable(false)
+	}: Props = $props();
+
 	let transactionStep = $state(1);
 	let categoryType = $state('');
-	let category: Category | null = $state(null);
+	let category: Category | undefined = $derived(undefined);
 	let filteredCategories = $derived(
 		categories.filter((c: Category) => c.categoryType === categoryType)
 	);
@@ -37,14 +65,14 @@
 	function goToPreviousStep() {
 		if (categoryType === 'TRANSFER') {
 			reset(); // Reset form if going back from transfer
-      transferReset(); // Reset transfer form
+			transferReset(); // Reset transfer form
 			transactionStep = 1; // Go back to type selection for transfer
 		} else {
 			if (transactionStep === 2) {
-				category = null; // Reset category if going back from details
+				category = undefined; // Reset category if going back from details
 			} else if (transactionStep === 3) {
 				reset(); // Reset form if going back from details
-        transferReset(); // Reset transfer form
+				transferReset(); // Reset transfer form
 			}
 			transactionStep -= 1;
 		}
@@ -63,7 +91,7 @@
 			if (form.valid) {
 				transactionStep = 1;
 				categoryType = '';
-				category = null;
+				category = undefined;
 				reset();
 				open = false;
 			}
@@ -92,6 +120,41 @@
 		delayed: transferDelayed,
 		reset: transferReset
 	} = transferForm;
+
+  function resetDialog() {
+    transactionStep = 1;
+    categoryType = '';
+    category = undefined;
+    reset();
+    transferReset();
+  }
+
+	$effect(() => {
+		if (transaction) {
+			transactionStep = 3;
+			categoryType = transaction.category?.categoryType || 'TRANSFER';
+			category = transaction.category;
+      if (categoryType === 'TRANSFER') {
+        $transferFormData.amount = transaction.amount;
+        $transferFormData.date = transaction.date.toISOString();
+        $transferFormData.description = transaction.description;
+        $transferFormData.notes = transaction.notes;
+        $transferFormData.account = transaction.account.id;
+        $transferFormData.originAccount = transaction.transfer.account.id;
+      } else {
+        $formData.amount = Math.abs(transaction.amount);
+        $formData.date = transaction.date.toISOString();
+        $formData.description = transaction.description;
+        $formData.notes = transaction.notes;
+        $formData.account = transaction.account.id;
+        $formData.category = transaction.category?.id;
+      }
+		} else {
+      resetDialog();
+		}
+	});
+
+  $inspect(transaction)
 </script>
 
 <Dialog.Root
@@ -100,14 +163,14 @@
 		if (!open) {
 			transactionStep = 1;
 			categoryType = '';
-			category = null;
+			category = undefined;
 			reset();
-      transferReset();
+			transferReset();
 		}
 	}}
 >
-	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}>
-		<Plus class="h-4 w-4 mr-2" />
+	<Dialog.Trigger class={buttonVariants({ variant: buttonVariant })}>
+		<Plus class="mr-2 h-4 w-4" />
 		{$t('transactions.addTransaction')}
 	</Dialog.Trigger>
 	<Dialog.Content escapeKeydownBehavior="ignore" interactOutsideBehavior="ignore">
@@ -169,7 +232,7 @@
 									? 'destructive'
 									: 'secondary'}
 						>
-							{categoryType}
+							{$t(`categories.categoryType.${categoryType}`).toUpperCase()}
 						</Badge>
 						{#if category}
 							<Badge variant="outline">

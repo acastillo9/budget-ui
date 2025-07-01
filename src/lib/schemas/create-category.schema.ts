@@ -6,4 +6,4 @@ export const createCategorySchema = z.object({
   categoryType: z.enum(['INCOME', 'EXPENSE'])
 })
 
-export type CreateCategorySchema = typeof createCategorySchema;
+export type CreateCategorySchema = z.infer<typeof createCategorySchema>;
