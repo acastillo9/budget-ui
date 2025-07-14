@@ -1,10 +1,10 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { API_URL } from '$env/static/private';
 import type { Actions, PageServerLoad } from './$types';
-import { setError, superValidate, type Infer, type SuperValidated } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
+import { setError, superValidate, type SuperValidated } from 'sveltekit-superforms';
+import { zod4 } from 'sveltekit-superforms/adapters';
 import { setFlash } from 'sveltekit-flash-message/server';
-import { activationSchema, activationWithEmailSchema, checkEmailSchema, passwordSchema, passwordWithTokenSchema, signupFormSchema, type CheckEmailSchema } from '$lib/components/register-form/schema';
+import { activationSchema, activationWithEmailSchema, checkEmailSchema, passwordSchema, passwordWithTokenSchema, signupFormSchema, type CheckEmailSchema } from '$lib/schemas/auth.schema';
 import { $t } from '$lib/i18n';
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -14,13 +14,13 @@ export const load: PageServerLoad = async ({ locals }) => {
   }
 
   return {
-    form: await superValidate(zod(signupFormSchema)),
-    activationForm: await superValidate(zod(activationSchema)),
-    passwordForm: await superValidate(zod(passwordSchema)),
+    form: await superValidate(zod4(signupFormSchema)),
+    activationForm: await superValidate(zod4(activationSchema)),
+    passwordForm: await superValidate(zod4(passwordSchema)),
   };
 };
 
-async function checkEmail(form: SuperValidated<Infer<CheckEmailSchema>>) {
+async function checkEmail(form: SuperValidated<CheckEmailSchema>) {
   try {
     const response = await fetch(`${API_URL}/auth/email-registered?email=${form.data.email}`);
     const data = await response.json();
@@ -32,7 +32,7 @@ async function checkEmail(form: SuperValidated<Infer<CheckEmailSchema>>) {
 
 export const actions: Actions = {
   post: async ({ request, cookies, fetch }) => {
-    const form = await superValidate(request, zod(signupFormSchema));
+    const form = await superValidate(request, zod4(signupFormSchema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -74,7 +74,7 @@ export const actions: Actions = {
     return { form, step: 2, email: userEmail, activationCodeResendAt: userActivationCodeResendAt };
   },
   check: async ({ request }) => {
-    const form = await superValidate(request, zod(checkEmailSchema));
+    const form = await superValidate(request, zod4(checkEmailSchema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -89,7 +89,7 @@ export const actions: Actions = {
     return { form };
   },
   activate: async ({ request, cookies }) => {
-    const form = await superValidate(request, zod(activationWithEmailSchema));
+    const form = await superValidate(request, zod4(activationWithEmailSchema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -122,7 +122,7 @@ export const actions: Actions = {
     return { form, step: 3, accessToken };
   },
   password: async ({ request, cookies }) => {
-    const form = await superValidate(request, zod(passwordWithTokenSchema));
+    const form = await superValidate(request, zod4(passwordWithTokenSchema));
 
     if (!form.valid) {
       return fail(400, { form });

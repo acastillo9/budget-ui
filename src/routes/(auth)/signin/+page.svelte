@@ -4,9 +4,9 @@
 	import { Checkbox } from '$lib/components/ui/checkbox';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
-	import { loginFormSchema } from './schema';
+	import { loginFormSchema } from '$lib/schemas/auth.schema';
 	import { superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { zod4 } from 'sveltekit-superforms/adapters';
 	import type { PageProps } from './$types';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Logo from '$lib/components/logo.svelte';
@@ -18,7 +18,7 @@
 	let showPassword = $state(false);
 
 	const form = superForm(data.form, {
-		validators: zodClient(loginFormSchema)
+		validators: zod4(loginFormSchema)
 	});
 
 	const { form: formData, enhance, delayed, isTainted, tainted, allErrors } = form;

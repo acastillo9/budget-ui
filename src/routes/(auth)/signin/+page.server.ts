@@ -2,8 +2,8 @@ import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { API_URL } from '$env/static/private';
 import { superValidate } from 'sveltekit-superforms';
-import { loginFormSchema } from './schema';
-import { zod } from "sveltekit-superforms/adapters";
+import { loginFormSchema } from '$lib/schemas/auth.schema';
+import { zod4 } from "sveltekit-superforms/adapters";
 import { setFlash } from 'sveltekit-flash-message/server';
 import { $t } from '$lib/i18n';
 
@@ -14,13 +14,13 @@ export const load: PageServerLoad = async ({ locals }) => {
   }
 
   return {
-    form: await superValidate(zod(loginFormSchema)),
+    form: await superValidate(zod4(loginFormSchema)),
   };
 };
 
 export const actions: Actions = {
   default: async ({ request, cookies }) => {
-    const form = await superValidate(request, zod(loginFormSchema));
+    const form = await superValidate(request, zod4(loginFormSchema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -36,7 +36,7 @@ export const actions: Actions = {
       });
 
       if (!response.ok) {
-        setFlash({ type: 'error', message: $t('signIn.signInError')}, cookies);
+        setFlash({ type: 'error', message: $t('signIn.signInError') }, cookies);
         return fail(401, { form });
       }
 
@@ -61,7 +61,7 @@ export const actions: Actions = {
       }
 
     } catch {
-      setFlash({ type: 'error', message: $t('signIn.signInError')}, cookies);
+      setFlash({ type: 'error', message: $t('signIn.signInError') }, cookies);
       return fail(401, { form });
     }
 

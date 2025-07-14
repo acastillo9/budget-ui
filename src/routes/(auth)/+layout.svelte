@@ -6,7 +6,7 @@
 </script>
 
 <div class="flex h-screen flex-col">
-	<Header borderless></Header>
+	<Header></Header>
 
 	<div class="grow">
 		{@render children()}

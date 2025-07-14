@@ -3,17 +3,17 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
 	import { superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { signupFormSchema } from './schema';
+	import { zod4 } from 'sveltekit-superforms/adapters';
 	import { debounce } from 'throttle-debounce';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import { t } from 'svelte-i18n';
+	import { signupFormSchema } from '$lib/schemas/auth.schema';
 
 	let { data, goToNextStep } = $props();
 
 	const form = superForm(data, {
 		validationMethod: 'oninput',
-		validators: zodClient(signupFormSchema),
+		validators: zod4(signupFormSchema),
 		onChange(event) {
 			if (event.target && event.path !== 'email') {
 				checkEmailError();

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import AccountList from '$lib/components/account-list.svelte';
 	import AddAccountDialog from '$lib/components/add-account-dialog.svelte';
-	import AddTransactionDialog from '$lib/components/add-transaction-wizard/add-transaction-dialog.svelte';
+	import CreateTransactionDialog from '$lib/components/create-transaction-wizard/create-transaction-dialog.svelte';
 	import TransactionList from '$lib/components/transaction-list.svelte';
 	import { t } from 'svelte-i18n';
 	import type { PageProps } from './$types';
@@ -23,7 +23,7 @@
 		<div class="flex items-center space-x-2">
 			<AddAccountDialog data={data.addAccountForm} />
 			{#if data.accounts.length > 0}
-				<AddTransactionDialog
+				<CreateTransactionDialog
 					buttonVariant="outline"
 					addTransactionForm={data.addTransactionForm}
 					addTransferForm={data.addTransferForm}

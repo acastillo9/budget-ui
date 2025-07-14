@@ -3,21 +3,21 @@
 	import * as InputOTP from '$lib/components/ui/input-otp/index.js';
 	import { Button } from '$lib/components/ui/button';
 	import { superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { activationSchema } from './schema';
+	import { zod4 } from 'sveltekit-superforms/adapters';
 	import { REGEXP_ONLY_DIGITS } from 'bits-ui';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Countdown from '../countdown.svelte';
 	import type { CountdownData } from '$lib/types';
 	import { toast } from 'svelte-sonner';
 	import { t } from 'svelte-i18n';
+	import { activationSchema } from '$lib/schemas/auth.schema';
 
 	let { data, email, activationCodeResendAt, goToNextStep } = $props();
 	let remainingTime = $state(activationCodeResendAt);
 	let resendingActivationCode = $state(false);
 
 	const form = superForm(data, {
-		validators: zodClient(activationSchema),
+		validators: zod4(activationSchema),
 		onSubmit({ formData, cancel }) {
 			if (!email) {
 				cancel();

@@ -4,9 +4,9 @@ import type { PageServerLoad } from "../$types";
 import { $t } from "$lib/i18n";
 import { fail, redirect, type Actions } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms";
-import { zod } from "sveltekit-superforms/adapters";
-import { createCategorySchema } from "$lib/schemas/create-category.schema";
-import { addTransactionSchema, addTransferSchema } from "$lib/schemas/add-transaction.schema";
+import { zod4 } from "sveltekit-superforms/adapters";
+import { createCategorySchema } from "$lib/schemas/category.schema";
+import { createTransactionSchema, createTransferSchema } from "$lib/schemas/transaction.schema";
 import type { Transaction } from "$lib/types/transactions.types";
 
 export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
@@ -60,9 +60,9 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
   }
 
   return {
-    createCategoryForm: await superValidate(zod(createCategorySchema)),
-    addTransactionForm: await superValidate(zod(addTransactionSchema)),
-    addTransferForm: await superValidate(zod(addTransferSchema)),
+    createCategoryForm: await superValidate(zod4(createCategorySchema)),
+    addTransactionForm: await superValidate(zod4(createTransactionSchema)),
+    addTransferForm: await superValidate(zod4(createTransferSchema)),
     transactions,
     accounts,
     categories
@@ -72,7 +72,7 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
 
 export const actions: Actions = {
   addCategory: async ({ request, cookies, fetch }) => {
-    const form = await superValidate(request, zod(createCategorySchema));
+    const form = await superValidate(request, zod4(createCategorySchema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -101,15 +101,16 @@ export const actions: Actions = {
     }
   },
   addTransaction: async ({ request, cookies, fetch }) => {
-    const form = await superValidate(request, zod(addTransactionSchema));
+    const form = await superValidate(request, zod4(createTransactionSchema));
 
     if (!form.valid) {
       return fail(400, { form });
     }
 
+    const isEditing = Boolean(form.data.id);
     try {
-      const response = await fetch(`${API_URL}/transactions`, {
-        method: 'POST',
+      const response = await fetch(`${API_URL}/transactions${isEditing ? `/${form.data.id}` : ''}`, {
+        method: isEditing ? 'PATCH' : 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -122,23 +123,26 @@ export const actions: Actions = {
         return fail(statusCode, { form });
       }
 
-      setFlash({ type: 'success', message: $t('transactions.addTransactionSuccess') }, cookies);
+      const message = isEditing ? $t('transactions.editTransactionSuccess') : $t('transactions.addTransactionSuccess');
+      setFlash({ type: 'success', message }, cookies);
       return { form };
     } catch {
-      setFlash({ type: 'error', message: $t('transactions.addTransactionError') }, cookies);
+      const message = isEditing ? $t('transactions.editTransactionError') : $t('transactions.addTransactionError');
+      setFlash({ type: 'error', message }, cookies);
       return fail(500, { form });
     }
   },
   addTransfer: async ({ request, cookies, fetch }) => {
-    const form = await superValidate(request, zod(addTransferSchema));
+    const form = await superValidate(request, zod4(createTransferSchema));
 
     if (!form.valid) {
       return fail(400, { form });
     }
 
+    const isEditing = Boolean(form.data.id);
     try {
-      const response = await fetch(`${API_URL}/transactions/transfer`, {
-        method: 'POST',
+      const response = await fetch(`${API_URL}/transactions/transfer${isEditing ? `/${form.data.id}` : ''}`, {
+        method: isEditing ? 'PATCH' : 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -151,10 +155,12 @@ export const actions: Actions = {
         return fail(statusCode, { form });
       }
 
-      setFlash({ type: 'success', message: $t('transactions.addTransactionSuccess') }, cookies);
+      const message = isEditing ? $t('transactions.editTransactionSuccess') : $t('transactions.addTransactionSuccess');
+      setFlash({ type: 'success', message }, cookies);
       return { form };
     } catch {
-      setFlash({ type: 'error', message: $t('transactions.addTransactionError') }, cookies);
+      const message = isEditing ? $t('transactions.editTransactionError') : $t('transactions.addTransactionError');
+      setFlash({ type: 'error', message }, cookies);
       return fail(500, { form });
     }
   }

@@ -1,5 +1,5 @@
 import { $t } from '$lib/i18n';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const signupFormSchema = z.object({
   name: z.string().min(1, { message: $t('signUp.validation.nameIsRequired') }).max(200),
@@ -40,3 +40,17 @@ export const passwordWithTokenSchema = z.object({
 });
 
 export type PasswordWithTokenSchema = z.infer<typeof passwordWithTokenSchema>;
+
+export const loginFormSchema = z.object({
+  email: z.string().email(),
+  password: z.string(),
+  rememberMe: z.boolean(),
+});
+
+export type LoginFormSchema = z.infer<typeof loginFormSchema>;
+
+export const forgotPasswordFormSchema = z.object({
+  email: z.string().email(),
+});
+
+export type ForgotPasswordFormSchema = z.infer<typeof forgotPasswordFormSchema>;

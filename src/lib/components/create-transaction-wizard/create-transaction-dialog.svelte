@@ -4,7 +4,7 @@
 	import Plus from '@lucide/svelte/icons/plus';
 	import { t } from 'svelte-i18n';
 	import { superForm, type SuperValidated } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { zod4 } from 'sveltekit-superforms/adapters';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import Check from '@lucide/svelte/icons/check';
 	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
@@ -12,22 +12,22 @@
 	import SelectTransactionType from './select-transaction-type.svelte';
 	import ChooseCategory from './choose-category.svelte';
 	import {
-		addTransactionSchema,
-		addTransferSchema,
-		type AddTransactionSchema,
-		type AddTransferSchema
-	} from '$lib/schemas/add-transaction.schema';
-	import AddTransactionForm from './add-transaction-form.svelte';
+		createTransactionSchema,
+		createTransferSchema,
+		type CreateTransactionSchema,
+		type CreateTransferSchema
+	} from '$lib/schemas/transaction.schema';
+	import CreateTransactionForm from './create-transaction-form.svelte';
 	import type { Category } from '$lib/types/category.types';
 	import { Badge } from '$lib/components/ui/badge';
-	import AddTransferForm from './add-transfer-form.svelte';
-	import type { CreateCategorySchema } from '$lib/schemas/create-category.schema';
+	import CreateTransferForm from './create-transfer-form.svelte';
+	import type { CreateCategorySchema } from '$lib/schemas/category.schema';
 	import type { Account } from '$lib/types/account.types';
 	import type { Transaction } from '$lib/types/transactions.types';
 
 	interface Props {
-		addTransactionForm: SuperValidated<AddTransactionSchema>;
-		addTransferForm: SuperValidated<AddTransferSchema>;
+		addTransactionForm: SuperValidated<CreateTransactionSchema>;
+		addTransferForm: SuperValidated<CreateTransferSchema>;
 		createCategoryForm: SuperValidated<CreateCategorySchema>;
 		categories: Category[];
 		accounts: Account[];
@@ -79,7 +79,7 @@
 	}
 
 	const form = superForm(addTransactionForm, {
-		validators: zodClient(addTransactionSchema),
+		validators: zod4(createTransactionSchema),
 		onSubmit({ formData, cancel }) {
 			if (!category) {
 				cancel();
@@ -101,7 +101,7 @@
 	const { form: formData, enhance, isTainted, tainted, allErrors, delayed, reset } = form;
 
 	const transferForm = superForm(addTransferForm, {
-		validators: zodClient(addTransferSchema),
+		validators: zod4(createTransferSchema),
 		onUpdate({ form }) {
 			if (form.valid) {
 				transactionStep = 1;
@@ -121,40 +121,48 @@
 		reset: transferReset
 	} = transferForm;
 
-  function resetDialog() {
-    transactionStep = 1;
-    categoryType = '';
-    category = undefined;
-    reset();
-    transferReset();
-  }
+	function resetDialog() {
+		transactionStep = 1;
+		categoryType = '';
+		category = undefined;
+		reset();
+		transferReset();
+	}
 
 	$effect(() => {
 		if (transaction) {
 			transactionStep = 3;
 			categoryType = transaction.category?.categoryType || 'TRANSFER';
 			category = transaction.category;
-      if (categoryType === 'TRANSFER') {
-        $transferFormData.amount = transaction.amount;
-        $transferFormData.date = transaction.date.toISOString();
-        $transferFormData.description = transaction.description;
-        $transferFormData.notes = transaction.notes;
-        $transferFormData.account = transaction.account.id;
-        $transferFormData.originAccount = transaction.transfer.account.id;
-      } else {
-        $formData.amount = Math.abs(transaction.amount);
-        $formData.date = transaction.date.toISOString();
-        $formData.description = transaction.description;
-        $formData.notes = transaction.notes;
-        $formData.account = transaction.account.id;
-        $formData.category = transaction.category?.id;
-      }
+			if (categoryType === 'TRANSFER') {
+				$transferFormData.id = transaction.id;
+				$transferFormData.amount = Math.abs(transaction.amount);
+				// date should be formatted as string with the form '2025-07-04'
+				$transferFormData.date = transaction.date.toISOString().split('T')[0];
+				$transferFormData.description = transaction.description;
+				$transferFormData.notes = transaction.notes;
+				// if the transaction is a transfer, the origin account is the account where the money comes from
+				if (transaction.amount < 0) {
+					$transferFormData.account = transaction.transfer.account.id;
+					$transferFormData.originAccount = transaction.account.id;
+				} else {
+					$transferFormData.account = transaction.account.id;
+					$transferFormData.originAccount = transaction.transfer.account.id;
+				}
+			} else {
+				$formData.id = transaction.id;
+				$formData.amount = Math.abs(transaction.amount);
+				// date should be formatted as string with the form '2025-07-04'
+				$formData.date = transaction.date.toISOString().split('T')[0];
+				$formData.description = transaction.description;
+				$formData.notes = transaction.notes;
+				$formData.account = transaction.account.id;
+				$formData.category = transaction.category?.id;
+			}
 		} else {
-      resetDialog();
+			resetDialog();
 		}
 	});
-
-  $inspect(transaction)
 </script>
 
 <Dialog.Root
@@ -242,14 +250,14 @@
 					</div>
 				</div>
 				{#if categoryType === 'TRANSFER'}
-					<AddTransferForm
+					<CreateTransferForm
 						form={transferForm}
 						bind:formData={$transferFormData}
 						enhance={transferEnhance}
 						{accounts}
 					/>
 				{:else}
-					<AddTransactionForm {form} bind:formData={$formData} {enhance} {accounts} />
+					<CreateTransactionForm {form} bind:formData={$formData} {enhance} {accounts} />
 				{/if}
 			</div>
 		{/if}

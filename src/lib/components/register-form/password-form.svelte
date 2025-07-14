@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { superForm, type SuperValidated } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { passwordSchema } from './schema';
+	import { zod4 } from 'sveltekit-superforms/adapters';
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
@@ -9,6 +8,7 @@
 	import Eye from '@lucide/svelte/icons/eye';
 	import EyeOff from '@lucide/svelte/icons/eye-off';
 	import { t } from 'svelte-i18n';
+	import { passwordSchema } from '$lib/schemas/auth.schema';
 
 	interface Props {
 		data: SuperValidated<{
@@ -22,7 +22,7 @@
 	let showPassword = $state(false);
 
 	const form = superForm(data, {
-		validators: zodClient(passwordSchema),
+		validators: zod4(passwordSchema),
 		onSubmit({ formData, cancel }) {
 			if (!accessToken) {
 				cancel();
@@ -46,7 +46,7 @@
 						bind:value={$formData.password}
 					/>
 					<Button
-						class="absolute right-0 top-0 border-none bg-transparent hover:bg-transparent"
+						class="absolute top-0 right-0 border-none bg-transparent hover:bg-transparent"
 						variant="outline"
 						size="icon"
 						onclick={() => (showPassword = !showPassword)}

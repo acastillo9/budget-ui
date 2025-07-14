@@ -6,15 +6,15 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
+	import { zod4 } from 'sveltekit-superforms/adapters';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
-	import { forgotPasswordFormSchema } from './schema';
+	import { forgotPasswordFormSchema } from '$lib/schemas/auth.schema';
 	import { t } from 'svelte-i18n';
 
 	let { data }: PageProps = $props();
 
 	const form = superForm(data.form, {
-		validators: zodClient(forgotPasswordFormSchema)
+		validators: zod4(forgotPasswordFormSchema)
 	});
 
 	const { form: formData, enhance, delayed, isTainted, tainted, allErrors } = form;
@@ -24,7 +24,7 @@
 	<title>Budget App - {$t('forgotPassword.title')}</title>
 </svelte:head>
 
-<div class="p-4 flex h-full items-center justify-center">
+<div class="flex h-full items-center justify-center p-4">
 	<div class="w-full md:w-96">
 		<Card.Root>
 			<Card.Header class="space-y-1">
@@ -63,7 +63,7 @@
 					{$t('common.send')}
 				</Button>
 				<div class="flex items-center">
-					<p class="text-sm text-muted-foreground">{$t('common.goTo')}</p>
+					<p class="text-muted-foreground text-sm">{$t('common.goTo')}</p>
 					<Button class="px-2" variant="link" href="/signin">{$t('common.signIn')}</Button>
 				</div>
 			</Card.Footer>

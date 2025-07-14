@@ -4,10 +4,10 @@ import { API_URL } from "$env/static/private";
 import { setFlash } from "sveltekit-flash-message/server";
 import { $t } from "$lib/i18n";
 import { superValidate } from "sveltekit-superforms";
-import { zod } from "sveltekit-superforms/adapters";
-import { addAccountSchema } from "$lib/schemas/add-account.schema";
-import { createCategorySchema } from "$lib/schemas/create-category.schema";
-import { AddTransactionSchema, addTransactionSchema, addTransferSchema } from "$lib/schemas/add-transaction.schema";
+import { zod4 } from "sveltekit-superforms/adapters";
+import { createAccountSchema } from "$lib/schemas/account.schema";
+import { createCategorySchema } from "$lib/schemas/category.schema";
+import { createTransactionSchema, createTransferSchema } from "$lib/schemas/transaction.schema";
 
 export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
   const { user } = locals
@@ -53,10 +53,10 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
   }
 
   return {
-    addAccountForm: await superValidate(zod(addAccountSchema)),
-    createCategoryForm: await superValidate(zod(createCategorySchema)),
-    addTransactionForm: await superValidate(zod(addTransactionSchema)),
-    addTransferForm: await superValidate(zod(addTransferSchema)),
+    addAccountForm: await superValidate(zod4(createAccountSchema)),
+    createCategoryForm: await superValidate(zod4(createCategorySchema)),
+    addTransactionForm: await superValidate(zod4(createTransactionSchema)),
+    addTransferForm: await superValidate(zod4(createTransferSchema)),
     accounts,
     categories,
     transactions
@@ -65,7 +65,7 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
 
 export const actions: Actions = {
   addAccount: async ({ request, cookies, fetch }) => {
-    const form = await superValidate(request, zod(addAccountSchema));
+    const form = await superValidate(request, zod4(createAccountSchema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -94,7 +94,7 @@ export const actions: Actions = {
     }
   },
   addCategory: async ({ request, cookies, fetch }) => {
-    const form = await superValidate(request, zod(createCategorySchema));
+    const form = await superValidate(request, zod4(createCategorySchema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -123,7 +123,7 @@ export const actions: Actions = {
     }
   },
   addTransaction: async ({ request, cookies, fetch }) => {
-    const form = await superValidate(request, zod(addTransactionSchema));
+    const form = await superValidate(request, zod4(createTransactionSchema));
 
     if (!form.valid) {
       return fail(400, { form });
@@ -152,7 +152,7 @@ export const actions: Actions = {
     }
   },
   addTransfer: async ({ request, cookies, fetch }) => {
-    const form = await superValidate(request, zod(addTransferSchema));
+    const form = await superValidate(request, zod4(createTransferSchema));
 
     if (!form.valid) {
       return fail(400, { form });

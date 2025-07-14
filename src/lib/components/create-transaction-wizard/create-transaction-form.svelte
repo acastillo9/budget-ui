@@ -9,7 +9,7 @@
 	import CalendarIcon from '@lucide/svelte/icons/calendar';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
-	import { DateFormatter, getLocalTimeZone, parseAbsolute, today } from '@internationalized/date';
+	import { DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
 	import { formatAccountName } from '$lib/utils/account';
 
@@ -18,52 +18,27 @@
 	const df = new DateFormatter($locale || 'en-US', {
 		dateStyle: 'long'
 	});
-	let date = $derived(
-		formData.date ? parseAbsolute(formData.date, getLocalTimeZone()) : today(getLocalTimeZone())
-	);
+	let date = $derived(formData.date ? parseDate(formData.date) : today(getLocalTimeZone()));
 	let contentRef = $state<HTMLElement | null>(null);
 </script>
 
-<form id="addTransferForm" class="space-y-4" method="POST" action="?/addTransfer" use:enhance>
-	<Form.Field {form} name="originAccount">
-		<Form.Control>
-			{#snippet children({ props })}
-				<Form.Label>{$t('transactions.fromAccount')}</Form.Label>
-				<Select.Root type="single" bind:value={formData.originAccount} name={props.name}>
-					<Select.Trigger class="w-full" {...props}>
-						{formData.originAccount
-							? formatAccountName(
-									accounts.find((account: Account) => account.id === formData.originAccount),
-									true
-								)
-							: $t('transactions.fromAccountPlaceholder')}
-					</Select.Trigger>
-					<Select.Content>
-						{#each accounts as account (account.id)}
-							<Select.Item value={account.id}>{formatAccountName(account, true)}</Select.Item>
-						{/each}
-					</Select.Content>
-				</Select.Root>
-			{/snippet}
-		</Form.Control>
-		<Form.FieldErrors />
-	</Form.Field>
+<form id="addTransactionForm" class="space-y-4" method="POST" action="?/addTransaction" use:enhance>
+	<input hidden name="id" value={formData.id || ''} />
 	<Form.Field {form} name="account">
 		<Form.Control>
 			{#snippet children({ props })}
-				<Form.Label>{$t('transactions.toAccount')}</Form.Label>
+				<Form.Label>{$t('transactions.account')}</Form.Label>
 				<Select.Root type="single" bind:value={formData.account} name={props.name}>
 					<Select.Trigger class="w-full" {...props}>
 						{formData.account
 							? formatAccountName(
-									accounts.find((account: Account) => account.id === formData.account),
-									true
+									accounts.find((account: Account) => account.id === formData.account)
 								)
-							: $t('transactions.toAccountPlaceholder')}
+							: $t('transactions.accountPlaceholder')}
 					</Select.Trigger>
 					<Select.Content>
 						{#each accounts as account (account.id)}
-							<Select.Item value={account.id}>{formatAccountName(account, true)}</Select.Item>
+							<Select.Item value={account.id}>{formatAccountName(account)}</Select.Item>
 						{/each}
 					</Select.Content>
 				</Select.Root>
@@ -96,7 +71,7 @@
 								variant: 'outline',
 								class: 'w-full justify-start text-left font-normal'
 							}),
-							!formData.date && 'text-muted-foreground'
+							!date && 'text-muted-foreground'
 						)}
 						{...props}
 					>

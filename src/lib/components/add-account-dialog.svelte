@@ -6,18 +6,18 @@
 	import Plus from '@lucide/svelte/icons/plus';
 	import { t } from 'svelte-i18n';
 	import { superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { addAccountSchema } from '../schemas/add-account.schema';
+	import { zod4 } from 'sveltekit-superforms/adapters';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import { Input } from '$lib/components/ui/input';
 	import { getUserContext } from '$lib/context';
 	import { currencies, getCurrencyByCode } from '$lib/utils/currency';
+	import { createAccountSchema } from '$lib/schemas/account.schema';
 
 	let { data } = $props();
 	let open = $state(false);
 
 	const form = superForm(data, {
-		validators: zodClient(addAccountSchema),
+		validators: zod4(createAccountSchema),
 		onUpdate({ form }) {
 			if (form.valid) {
 				open = false;

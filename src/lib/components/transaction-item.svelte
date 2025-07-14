@@ -3,9 +3,26 @@
 	import { ArrowDownLeft, ArrowUpRight, Edit, Trash2 } from '@lucide/svelte';
 	import CategoryBadge from './category-badge.svelte';
 	import Button from './ui/button/button.svelte';
+	import { t } from 'svelte-i18n';
 
 	let { transaction, editable = false, onEdit } = $props();
 	let isIncome = $derived(transaction.amount > 0);
+	let description = $derived.by(() => {
+		if (transaction.isTransfer) {
+			const descriptionTranslation =
+				transaction.amount < 0
+					? 'transactions.descriptionTransferTo'
+					: 'transactions.descriptionTransferFrom';
+			return $t(descriptionTranslation, {
+				values: {
+					account: transaction.transfer.account.name,
+					description: transaction.transfer.description
+				}
+			});
+		} else {
+			return transaction.description;
+		}
+	});
 </script>
 
 <div class="flex items-center justify-between border-b py-3 last:border-0">
@@ -18,7 +35,7 @@
 			{/if}
 		</div>
 		<div>
-			<p class="font-medium">{transaction.description}</p>
+			<p class="font-medium">{description}</p>
 			<div class="text-muted-foreground flex items-center gap-2 text-xs">
 				<span>{transaction.account.name}</span>
 				{#if transaction.category}

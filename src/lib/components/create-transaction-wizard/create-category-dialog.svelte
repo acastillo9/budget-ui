@@ -6,8 +6,8 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { superForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
-	import { createCategorySchema } from '../../schemas/create-category.schema';
+	import { zod4 } from 'sveltekit-superforms/adapters';
+	import { createCategorySchema } from '$lib/schemas/category.schema';
 	import LoaderCircle from '@lucide/svelte/icons/loader-circle';
 	import IconPicker from './icon-picker.svelte';
 	import Label from '../ui/label/label.svelte';
@@ -17,7 +17,7 @@
 	let selectedIcon = $state('');
 
 	const form = superForm(data, {
-		validators: zodClient(createCategorySchema),
+		validators: zod4(createCategorySchema),
 		onSubmit({ formData, cancel }) {
 			if (!categoryType) {
 				cancel();
