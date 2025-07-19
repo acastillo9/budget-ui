@@ -87,6 +87,9 @@
 					accounts={data.accounts}
 					transaction={selectedTransaction}
 					bind:open={isEditTransactionDialogOpen}
+					onClose={() => {
+						selectedTransaction = undefined;
+					}}
 				/>
 			{/if}
 		</div>

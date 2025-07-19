@@ -34,6 +34,7 @@
 		buttonVariant?: ButtonVariant;
 		transaction?: Transaction;
 		open?: boolean;
+		onClose: () => void;
 	}
 
 	let {
@@ -44,7 +45,8 @@
 		accounts,
 		buttonVariant = 'default',
 		transaction = undefined,
-		open = $bindable(false)
+		open = $bindable(false),
+		onClose = () => {}
 	}: Props = $props();
 
 	let transactionStep = $state(1);
@@ -64,16 +66,8 @@
 
 	function goToPreviousStep() {
 		if (categoryType === 'TRANSFER') {
-			reset(); // Reset form if going back from transfer
-			transferReset(); // Reset transfer form
 			transactionStep = 1; // Go back to type selection for transfer
 		} else {
-			if (transactionStep === 2) {
-				category = undefined; // Reset category if going back from details
-			} else if (transactionStep === 3) {
-				reset(); // Reset form if going back from details
-				transferReset(); // Reset transfer form
-			}
 			transactionStep -= 1;
 		}
 	}
@@ -89,10 +83,7 @@
 		},
 		onUpdate({ form }) {
 			if (form.valid) {
-				transactionStep = 1;
-				categoryType = '';
-				category = undefined;
-				reset();
+				resetDialog();
 				open = false;
 			}
 		}
@@ -104,8 +95,7 @@
 		validators: zod4(createTransferSchema),
 		onUpdate({ form }) {
 			if (form.valid) {
-				transactionStep = 1;
-				transferReset();
+				resetDialog();
 				open = false;
 			}
 		}
@@ -132,9 +122,10 @@
 	$effect(() => {
 		if (transaction) {
 			transactionStep = 3;
-			categoryType = transaction.category?.categoryType || 'TRANSFER';
+			const transactioncategoryType = transaction.category?.categoryType || 'TRANSFER';
 			category = transaction.category;
-			if (categoryType === 'TRANSFER') {
+			categoryType = transactioncategoryType;
+			if (transactioncategoryType === 'TRANSFER') {
 				$transferFormData.id = transaction.id;
 				$transferFormData.amount = Math.abs(transaction.amount);
 				// date should be formatted as string with the form '2025-07-04'
@@ -169,11 +160,8 @@
 	bind:open
 	onOpenChange={(open: boolean) => {
 		if (!open) {
-			transactionStep = 1;
-			categoryType = '';
-			category = undefined;
-			reset();
-			transferReset();
+			resetDialog();
+			onClose();
 		}
 	}}
 >
