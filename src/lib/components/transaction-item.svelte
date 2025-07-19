@@ -5,7 +5,7 @@
 	import Button from './ui/button/button.svelte';
 	import { t } from 'svelte-i18n';
 
-	let { transaction, editable = false, onEdit } = $props();
+	let { transaction, editable = false, onEdit, onDelete } = $props();
 	let isIncome = $derived(transaction.amount > 0);
 	let description = $derived.by(() => {
 		if (transaction.isTransfer) {
@@ -61,7 +61,7 @@
 				<Button
 					variant="ghost"
 					size="icon"
-					onclick={() => {}}
+					onclick={onDelete}
 					class="text-destructive hover:text-destructive"
 				>
 					<Trash2 class="h-4 w-4" />

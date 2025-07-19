@@ -10,9 +10,16 @@
 		headless?: boolean;
 		editable?: boolean;
 		onEdit?: (transaction: Transaction) => void;
+		onDelete?: (transaction: Transaction) => void;
 	}
 
-	let { transactions, headless = false, editable = false, onEdit = () => {} }: Props = $props();
+	let {
+		transactions,
+		headless = false,
+		editable = false,
+		onEdit = () => {},
+		onDelete = () => {}
+	}: Props = $props();
 </script>
 
 <Card.Root>
@@ -31,7 +38,12 @@
 		{:else}
 			<div class="space-y-4">
 				{#each transactions as transaction (transaction.id)}
-					<TransactionItem {transaction} {editable} onEdit={() => onEdit(transaction)} />
+					<TransactionItem
+						{transaction}
+						{editable}
+						onEdit={() => onEdit(transaction)}
+						onDelete={() => onDelete(transaction)}
+					/>
 				{/each}
 			</div>
 		{/if}
