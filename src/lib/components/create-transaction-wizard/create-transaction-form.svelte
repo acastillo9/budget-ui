@@ -9,7 +9,13 @@
 	import CalendarIcon from '@lucide/svelte/icons/calendar';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
-	import { DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date';
+	import {
+		CalendarDate,
+		DateFormatter,
+		getLocalTimeZone,
+		parseDate,
+		today
+	} from '@internationalized/date';
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
 	import { formatAccountName } from '$lib/utils/account';
 
@@ -18,7 +24,8 @@
 	const df = new DateFormatter($locale || 'en-US', {
 		dateStyle: 'long'
 	});
-	let date = $derived(formData.date ? parseDate(formData.date) : today(getLocalTimeZone()));
+	formData.date = formData.date || today(getLocalTimeZone()).toString();
+	let date: CalendarDate | undefined = $state(parseDate(formData.date));
 	let contentRef = $state<HTMLElement | null>(null);
 </script>
 
@@ -86,8 +93,10 @@
 							onValueChange={(v) => {
 								if (v) {
 									formData.date = v.toString();
+									date = parseDate(formData.date);
 								} else {
 									formData.date = '';
+									date = undefined;
 								}
 							}}
 						/>
