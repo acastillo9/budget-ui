@@ -9,7 +9,10 @@ import { createCategorySchema } from "$lib/schemas/category.schema";
 import { createTransactionSchema, createTransferSchema } from "$lib/schemas/transaction.schema";
 import type { Transaction } from "$lib/types/transactions.types";
 
-export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
+export const load: PageServerLoad = async ({ locals, cookies, fetch, url }) => {
+
+  const offset = url.searchParams.get('offset') ? parseInt(url.searchParams.get('offset') as string, 10) : 0;
+
   const { user } = locals
   if (!user) {
     throw redirect(302, '/signin')
@@ -40,21 +43,31 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
   }
 
   // load transactions from the API
-  let transactions: Transaction[] = [];
+  const transactions = {
+    data: [],
+    total: 0,
+    limit: 10,
+    offset,
+    nextPage: null,
+  }
   try {
-    const response = await fetch(`${API_URL}/transactions`);
+    const response = await fetch(`${API_URL}/transactions${transactions.offset ? `?offset=${transactions.offset}` : ''}`)
     if (!response.ok) {
       throw new Error('Failed to load transactions');
     }
     // fetch the transactions from the API and parsing the date fields on the
     // result from string to date
-    const { data } = await response.json();
-    transactions = data.map((transaction: Transaction) => ({
+    const { data, total, limit, offset, nextPage } = await response.json();
+    transactions.data = data.map((transaction: Transaction) => ({
       ...transaction,
       date: new Date(transaction.date),
       createdAt: new Date(transaction.createdAt),
       updatedAt: new Date(transaction.updatedAt)
     }))
+    transactions.total = total;
+    transactions.limit = limit;
+    transactions.offset = offset;
+    transactions.nextPage = nextPage;
   } catch {
     setFlash({ type: 'error', message: $t('transactions.loadTransactionsError') }, cookies);
   }
@@ -63,7 +76,7 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
     createCategoryForm: await superValidate(zod4(createCategorySchema)),
     addTransactionForm: await superValidate(zod4(createTransactionSchema)),
     addTransferForm: await superValidate(zod4(createTransferSchema)),
-    transactions,
+    transactions: transactions,
     accounts,
     categories
   }

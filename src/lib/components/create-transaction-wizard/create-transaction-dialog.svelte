@@ -34,7 +34,7 @@
 		buttonVariant?: ButtonVariant;
 		transaction?: Transaction;
 		open?: boolean;
-		onClose: () => void;
+		onClose?: () => void;
 	}
 
 	let {

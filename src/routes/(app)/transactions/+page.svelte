@@ -6,7 +6,8 @@
 	import type { Transaction } from '$lib/types/transactions.types';
 	import ConfirmationDialog from '$lib/components/confirmation-dialog.svelte';
 	import { toast } from 'svelte-sonner';
-	import { invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
+	import * as Pagination from '$lib/components/ui/pagination/index.js';
 
 	let { data }: PageProps = $props();
 
@@ -70,41 +71,95 @@
 	<title>Budget App - {$t('transactions.title')}</title>
 </svelte:head>
 
-<section class="flex h-full w-full flex-col p-4 md:p-6">
-	<div class="mb-4 flex items-center justify-between">
-		<div>
-			<h1 class="text-3xl font-bold">{$t('transactions.title')}</h1>
-			<p class="text-muted-foreground">{$t('transactions.description')}</p>
+<section class="flex h-full w-full flex-col py-4 md:py-6">
+	<div class="container mx-auto">
+		<div class="mb-4 flex items-center justify-between">
+			<div>
+				<h1 class="text-3xl font-bold">{$t('transactions.title')}</h1>
+				<p class="text-muted-foreground">{$t('transactions.description')}</p>
+			</div>
+
+			<div class="flex items-center space-x-2">
+				{#if data.accounts.length > 0}
+					<CreateTransactionDialog
+						addTransactionForm={data.addTransactionForm}
+						addTransferForm={data.addTransferForm}
+						createCategoryForm={data.createCategoryForm}
+						categories={data.categories}
+						accounts={data.accounts}
+						transaction={selectedTransaction}
+						bind:open={isEditTransactionDialogOpen}
+						onClose={() => {
+							selectedTransaction = undefined;
+						}}
+					/>
+				{/if}
+			</div>
 		</div>
 
-		<div class="flex items-center space-x-2">
-			{#if data.accounts.length > 0}
-				<CreateTransactionDialog
-					addTransactionForm={data.addTransactionForm}
-					addTransferForm={data.addTransferForm}
-					createCategoryForm={data.createCategoryForm}
-					categories={data.categories}
-					accounts={data.accounts}
-					transaction={selectedTransaction}
-					bind:open={isEditTransactionDialogOpen}
-					onClose={() => {
-						selectedTransaction = undefined;
-					}}
-				/>
-			{/if}
-		</div>
+		<TransactionList
+			transactions={data.transactions.data}
+			headless
+			editable
+			onEdit={(event) => {
+				selectedTransaction = event;
+				isEditTransactionDialogOpen = true;
+			}}
+			onDelete={confirmDeleteTransaction}
+		/>
+		<Pagination.Root
+			count={data.transactions.total}
+			perPage={data.transactions.limit}
+			page={data.transactions.offset / data.transactions.limit + 1}
+		>
+			{#snippet children({ pages, currentPage })}
+				<Pagination.Content>
+					<Pagination.Item>
+						<Pagination.PrevButton
+							onclick={() => {
+								goto(
+									`/transactions?offset=${Math.max(data.transactions.offset - data.transactions.limit, 0)}`,
+									{
+										replaceState: true
+									}
+								);
+							}}
+						/>
+					</Pagination.Item>
+					{#each pages as page (page.key)}
+						{#if page.type === 'ellipsis'}
+							<Pagination.Item>
+								<Pagination.Ellipsis />
+							</Pagination.Item>
+						{:else}
+							<Pagination.Item>
+								<Pagination.Link
+									{page}
+									isActive={currentPage === page.value}
+									onclick={() => {
+										goto(`/transactions?offset=${(page.value - 1) * data.transactions.limit}`, {
+											replaceState: true
+										});
+									}}
+								>
+									{page.value}
+								</Pagination.Link>
+							</Pagination.Item>
+						{/if}
+					{/each}
+					<Pagination.Item>
+						<Pagination.NextButton
+							onclick={() => {
+								goto(`/transactions?offset=${data.transactions.offset + data.transactions.limit}`, {
+									replaceState: true
+								});
+							}}
+						/>
+					</Pagination.Item>
+				</Pagination.Content>
+			{/snippet}
+		</Pagination.Root>
 	</div>
-
-	<TransactionList
-		transactions={data.transactions}
-		headless
-		editable
-		onEdit={(event) => {
-			selectedTransaction = event;
-			isEditTransactionDialogOpen = true;
-		}}
-		onDelete={confirmDeleteTransaction}
-	/>
 </section>
 
 <ConfirmationDialog

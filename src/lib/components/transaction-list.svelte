@@ -22,7 +22,7 @@
 	}: Props = $props();
 </script>
 
-<Card.Root>
+<Card.Root class="mb-4">
 	{#if !headless}
 		<Card.Header>
 			<Card.Title>{$t('transactions.recentTransactions')}</Card.Title>
