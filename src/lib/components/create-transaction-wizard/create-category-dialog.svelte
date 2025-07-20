@@ -39,9 +39,9 @@
 	bind:open
 	onOpenChange={(open: boolean) => {
 		if (!open) {
-			selectedIcon = '';
 			reset();
 		}
+		selectedIcon = '';
 	}}
 >
 	<Dialog.Trigger>

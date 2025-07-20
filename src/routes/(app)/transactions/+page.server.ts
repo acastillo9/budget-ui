@@ -10,7 +10,6 @@ import { createTransactionSchema, createTransferSchema } from "$lib/schemas/tran
 import type { Transaction } from "$lib/types/transactions.types";
 
 export const load: PageServerLoad = async ({ locals, cookies, fetch, url }) => {
-
   const offset = url.searchParams.get('offset') ? parseInt(url.searchParams.get('offset') as string, 10) : 0;
 
   const { user } = locals

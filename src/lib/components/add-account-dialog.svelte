@@ -13,8 +13,7 @@
 	import { currencies, getCurrencyByCode } from '$lib/utils/currency';
 	import { createAccountSchema } from '$lib/schemas/account.schema';
 
-	let { data } = $props();
-	let open = $state(false);
+	let { data, account = undefined, open = $bindable(false), onClose = () => {} } = $props();
 
 	const form = superForm(data, {
 		validators: zod4(createAccountSchema),
@@ -34,6 +33,18 @@
 	$effect(() => {
 		$formData.currencyCode = userState.user?.currencyCode || 'USD';
 	});
+
+	$effect(() => {
+		if (account) {
+			$formData.id = account.id;
+			$formData.name = account.name;
+			$formData.balance = account.balance;
+			$formData.accountType = account.accountType;
+			$formData.currencyCode = account.currencyCode;
+		} else {
+			reset();
+		}
+	});
 </script>
 
 <Dialog.Root
@@ -41,8 +52,9 @@
 	onOpenChange={(open: boolean) => {
 		if (!open) {
 			reset();
-			$formData.currencyCode = userState.user?.currencyCode || 'USD';
+			onClose();
 		}
+		$formData.currencyCode = userState.user?.currencyCode || 'USD';
 	}}
 >
 	<Dialog.Trigger class={buttonVariants({ variant: 'default' })}>
@@ -57,6 +69,7 @@
 			</Dialog.Description>
 		</Dialog.Header>
 		<form id="addAccountForm" class="space-y-4" method="POST" action="?/addAccount" use:enhance>
+			<input hidden name="id" value={$formData.id || ''} />
 			<Form.Field {form} name="name">
 				<Form.Control>
 					{#snippet children({ props })}

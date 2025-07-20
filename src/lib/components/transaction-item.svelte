@@ -15,8 +15,8 @@
 					: 'transactions.descriptionTransferFrom';
 			return $t(descriptionTranslation, {
 				values: {
-					account: transaction.transfer.account.name,
-					description: transaction.transfer.description
+					account: transaction.transfer?.account.name || $t('accounts.deletedAccount'),
+					description: transaction.transfer?.description || '--'
 				}
 			});
 		} else {
@@ -48,16 +48,18 @@
 		</div>
 	</div>
 	<div class="flex items-center gap-2">
-		<div class="text-right">
+		<div class="mr-4 text-right">
 			<p class={`font-semibold ${isIncome ? 'text-green-600' : 'text-red-600'}`}>
 				{formatCurrencyWithSymbol(transaction.amount, transaction.account.currencyCode)}
 			</p>
 		</div>
 		{#if editable}
 			<div class="flex items-center gap-2">
-				<Button variant="ghost" size="icon" onclick={onEdit}>
-					<Edit class="h-4 w-4" />
-				</Button>
+				{#if !transaction.isTransfer || (transaction.isTransfer && transaction.transfer)}
+					<Button variant="ghost" size="icon" onclick={onEdit}>
+						<Edit class="h-4 w-4" />
+					</Button>
+				{/if}
 				<Button
 					variant="ghost"
 					size="icon"

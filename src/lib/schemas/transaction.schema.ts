@@ -14,7 +14,7 @@ export type CreateTransactionSchema = z.infer<typeof createTransactionSchema>;
 
 export const createTransferSchema = z.object({
   id: z.string().optional(),
-  amount: z.number().default('' as unknown as number),
+  amount: z.number().min(0.01, { message: 'Amount must be greater than 0' }).default('' as unknown as number),
   date: z.string().min(1, { message: 'Date is required' }),
   description: z.string().min(1, { message: 'Description is required' }),
   notes: z.string().optional(),
