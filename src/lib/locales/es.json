@@ -25,6 +25,7 @@
     "editAccountError": "Error al editar la cuenta. Por favor verifica los datos e intenta de nuevo.",
     "editAcountSuccess": "Cuenta editada exitosamente.",
     "loadAccountsError": "Error al cargar las cuentas. Por favor intenta más tarde.",
+    "loadSummaryError": "Error al cargar el resumen de la cuenta. Por favor intenta más tarde.",
     "noAccounts": "Aún no tienes cuentas. Crea tu primera cuenta para comenzar.",
     "title": "Cuentas",
     "yourAccounts": "Tus cuentas",
@@ -123,11 +124,19 @@
   },
   "currencies": {
     "COP": "Peso colombiano",
-    "USD": "Dólar estadounidense"
+    "USD": "Dólar estadounidense",
+    "currencyUpdateError": "Error al actualizar la moneda. Por favor, inténtalo de nuevo más tarde.",
+    "currencyUpdateSuccess": "Moneda actualizada exitosamente.",
+    "loadCurrenciesError": "Error al cargar las monedas. Por favor, inténtalo de nuevo más tarde."
   },
   "dashboard": {
     "description": "Gestione sus cuentas y controle sus gastos",
-    "title": "Tablero"
+    "title": "Tablero",
+    "totalBalance": "Saldo total",
+    "totalBalanceDescription": "Saldo total de {count} cuentas • Convertido a {currency}",
+    "totalExpenses": "Gastos totales",
+    "totalIncome": "Ingresos totales",
+    "totalTransactionsDescription": "Este mes • Convertido a {currency}"
   },
   "forgotPassword": {
     "description": "Ingresa tu correo electrónico para recibir un enlace para restablecer la contraseña.",
@@ -220,6 +229,7 @@
     "fromAccountPlaceholder": "Selecciona la cuenta de origen",
     "income": "Ingreso",
     "loadTransactionsError": "Error al cargar las transacciones. Por favor, inténtalo de nuevo más tarde.",
+    "loadSummaryError": "Error al cargar el resumen. Por favor, inténtalo de nuevo más tarde.",
     "notes": "Notas (opcional)",
     "notesPlaceholder": "Ingresa notas adicionales",
     "noTransactions": "Aún no tienes transacciones. Agrega tu primera transacción para comenzar.",

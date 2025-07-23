@@ -22,7 +22,7 @@
 	setUserContext(userState);
 
 	let breadcrumbs = $derived(getBreadcrumbs(page.route.id || '/'));
-  let currencySelectorOpen = $state(false);
+	let currencySelectorOpen = $state(false);
 
 	async function updateCurrencyCode(currencyCode: string) {
 		try {
@@ -32,7 +32,7 @@
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					currencyCode,
+					currencyCode
 				})
 			});
 
@@ -41,9 +41,9 @@
 			}
 
 			const updatedUser = await response.json();
-      userState.user = updatedUser;
-      toast.success($t('currencies.currencyUpdateSuccess'));
-      currencySelectorOpen = false;
+			userState.user = updatedUser;
+			toast.success($t('currencies.currencyUpdateSuccess'));
+			currencySelectorOpen = false;
 		} catch {
 			toast.error($t('currencies.currencyUpdateError'));
 		}
@@ -83,7 +83,7 @@
 					<div class="text-muted-foreground hidden text-xs sm:block">Currency:</div>
 					<CurrencySelector
 						bind:selectedCurrency={userState.user!.currencyCode}
-            bind:open={currencySelectorOpen}
+						bind:open={currencySelectorOpen}
 						onChange={updateCurrencyCode}
 					/>
 				</div>

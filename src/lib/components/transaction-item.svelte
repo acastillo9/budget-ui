@@ -4,6 +4,7 @@
 	import CategoryBadge from './category-badge.svelte';
 	import Button from './ui/button/button.svelte';
 	import { t } from 'svelte-i18n';
+	import { getUserContext } from '$lib/context';
 
 	let { transaction, editable = false, onEdit, onDelete } = $props();
 	let isIncome = $derived(transaction.amount > 0);
@@ -23,6 +24,8 @@
 			return transaction.description;
 		}
 	});
+
+	const userState = getUserContext();
 </script>
 
 <div class="flex items-center justify-between border-b py-3 last:border-0">
@@ -50,6 +53,9 @@
 	<div class="flex items-center gap-2">
 		<div class="mr-4 text-right">
 			<p class={`font-semibold ${isIncome ? 'text-green-600' : 'text-red-600'}`}>
+				{#if transaction.account.currencyCode !== userState.user?.currencyCode}
+					<span>{transaction.account.currencyCode}</span>
+				{/if}
 				{formatCurrencyWithSymbol(transaction.amount, transaction.account.currencyCode)}
 			</p>
 		</div>

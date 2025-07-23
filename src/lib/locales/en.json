@@ -25,6 +25,7 @@
     "editAccountError": "Error editing account. Please check your details and try again.",
     "editAcountSuccess": "Account edited successfully.",
     "loadAccountsError": "Error loading accounts. Please try again later.",
+    "loadSummaryError": "Error loading account summary. Please try again later.",
     "noAccounts": "No accounts yet. Create your first account to get started.",
     "title": "Accounts",
     "yourAccounts": "Your Accounts",
@@ -125,11 +126,17 @@
     "COP": "Colombian Peso",
     "USD": "US Dollar",
     "currencyUpdateError": "Error updating currency. Please try again later.",
-    "currencyUpdateSuccess": "Currency updated successfully."
+    "currencyUpdateSuccess": "Currency updated successfully.",
+    "loadCurrenciesError": "Error loading currencies. Please try again later."
   },
   "dashboard": {
     "description": "Manage your accounts and track your spending",
-    "title": "Dashboard"
+    "title": "Dashboard",
+    "totalBalance": "Total Balance",
+    "totalBalanceDescription": "Across {count} accounts • Converted to {currency}",
+    "totalExpenses": "Total Expenses",
+    "totalIncome": "Total Income",
+    "totalTransactionsDescription": "This month • Converted to {currency}"
   },
   "forgotPassword": {
     "description": "Enter your email to receive a password reset link.",
@@ -221,6 +228,7 @@
     "fromAccount": "From Account",
     "fromAccountPlaceholder": "Select account to transfer from",
     "income": "Income",
+    "loadSummaryError": "Error loading summary. Please try again later.",
     "loadTransactionsError": "Error loading transactions. Please try again later.",
     "notes": "Notes (Optional)",
     "notesPlaceholder": "Enter additional notes",
