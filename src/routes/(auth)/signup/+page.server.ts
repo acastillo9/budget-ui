@@ -152,7 +152,7 @@ export const actions: Actions = {
       cookies.set('AuthorizationToken', `${access_token}`, {
         httpOnly: true,
         path: '/',
-        secure: true,
+        secure: import.meta.env.MODE === 'production', // Use secure cookies in production
         sameSite: 'strict',
         maxAge: 60 * 60 * 24 // 1 day
       });

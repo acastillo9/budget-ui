@@ -11,14 +11,14 @@ export const load: PageServerLoad = ({ request, cookies }) => {
   cookies.set('AuthorizationToken', `${access_token}`, {
     httpOnly: true,
     path: '/',
-    secure: true,
+    secure: import.meta.env.MODE === 'production', // Use secure cookies in production
     sameSite: 'lax',
   });
 
   cookies.set('RefreshToken', `${refresh_token}`, {
     httpOnly: true,
     path: '/',
-    secure: true,
+    secure: import.meta.env.MODE === 'production', // Use secure cookies in production
     sameSite: 'lax',
     maxAge: 60 * 60 * 24 * 30 // 30 days
   });

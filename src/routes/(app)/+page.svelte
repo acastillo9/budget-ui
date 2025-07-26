@@ -1,15 +1,13 @@
 <script lang="ts">
 	import AccountList from '$lib/components/account-list.svelte';
-	import AddAccountDialog from '$lib/components/add-account-dialog.svelte';
 	import CreateTransactionDialog from '$lib/components/create-transaction-wizard/create-transaction-dialog.svelte';
 	import TransactionList from '$lib/components/transaction-list.svelte';
 	import { t } from 'svelte-i18n';
 	import type { PageProps } from './$types';
-	import * as Card from '$lib/components/ui/card';
-	import { DollarSign, TrendingDown, TrendingUp } from '@lucide/svelte';
 	import { formatCurrencyWithSymbol } from '$lib/utils/currency';
 	import { getUserContext } from '$lib/context';
 	import { toast } from 'svelte-sonner';
+	import TotalCard from '$lib/components/total-card.svelte';
 
 	let { data }: PageProps = $props();
 
@@ -67,19 +65,17 @@
 	<title>Budget App - {$t('dashboard.title')}</title>
 </svelte:head>
 
-<section class="flex h-full w-full flex-col py-4 md:py-6">
+<section class="flex h-full w-full flex-col gap-4 py-4 md:py-6">
 	<div class="container mx-auto">
-		<div class="mb-4 flex items-center justify-between">
+		<div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
 			<div>
 				<h1 class="text-3xl font-bold">{$t('dashboard.title')}</h1>
 				<p class="text-muted-foreground">{$t('dashboard.description')}</p>
 			</div>
 
 			<div class="flex items-center space-x-2">
-				<AddAccountDialog data={data.addAccountForm} />
 				{#if data.accounts.length > 0}
 					<CreateTransactionDialog
-						buttonVariant="outline"
 						addTransactionForm={data.addTransactionForm}
 						addTransferForm={data.addTransferForm}
 						createCategoryForm={data.createCategoryForm}
@@ -89,57 +85,34 @@
 				{/if}
 			</div>
 		</div>
+	</div>
 
+	<div class="container mx-auto">
 		<div class="space-y-6">
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-				<Card.Root>
-					<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-						<Card.Title class="text-sm font-medium">{$t('dashboard.totalBalance')}</Card.Title>
-						<DollarSign class="text-muted-foreground h-4 w-4" />
-					</Card.Header>
-					<Card.Content>
-						<div class="text-2xl font-bold">
-							{formatCurrencyWithSymbol(totalBalance, userCurrencyCode)}
-						</div>
-						<p class="text-muted-foreground text-xs">
-							{$t('dashboard.totalBalanceDescription', {
-								values: { count: data.accounts.length, currency: userCurrencyCode }
-							})}
-						</p>
-					</Card.Content>
-				</Card.Root>
-				<Card.Root>
-					<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-						<Card.Title class="text-sm font-medium">{$t('dashboard.totalIncome')}</Card.Title>
-						<TrendingUp class="h-4 w-4 text-green-600" />
-					</Card.Header>
-					<Card.Content>
-						<div class="text-2xl font-bold text-green-600">
-							{formatCurrencyWithSymbol(transactionsSummary.totalIncome, userCurrencyCode)}
-						</div>
-						<p class="text-muted-foreground text-xs">
-							{$t('dashboard.totalTransactionsDescription', {
-								values: { currency: userCurrencyCode }
-							})}
-						</p>
-					</Card.Content>
-				</Card.Root>
-				<Card.Root>
-					<Card.Header class="flex flex-row items-center justify-between space-y-0 pb-2">
-						<Card.Title class="text-sm font-medium">{$t('dashboard.totalExpenses')}</Card.Title>
-						<TrendingDown class="h-4 w-4 text-red-600" />
-					</Card.Header>
-					<Card.Content>
-						<div class="text-2xl font-bold text-red-600">
-							{formatCurrencyWithSymbol(transactionsSummary.totalExpenses, userCurrencyCode)}
-						</div>
-						<p class="text-muted-foreground text-xs">
-							{$t('dashboard.totalTransactionsDescription', {
-								values: { currency: userCurrencyCode }
-							})}
-						</p>
-					</Card.Content>
-				</Card.Root>
+				<TotalCard
+					title={$t('dashboard.totalBalance')}
+					description={$t('dashboard.totalBalanceDescription', {
+						values: { count: data.accounts.length, currency: userCurrencyCode }
+					})}
+					total={formatCurrencyWithSymbol(totalBalance, userCurrencyCode)}
+				></TotalCard>
+				<TotalCard
+					title={$t('dashboard.totalIncome')}
+					description={$t('dashboard.totalTransactionsDescription', {
+						values: { currency: userCurrencyCode }
+					})}
+					total={formatCurrencyWithSymbol(transactionsSummary.totalIncome, userCurrencyCode)}
+					variant="income"
+				></TotalCard>
+				<TotalCard
+					title={$t('dashboard.totalExpenses')}
+					description={$t('dashboard.totalTransactionsDescription', {
+						values: { currency: userCurrencyCode }
+					})}
+					total={formatCurrencyWithSymbol(transactionsSummary.totalExpenses, userCurrencyCode)}
+					variant="expense"
+				></TotalCard>
 			</div>
 			<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
 				<div>

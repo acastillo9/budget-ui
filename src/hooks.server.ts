@@ -70,14 +70,14 @@ export const handle: Handle = async ({ event, resolve }) => {
       // Overwrite cookies with new tokens
       cookies.set('AuthorizationToken', access_token, {
         httpOnly: true,
-        secure: true,
+        secure: import.meta.env.MODE === 'production', // Use secure cookies in production
         sameSite: 'strict',
         path: '/'
       });
 
       cookies.set('RefreshToken', refresh_token, {
         httpOnly: true,
-        secure: true,
+        secure: import.meta.env.MODE === 'production', // Use secure cookies in production
         sameSite: 'strict',
         path: '/',
         maxAge: isLongLived ? 60 * 60 * 24 * 30 : 60 * 60 * 2 // 30 days for long-lived, 2 hours for short-lived
