@@ -54,19 +54,21 @@
 				{#each accounts as account (account.id)}
 					{@const Icon = accountTypeIcons[account.accountType]}
 					<div class="flex items-center justify-between rounded-lg border p-4">
-						<div class="flex items-center gap-3">
-							<div class="bg-muted rounded-lg p-2">
-								<Icon class="h-4 w-4" />
+						<div
+							class="flex w-full flex-col items-start md:flex-row md:items-center md:justify-between"
+						>
+							<div class="mb-2 flex items-center gap-3 md:mb-0">
+								<div class="bg-muted rounded-lg p-2">
+									<Icon class="h-4 w-4" />
+								</div>
+								<div>
+									<p class="font-medium">{account.name}</p>
+									<p class="text-muted-foreground text-sm">
+										{$t(`accounts.accountTypes.${account.accountType}`)} • {account.currencyCode}
+									</p>
+								</div>
 							</div>
-							<div>
-								<p class="font-medium">{account.name}</p>
-								<p class="text-muted-foreground text-sm">
-									{$t(`accounts.accountTypes.${account.accountType}`)} • {account.currencyCode}
-								</p>
-							</div>
-						</div>
-						<div class="flex items-center gap-2">
-							<div class="mr-4 text-right">
+							<div class="mr-4 md:text-right">
 								<p class="font-semibold">
 									{#if account.currencyCode !== userState.user?.currencyCode}
 										<span>{account.currencyCode}</span>
@@ -77,6 +79,8 @@
 									{account.accountType}
 								</Badge>
 							</div>
+						</div>
+						<div class="flex items-center gap-2">
 							{#if editable}
 								<div class="flex items-center gap-2">
 									<Button variant="ghost" size="icon" onclick={() => onEdit(account)}>
