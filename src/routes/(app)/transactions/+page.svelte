@@ -71,9 +71,9 @@
 	<title>Budget App - {$t('transactions.title')}</title>
 </svelte:head>
 
-<section class="flex h-full w-full flex-col py-4 md:py-6">
+<section class="flex h-full w-full flex-col gap-4 py-4 md:py-6">
 	<div class="container mx-auto">
-		<div class="mb-4 flex items-center justify-between">
+		<div class="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
 			<div>
 				<h1 class="text-3xl font-bold">{$t('transactions.title')}</h1>
 				<p class="text-muted-foreground">{$t('transactions.description')}</p>
@@ -96,7 +96,9 @@
 				{/if}
 			</div>
 		</div>
+	</div>
 
+	<div class="container mx-auto">
 		<TransactionList
 			transactions={data.transactions.data}
 			headless

@@ -5,6 +5,7 @@
 	import Button from './ui/button/button.svelte';
 	import { t } from 'svelte-i18n';
 	import { getUserContext } from '$lib/context';
+	import Badge from './ui/badge/badge.svelte';
 
 	let { transaction, editable = false, onEdit, onDelete } = $props();
 	let isIncome = $derived(transaction.amount > 0);
@@ -28,8 +29,8 @@
 	const userState = getUserContext();
 </script>
 
-<div class="flex items-center justify-between border-b py-3 last:border-0">
-	<div class="flex items-center gap-3">
+<div class="flex items-center justify-between gap-4 border-b py-3 last:border-0">
+	<div class="flex w-full items-center gap-4">
 		<div class={`rounded-full p-2 ${isIncome ? 'bg-green-100' : 'bg-red-100'}`}>
 			{#if isIncome}
 				<ArrowUpRight class="h-4 w-4 text-green-600" />
@@ -37,21 +38,27 @@
 				<ArrowDownLeft class="h-4 w-4 text-red-600" />
 			{/if}
 		</div>
-		<div>
-			<p class="font-medium">{description}</p>
-			<div class="text-muted-foreground flex items-center gap-2 text-xs">
-				<span>{transaction.account.name}</span>
-				{#if transaction.category}
-					<span>•</span>
-					<CategoryBadge category={transaction.category} size="sm" />
-				{/if}
-				<span>•</span>
-				<span>{new Date(transaction.date).toLocaleDateString()}</span>
+
+		<div
+			class="flex w-full flex-col items-start gap-2 md:flex-row md:items-center md:justify-between"
+		>
+			<div class="flex flex-col gap-1">
+				<p class="font-medium">{description}</p>
+				<div class="flex flex-col gap-1">
+					<Badge>
+						{transaction.account.name}
+					</Badge>
+					<div class="flex gap-1">
+						<Badge variant="outline">
+							{new Date(transaction.date).toLocaleDateString()}
+						</Badge>
+						{#if transaction.category}
+							<CategoryBadge category={transaction.category} size="sm" />
+						{/if}
+					</div>
+				</div>
 			</div>
-		</div>
-	</div>
-	<div class="flex items-center gap-2">
-		<div class="mr-4 text-right">
+
 			<p class={`font-semibold ${isIncome ? 'text-green-600' : 'text-red-600'}`}>
 				{#if transaction.account.currencyCode !== userState.user?.currencyCode}
 					<span>{transaction.account.currencyCode}</span>
@@ -59,6 +66,8 @@
 				{formatCurrencyWithSymbol(transaction.amount, transaction.account.currencyCode)}
 			</p>
 		</div>
+	</div>
+	<div class="flex items-center gap-2">
 		{#if editable}
 			<div class="flex items-center gap-2">
 				{#if !transaction.isTransfer || (transaction.isTransfer && transaction.transfer)}
