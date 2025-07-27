@@ -24,6 +24,7 @@
 	import type { CreateCategorySchema } from '$lib/schemas/category.schema';
 	import type { Account } from '$lib/types/account.types';
 	import type { Transaction } from '$lib/types/transactions.types';
+	import CategoryBadge from '../category-badge.svelte';
 
 	interface Props {
 		addTransactionForm: SuperValidated<CreateTransactionSchema>;
@@ -231,9 +232,7 @@
 							{$t(`categories.categoryType.${categoryType}`).toUpperCase()}
 						</Badge>
 						{#if category}
-							<Badge variant="outline">
-								{category.name}
-							</Badge>
+							<CategoryBadge {category} />
 						{/if}
 					</div>
 				</div>

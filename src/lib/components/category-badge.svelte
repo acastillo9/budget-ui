@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { Badge } from '$lib/components/ui/badge';
-	import { TrendingDown, TrendingUp } from '@lucide/svelte';
+	import { iconMap } from '$lib/utils/icons';
 
 	let { category, size = 'default' } = $props();
 
 	let isIncome = $derived(category.categoryType === 'INCOME');
-	let Icon = $derived(isIncome ? TrendingUp : TrendingDown);
+	let Icon = iconMap[category.icon as keyof typeof iconMap];
 	let colorClass = $derived(
 		isIncome
 			? 'bg-green-100 text-green-800 hover:bg-green-200'

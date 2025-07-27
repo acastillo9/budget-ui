@@ -52,18 +52,6 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
     setFlash({ type: 'error', message: $t('transactions.loadTransactionsError') }, cookies);
   }
 
-  // Get the currency exchange rates
-  let currencies: { [currencyCode: string]: number } = {};
-  try {
-    const response = await fetch(`${API_URL}/currencies/${user.currencyCode}`);
-    if (!response.ok) {
-      throw new Error('Failed to load currencies');
-    }
-    currencies = await response.json();
-  } catch {
-    setFlash({ type: 'error', message: $t('currencies.loadCurrenciesError') }, cookies);
-  }
-
   // Get the total balance, income, and expenses
   let accountsSummary = [];
   try {
@@ -95,7 +83,6 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
     accounts,
     categories,
     transactions,
-    currencies,
     transactionsSummary,
     accountsSummary,
   }

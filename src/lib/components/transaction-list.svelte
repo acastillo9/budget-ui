@@ -4,9 +4,11 @@
 	import type { Transaction } from '$lib/types/transactions.types';
 	import { DollarSign } from '@lucide/svelte';
 	import TransactionItem from './transaction-item.svelte';
+	import type { Rates } from '$lib/types';
 
 	interface Props {
 		transactions: Transaction[];
+		rates: Rates;
 		headless?: boolean;
 		editable?: boolean;
 		onEdit?: (transaction: Transaction) => void;
@@ -15,6 +17,7 @@
 
 	let {
 		transactions,
+		rates,
 		headless = false,
 		editable = false,
 		onEdit = () => {},
@@ -41,6 +44,7 @@
 					<TransactionItem
 						{transaction}
 						{editable}
+						{rates}
 						onEdit={() => onEdit(transaction)}
 						onDelete={() => onDelete(transaction)}
 					/>

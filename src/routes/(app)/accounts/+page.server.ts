@@ -27,7 +27,7 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
 
   return {
     addAccountForm: await superValidate(zod4(createAccountSchema)),
-    accounts
+    accounts,
   };
 }
 

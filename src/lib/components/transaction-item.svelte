@@ -7,7 +7,7 @@
 	import { getUserContext } from '$lib/context';
 	import Badge from './ui/badge/badge.svelte';
 
-	let { transaction, editable = false, onEdit, onDelete } = $props();
+	let { transaction, rates, editable = false, onEdit, onDelete } = $props();
 	let isIncome = $derived(transaction.amount > 0);
 	let description = $derived.by(() => {
 		if (transaction.isTransfer) {
@@ -44,27 +44,36 @@
 		>
 			<div class="flex flex-col gap-1">
 				<p class="font-medium">{description}</p>
-				<div class="flex flex-col gap-1">
+				<div class="flex flex-wrap gap-1">
 					<Badge>
 						{transaction.account.name}
 					</Badge>
-					<div class="flex gap-1">
-						<Badge variant="outline">
-							{new Date(transaction.date).toLocaleDateString()}
-						</Badge>
-						{#if transaction.category}
-							<CategoryBadge category={transaction.category} size="sm" />
-						{/if}
-					</div>
+					{#if transaction.category}
+						<CategoryBadge category={transaction.category} />
+					{/if}
+					<Badge variant="outline">
+						{new Date(transaction.date).toLocaleDateString()}
+					</Badge>
 				</div>
 			</div>
 
-			<p class={`font-semibold ${isIncome ? 'text-green-600' : 'text-red-600'}`}>
+			<div class="flex flex-col md:text-right">
+				<p class={`font-semibold ${isIncome ? 'text-green-600' : 'text-red-600'}`}>
+					{#if transaction.account.currencyCode !== userState.user?.currencyCode}
+						<span>{transaction.account.currencyCode}</span>
+					{/if}
+					{formatCurrencyWithSymbol(transaction.amount, transaction.account.currencyCode)}
+				</p>
 				{#if transaction.account.currencyCode !== userState.user?.currencyCode}
-					<span>{transaction.account.currencyCode}</span>
+					<p class="text-muted-foreground mt-1 text-xs break-words">
+						≈ {userState.user?.currencyCode || 'USD'}
+						{formatCurrencyWithSymbol(
+							transaction.amount / rates[transaction.account.currencyCode],
+							userState.user?.currencyCode || 'USD'
+						)}
+					</p>
 				{/if}
-				{formatCurrencyWithSymbol(transaction.amount, transaction.account.currencyCode)}
-			</p>
+			</div>
 		</div>
 	</div>
 	<div class="flex items-center gap-2">

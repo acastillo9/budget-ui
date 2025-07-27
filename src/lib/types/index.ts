@@ -15,7 +15,6 @@ export type UserSession = {
 
 export type UserState = {
   user: UserSession | undefined
-  rates: Rates | undefined
 }
 
 export type CountdownData = {

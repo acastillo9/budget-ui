@@ -10,9 +10,11 @@
 	import Button from './ui/button/button.svelte';
 	import { Edit, Trash2 } from '@lucide/svelte';
 	import { getUserContext } from '$lib/context';
+	import type { Rates } from '$lib/types';
 
 	interface Props {
 		accounts: Account[];
+		rates: Rates;
 		headless?: boolean;
 		editable?: boolean;
 		onEdit?: (account: Account) => void;
@@ -21,6 +23,7 @@
 
 	let {
 		accounts,
+		rates,
 		headless = false,
 		editable = false,
 		onEdit = () => {},
@@ -64,7 +67,7 @@
 							>
 								<div class="flex flex-col gap-1">
 									<p class="font-medium">{account.name}</p>
-									<div class="flex gap-1">
+									<div class="flex flex-wrap gap-1">
 										<Badge variant={account.accountType === 'CREDIT' ? 'destructive' : 'secondary'}>
 											{account.accountType}
 										</Badge>
@@ -73,12 +76,23 @@
 										</Badge>
 									</div>
 								</div>
-								<p class="font-semibold">
+								<div class="flex flex-col md:text-right">
+									<p class="font-semibold">
+										{#if account.currencyCode !== userState.user?.currencyCode}
+											{account.currencyCode}
+										{/if}
+										{formatCurrencyWithSymbol(account.balance, account.currencyCode)}
+									</p>
 									{#if account.currencyCode !== userState.user?.currencyCode}
-										{account.currencyCode}
+										<p class="text-muted-foreground mt-1 text-xs break-words">
+											≈ {userState.user?.currencyCode || 'USD'}
+											{formatCurrencyWithSymbol(
+												account.balance / rates[account.currencyCode],
+												userState.user?.currencyCode || 'USD'
+											)}
+										</p>
 									{/if}
-									{formatCurrencyWithSymbol(account.balance, account.currencyCode)}
-								</p>
+								</div>
 							</div>
 						</div>
 						<div class="flex items-center gap-2">

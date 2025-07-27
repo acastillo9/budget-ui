@@ -6,7 +6,6 @@
 	import type { PageProps } from './$types';
 	import { formatCurrencyWithSymbol } from '$lib/utils/currency';
 	import { getUserContext } from '$lib/context';
-	import { toast } from 'svelte-sonner';
 	import TotalCard from '$lib/components/total-card.svelte';
 
 	let { data }: PageProps = $props();
@@ -14,11 +13,11 @@
 	const userState = getUserContext();
 
 	let userCurrencyCode = $derived(userState.user?.currencyCode || 'USD');
-	let currencies = $state(data.currencies);
+	let rates = $derived(userState.rates || {});
 	let totalBalance = $derived(
 		data.accountsSummary.reduce(
 			(acc: number, accountSummary: { totalBalance: number; currencyCode: string }) =>
-				acc + accountSummary.totalBalance / currencies[accountSummary.currencyCode],
+				acc + accountSummary.totalBalance / rates[accountSummary.currencyCode],
 			0
 		)
 	);
@@ -31,34 +30,15 @@
 				return {
 					totalIncome:
 						acc.totalIncome +
-						transactionSummary.totalIncome / currencies[transactionSummary.currencyCode],
+						transactionSummary.totalIncome / rates[transactionSummary.currencyCode],
 					totalExpenses:
 						acc.totalExpenses +
-						transactionSummary.totalExpenses / currencies[transactionSummary.currencyCode]
+						transactionSummary.totalExpenses / rates[transactionSummary.currencyCode]
 				};
 			},
 			{ totalIncome: 0, totalExpenses: 0 }
 		)
 	);
-
-	async function loadCurrencies(currencyCode: string) {
-		try {
-			const response = await fetch(`/api/currencies/${currencyCode}`);
-
-			if (!response.ok) {
-				throw new Error('Failed to fetch currency data');
-			}
-
-			const data = await response.json();
-			currencies = data;
-		} catch {
-			toast.error($t('currencies.loadCurrenciesError'));
-		}
-	}
-
-	$effect(() => {
-		loadCurrencies(userCurrencyCode);
-	});
 </script>
 
 <svelte:head>
@@ -116,10 +96,10 @@
 			</div>
 			<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
 				<div>
-					<AccountList accounts={data.accounts} />
+					<AccountList accounts={data.accounts} {rates} />
 				</div>
 				<div>
-					<TransactionList transactions={data.transactions} />
+					<TransactionList transactions={data.transactions} {rates} />
 				</div>
 			</div>
 		</div>

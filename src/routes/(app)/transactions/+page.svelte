@@ -8,11 +8,13 @@
 	import { toast } from 'svelte-sonner';
 	import { goto, invalidateAll } from '$app/navigation';
 	import * as Pagination from '$lib/components/ui/pagination/index.js';
+	import { getUserContext } from '$lib/context';
 
 	let { data }: PageProps = $props();
 
 	let isEditTransactionDialogOpen = $state(false);
 	let selectedTransaction: Transaction | undefined = $state(undefined);
+	const userState = getUserContext();
 
 	let confirmationDialog = $state({
 		open: false,
@@ -101,6 +103,7 @@
 	<div class="container mx-auto">
 		<TransactionList
 			transactions={data.transactions.data}
+			rates={userState.rates || {}}
 			headless
 			editable
 			onEdit={(event) => {

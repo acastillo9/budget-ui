@@ -7,11 +7,13 @@
 	import type { Account } from '$lib/types/account.types';
 	import { toast } from 'svelte-sonner';
 	import { invalidateAll } from '$app/navigation';
+	import { getUserContext } from '$lib/context';
 
 	let { data }: PageProps = $props();
 
 	let isEditAccountDialogOpen = $state(false);
 	let selectedAccount: Account | undefined = $state(undefined);
+	const userState = getUserContext();
 
 	let confirmationDialog = $state({
 		open: false,
@@ -92,6 +94,7 @@
 	<div class="container mx-auto">
 		<AccountList
 			accounts={data.accounts}
+			rates={userState.rates || {}}
 			editable
 			headless
 			onDelete={confirmDeleteAccount}

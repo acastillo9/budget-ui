@@ -19,10 +19,26 @@
 	let { data, children } = $props();
 
 	userState.user = data.user;
+	userState.rates = data.rates;
 	setUserContext(userState);
 
 	let breadcrumbs = $derived(getBreadcrumbs(page.route.id || '/'));
 	let currencySelectorOpen = $state(false);
+
+	async function loadRates(currencyCode: string) {
+		try {
+			const response = await fetch(`/api/currencies/${currencyCode}`);
+
+			if (!response.ok) {
+				throw new Error('Failed to fetch currency data');
+			}
+
+			const data = await response.json();
+			return data;
+		} catch {
+			toast.error($t('currencies.loadCurrenciesError'));
+		}
+	}
 
 	async function updateCurrencyCode(currencyCode: string) {
 		try {
@@ -42,6 +58,8 @@
 
 			const updatedUser = await response.json();
 			userState.user = updatedUser;
+			const rates = await loadRates(currencyCode);
+			userState.rates = rates;
 			toast.success($t('currencies.currencyUpdateSuccess'));
 			currencySelectorOpen = false;
 		} catch {
