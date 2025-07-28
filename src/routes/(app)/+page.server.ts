@@ -75,6 +75,18 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
     setFlash({ type: 'error', message: $t('transactions.loadSummaryError') }, cookies);
   }
 
+  // load USD exchange rates
+  let usdExchangeRates = undefined;
+  try {
+    const response = await fetch(`${API_URL}/currencies/USD`);
+    if (!response.ok) {
+      throw new Error('Failed to load exchange rates');
+    }
+    usdExchangeRates = await response.json();
+  } catch {
+    setFlash({ type: 'error', message: $t('currencies.loadExchangeRatesError') }, cookies);
+  }
+
   return {
     addAccountForm: await superValidate(zod4(createAccountSchema)),
     createCategoryForm: await superValidate(zod4(createCategorySchema)),
@@ -85,6 +97,7 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
     transactions,
     transactionsSummary,
     accountsSummary,
+    usdExchangeRates,
   }
 };
 

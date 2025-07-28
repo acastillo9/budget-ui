@@ -68,7 +68,7 @@
 					<p class="text-muted-foreground mt-1 text-xs break-words">
 						≈ {userState.user?.currencyCode || 'USD'}
 						{formatCurrencyWithSymbol(
-							transaction.amount / rates[transaction.account.currencyCode],
+							transaction.amount / rates[transaction.account.currencyCode].rate,
 							userState.user?.currencyCode || 'USD'
 						)}
 					</p>

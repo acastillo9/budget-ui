@@ -127,7 +127,10 @@
     "USD": "US Dollar",
     "currencyUpdateError": "Error updating currency. Please try again later.",
     "currencyUpdateSuccess": "Currency updated successfully.",
-    "loadCurrenciesError": "Error loading currencies. Please try again later."
+    "exchangeRates": "Exchange Rates",
+    "exchangeRatesDescription": "Base: {currency} • Updated: {date}",
+    "loadCurrenciesError": "Error loading currencies. Please try again later.",
+    "loadExchangeRatesError": "Error loading exchange rates. Please try again later."
   },
   "dashboard": {
     "description": "Manage your accounts and track your spending",

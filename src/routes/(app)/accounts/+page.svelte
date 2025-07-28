@@ -94,7 +94,7 @@
 	<div class="container mx-auto">
 		<AccountList
 			accounts={data.accounts}
-			rates={userState.rates || {}}
+			rates={userState.currencyRates?.rates || {}}
 			editable
 			headless
 			onDelete={confirmDeleteAccount}

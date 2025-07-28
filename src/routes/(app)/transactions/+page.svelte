@@ -103,7 +103,7 @@
 	<div class="container mx-auto">
 		<TransactionList
 			transactions={data.transactions.data}
-			rates={userState.rates || {}}
+			rates={userState.currencyRates?.rates || {}}
 			headless
 			editable
 			onEdit={(event) => {

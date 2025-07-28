@@ -87,7 +87,7 @@
 										<p class="text-muted-foreground mt-1 text-xs break-words">
 											≈ {userState.user?.currencyCode || 'USD'}
 											{formatCurrencyWithSymbol(
-												account.balance / rates[account.currencyCode],
+												account.balance / rates[account.currencyCode].rate,
 												userState.user?.currencyCode || 'USD'
 											)}
 										</p>

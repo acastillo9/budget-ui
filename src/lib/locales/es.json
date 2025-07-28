@@ -127,7 +127,10 @@
     "USD": "Dólar estadounidense",
     "currencyUpdateError": "Error al actualizar la moneda. Por favor, inténtalo de nuevo más tarde.",
     "currencyUpdateSuccess": "Moneda actualizada exitosamente.",
-    "loadCurrenciesError": "Error al cargar las monedas. Por favor, inténtalo de nuevo más tarde."
+    "exchangeRates": "Tasas de cambio",
+    "exchangeRatesDescription": "Base: {currency} • Actualizado: {date}",
+    "loadCurrenciesError": "Error al cargar las monedas. Por favor, inténtalo de nuevo más tarde.",
+    "loadExchangeRatesError": "Error al cargar las tasas de cambio. Por favor, inténtalo de nuevo más tarde."
   },
   "dashboard": {
     "description": "Gestione sus cuentas y controle sus gastos",

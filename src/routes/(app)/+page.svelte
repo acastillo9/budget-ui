@@ -7,17 +7,21 @@
 	import { formatCurrencyWithSymbol } from '$lib/utils/currency';
 	import { getUserContext } from '$lib/context';
 	import TotalCard from '$lib/components/total-card.svelte';
+	import CurrencyRatesCard from '$lib/components/currency-rates-card.svelte';
+	import { toast } from 'svelte-sonner';
 
 	let { data }: PageProps = $props();
 
 	const userState = getUserContext();
 
+	let usdExchangeRates = $state(data.usdExchangeRates);
+	let isRefreshingRates = $state(false);
 	let userCurrencyCode = $derived(userState.user?.currencyCode || 'USD');
-	let rates = $derived(userState.rates || {});
+	let rates = $derived(userState.currencyRates?.rates || {});
 	let totalBalance = $derived(
 		data.accountsSummary.reduce(
 			(acc: number, accountSummary: { totalBalance: number; currencyCode: string }) =>
-				acc + accountSummary.totalBalance / rates[accountSummary.currencyCode],
+				acc + accountSummary.totalBalance / rates[accountSummary.currencyCode].rate,
 			0
 		)
 	);
@@ -30,15 +34,27 @@
 				return {
 					totalIncome:
 						acc.totalIncome +
-						transactionSummary.totalIncome / rates[transactionSummary.currencyCode],
+						transactionSummary.totalIncome / rates[transactionSummary.currencyCode].rate,
 					totalExpenses:
 						acc.totalExpenses +
-						transactionSummary.totalExpenses / rates[transactionSummary.currencyCode]
+						transactionSummary.totalExpenses / rates[transactionSummary.currencyCode].rate
 				};
 			},
 			{ totalIncome: 0, totalExpenses: 0 }
 		)
 	);
+
+	async function onRefreshRates() {
+		isRefreshingRates = true;
+		try {
+			const response = await fetch('/api/currencies/USD');
+			usdExchangeRates = await response.json();
+		} catch {
+			toast.error($t('currencies.loadExchangeRatesError'));
+		} finally {
+			isRefreshingRates = false;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -93,6 +109,13 @@
 					total={formatCurrencyWithSymbol(transactionsSummary.totalExpenses, userCurrencyCode)}
 					variant="expense"
 				></TotalCard>
+			</div>
+			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+				<CurrencyRatesCard
+					currencyRates={usdExchangeRates}
+					isRefreshing={isRefreshingRates}
+					{onRefreshRates}
+				/>
 			</div>
 			<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
 				<div>

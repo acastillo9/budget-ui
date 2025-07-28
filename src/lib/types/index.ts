@@ -15,6 +15,7 @@ export type UserSession = {
 
 export type UserState = {
   user: UserSession | undefined
+  currencyRates: CurrencyRates | undefined
 }
 
 export type CountdownData = {
@@ -24,4 +25,15 @@ export type CountdownData = {
   done: boolean
 }
 
-export type Rates = { [currencyCode: string]: number }
+export type Rates = {
+  [currencyCode: string]: {
+    rate: number;
+    isUp: boolean;
+  }
+}
+
+export type CurrencyRates = {
+  baseCurrencyCode: string;
+  updatedAt: Date;
+  rates: Rates
+}
