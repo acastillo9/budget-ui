@@ -8,7 +8,7 @@
 	import CreditCard from '@lucide/svelte/icons/credit-card';
 	import { formatCurrencyWithSymbol, getCurrencyByCode } from '$lib/utils/currency';
 	import Button from './ui/button/button.svelte';
-	import { Edit, Trash2 } from '@lucide/svelte';
+	import { Component, Edit, Trash2 } from '@lucide/svelte';
 	import { getUserContext } from '$lib/context';
 	import type { Rates } from '$lib/types';
 
@@ -30,9 +30,9 @@
 		onDelete = () => {}
 	}: Props = $props();
 
-	const accountTypeIcons = {
+	const accountTypeIcons: { [accountType: string]: typeof Component } = {
 		CHECKING: Building2,
-		CREDIT: CreditCard,
+		CREDIT_CARD: CreditCard,
 		CASH: Wallet
 	};
 
@@ -55,7 +55,7 @@
 		{:else}
 			<div class="space-y-4">
 				{#each accounts as account (account.id)}
-					{@const Icon = accountTypeIcons[account.accountType]}
+					{@const Icon = accountTypeIcons[account.accountType.name]}
 					{@const currency = getCurrencyByCode(account.currencyCode)}
 					<div class="flex items-center justify-between gap-4 rounded-lg border p-4">
 						<div class="flex w-full items-center gap-4">
@@ -68,8 +68,10 @@
 								<div class="flex flex-col gap-1">
 									<p class="font-medium">{account.name}</p>
 									<div class="flex flex-wrap gap-1">
-										<Badge variant={account.accountType === 'CREDIT' ? 'destructive' : 'secondary'}>
-											{account.accountType}
+										<Badge
+											variant={account.accountType.name === 'CREDIT' ? 'destructive' : 'secondary'}
+										>
+											{$t(`accounts.accountTypes.${account.accountType.name}`)}
 										</Badge>
 										<Badge variant="outline">
 											{`${currency?.flag} ${currency?.code}`}

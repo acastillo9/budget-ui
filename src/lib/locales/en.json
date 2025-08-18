@@ -10,7 +10,7 @@
     "accountTypePlaceholder": "Select account type",
     "accountTypes": {
       "CHECKING": "Checking",
-      "CREDIT": "Credit Card",
+      "CREDIT_CARD": "Credit Card",
       "CASH": "Cash"
     },
     "addAccount": "Add Account",
@@ -133,10 +133,17 @@
     "loadExchangeRatesError": "Error loading exchange rates. Please try again later."
   },
   "dashboard": {
+    "accountsCountSingular": "{count} account",
+    "accountsCountPlural": "{count} accounts",
+    "balanceBreakdown": "Balance Breakdown",
+    "balanceBreakdownDescription": "By currency • Converted to {currencyFlag} {currencyCode}",
+    "balanceBreakdownPercentage": "{percentage}% of total balance",
+    "cashFlow": "Cash Flow",
+    "cashFlowDescription": "Income - Expenses • Converted to {currency}",
     "description": "Manage your accounts and track your spending",
+    "netWorth": "Net Worth",
+    "netWorthDescription": "Across {count} accounts • Converted to {currency}",
     "title": "Dashboard",
-    "totalBalance": "Total Balance",
-    "totalBalanceDescription": "Across {count} accounts • Converted to {currency}",
     "totalExpenses": "Total Expenses",
     "totalIncome": "Total Income",
     "totalTransactionsDescription": "This month • Converted to {currency}"

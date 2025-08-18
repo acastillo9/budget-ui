@@ -9,6 +9,8 @@
 	import TotalCard from '$lib/components/total-card.svelte';
 	import CurrencyRatesCard from '$lib/components/currency-rates-card.svelte';
 	import { toast } from 'svelte-sonner';
+	import BalanceBreakdownCard from '$lib/components/balance-breakdown-card.svelte';
+	import type { AccountSummary } from '$lib/types/account.types';
 
 	let { data }: PageProps = $props();
 
@@ -20,7 +22,7 @@
 	let rates = $derived(userState.currencyRates?.rates || {});
 	let totalBalance = $derived(
 		data.accountsSummary.reduce(
-			(acc: number, accountSummary: { totalBalance: number; currencyCode: string }) =>
+			(acc: number, accountSummary: AccountSummary) =>
 				acc + accountSummary.totalBalance / rates[accountSummary.currencyCode].rate,
 			0
 		)
@@ -85,10 +87,10 @@
 
 	<div class="container mx-auto">
 		<div class="space-y-6">
-			<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+			<div class="grid grid-cols-1 gap-4 md:grid-cols-4">
 				<TotalCard
-					title={$t('dashboard.totalBalance')}
-					description={$t('dashboard.totalBalanceDescription', {
+					title={$t('dashboard.netWorth')}
+					description={$t('dashboard.netWorthDescription', {
 						values: { count: data.accounts.length, currency: userCurrencyCode }
 					})}
 					total={formatCurrencyWithSymbol(totalBalance, userCurrencyCode)}
@@ -109,13 +111,34 @@
 					total={formatCurrencyWithSymbol(transactionsSummary.totalExpenses, userCurrencyCode)}
 					variant="expense"
 				></TotalCard>
+				<TotalCard
+					title={$t('dashboard.cashFlow')}
+					description={$t('dashboard.cashFlowDescription', {
+						values: { currency: userCurrencyCode }
+					})}
+					total={formatCurrencyWithSymbol(
+						transactionsSummary.totalIncome - transactionsSummary.totalExpenses,
+						userCurrencyCode
+					)}
+					variant={transactionsSummary.totalIncome - transactionsSummary.totalExpenses >= 0
+						? 'income'
+						: 'expense'}
+				></TotalCard>
 			</div>
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-				<CurrencyRatesCard
-					currencyRates={usdExchangeRates}
-					isRefreshing={isRefreshingRates}
-					{onRefreshRates}
-				/>
+				<div>
+					<CurrencyRatesCard
+						currencyRates={usdExchangeRates}
+						isRefreshing={isRefreshingRates}
+						{onRefreshRates}
+					/>
+				</div>
+				<div>
+					<BalanceBreakdownCard
+						accountsSummary={data.accountsSummary}
+						currencyRates={userState.currencyRates}
+					/>
+				</div>
 			</div>
 			<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
 				<div>
