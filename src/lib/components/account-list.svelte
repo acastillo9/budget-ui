@@ -8,7 +8,7 @@
 	import CreditCard from '@lucide/svelte/icons/credit-card';
 	import { formatCurrencyWithSymbol, getCurrencyByCode } from '$lib/utils/currency';
 	import Button from './ui/button/button.svelte';
-	import { Component, Edit, Trash2 } from '@lucide/svelte';
+	import { Component, Edit, House, Landmark, LineChart, PiggyBank, Trash2 } from '@lucide/svelte';
 	import { getUserContext } from '$lib/context';
 	import type { Rates } from '$lib/types';
 
@@ -33,7 +33,11 @@
 	const accountTypeIcons: { [accountType: string]: typeof Component } = {
 		CHECKING: Building2,
 		CREDIT_CARD: CreditCard,
-		CASH: Wallet
+		CASH: Wallet,
+		SAVINGS: PiggyBank,
+		INVESTMENT: LineChart,
+		LOAN: Landmark,
+		MORTGAGE: House
 	};
 
 	const userState = getUserContext();

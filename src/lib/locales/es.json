@@ -11,7 +11,11 @@
     "accountTypes": {
       "CHECKING": "Cuenta corriente",
       "CREDIT_CARD": "Tarjeta de crédito",
-      "CASH": "Efectivo"
+      "CASH": "Efectivo",
+      "SAVINGS": "Ahorros",
+      "INVESTMENT": "Inversión",
+      "LOAN": "Préstamo",
+      "MORTGAGE": "Hipoteca"
     },
     "addAccount": "Agregar cuenta",
     "addAccountDescription": "Agrega una nueva cuenta para seguir tus gastos",
@@ -24,6 +28,7 @@
     "description": "Ver y administrar tus cuentas",
     "editAccountError": "Error al editar la cuenta. Por favor verifica los datos e intenta de nuevo.",
     "editAcountSuccess": "Cuenta editada exitosamente.",
+    "loadAccountTypesError": "Error al cargar los tipos de cuenta. Por favor intenta de nuevo más tarde.",
     "loadAccountsError": "Error al cargar las cuentas. Por favor intenta más tarde.",
     "loadSummaryError": "Error al cargar el resumen de la cuenta. Por favor intenta más tarde.",
     "noAccounts": "Aún no tienes cuentas. Crea tu primera cuenta para comenzar.",

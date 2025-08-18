@@ -82,6 +82,7 @@
 				<AddAccountDialog
 					data={data.addAccountForm}
 					account={selectedAccount}
+					accountTypes={data.accountTypes}
 					bind:open={isEditAccountDialogOpen}
 					onClose={() => {
 						selectedAccount = undefined;

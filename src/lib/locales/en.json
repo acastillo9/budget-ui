@@ -11,7 +11,11 @@
     "accountTypes": {
       "CHECKING": "Checking",
       "CREDIT_CARD": "Credit Card",
-      "CASH": "Cash"
+      "CASH": "Cash",
+      "SAVINGS": "Savings",
+      "INVESTMENT": "Investment",
+      "LOAN": "Loan",
+      "MORTGAGE": "Mortgage"
     },
     "addAccount": "Add Account",
     "addAccountDescription": "Add a new account to track your spending",
@@ -24,6 +28,7 @@
     "description": "View and manage your accounts",
     "editAccountError": "Error editing account. Please check your details and try again.",
     "editAcountSuccess": "Account edited successfully.",
+    "loadAccountTypesError": "Error loading account types. Please try again later.",
     "loadAccountsError": "Error loading accounts. Please try again later.",
     "loadSummaryError": "Error loading account summary. Please try again later.",
     "noAccounts": "No accounts yet. Create your first account to get started.",

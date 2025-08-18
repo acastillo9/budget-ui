@@ -25,9 +25,21 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
     setFlash({ type: 'error', message: $t('accounts.loadAccountsError') }, cookies);
   }
 
+  let accountTypes = [];
+  try {
+    const response = await fetch(`${API_URL}/account-types`);
+    if (!response.ok) {
+      throw new Error('Failed to load account types');
+    }
+    accountTypes = await response.json();
+  } catch {
+    setFlash({ type: 'error', message: $t('accounts.loadAccountTypesError') }, cookies);
+  }
+
   return {
     addAccountForm: await superValidate(zod4(createAccountSchema)),
     accounts,
+    accountTypes
   };
 }
 

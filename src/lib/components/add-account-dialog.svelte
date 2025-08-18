@@ -13,7 +13,13 @@
 	import { currencies, getCurrencyByCode } from '$lib/utils/currency';
 	import { createAccountSchema } from '$lib/schemas/account.schema';
 
-	let { data, account = undefined, open = $bindable(false), onClose = () => {} } = $props();
+	let {
+		data,
+		account = undefined,
+		accountTypes = [],
+		open = $bindable(false),
+		onClose = () => {}
+	} = $props();
 
 	const form = superForm(data, {
 		validators: zod4(createAccountSchema),
@@ -39,7 +45,7 @@
 			$formData.id = account.id;
 			$formData.name = account.name;
 			$formData.balance = account.balance;
-			$formData.accountType = account.accountType;
+			$formData.accountType = account.accountType.id;
 			$formData.currencyCode = account.currencyCode;
 		} else {
 			reset();
@@ -107,13 +113,17 @@
 						<Select.Root type="single" bind:value={$formData.accountType} name={props.name}>
 							<Select.Trigger class="w-full" {...props}>
 								{$formData.accountType
-									? $t(`accounts.accountTypes.${$formData.accountType}`)
+									? $t(
+											`accounts.accountTypes.${accountTypes.find((accountType) => accountType.id === $formData.accountType)?.name}`
+										)
 									: $t('accounts.accountTypePlaceholder')}
 							</Select.Trigger>
 							<Select.Content>
-								<Select.Item value="CHECKING">{$t('accounts.accountTypes.CHECKING')}</Select.Item>
-								<Select.Item value="CREDIT">{$t('accounts.accountTypes.CREDIT')}</Select.Item>
-								<Select.Item value="CASH">{$t('accounts.accountTypes.CASH')}</Select.Item>
+								{#each accountTypes as accountType}
+									<Select.Item value={accountType.id}
+										>{$t(`accounts.accountTypes.${accountType.name}`)}</Select.Item
+									>
+								{/each}
 							</Select.Content>
 						</Select.Root>
 					{/snippet}
