@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { Input } from '$lib/components/ui/input';
-	import Button from '../ui/button/button.svelte';
+	import Button from './ui/button/button.svelte';
 	import { t } from 'svelte-i18n';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
-  import { iconMap } from '$lib/utils/icons';
+	import { iconMap } from '$lib/utils/icons';
 
-  let { icon = $bindable() } = $props();
+	let { icon = $bindable() } = $props();
 
 	let searchTerm = $state('');
 	let selectedCategory = $state<string | null>(null);

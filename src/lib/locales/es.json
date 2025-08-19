@@ -23,7 +23,9 @@
     "addAccountSuccess": "Cuenta agregada exitosamente.",
     "createAccount": "Crear cuenta",
     "deleteAccountDescription": "¿Estás seguro de que deseas eliminar esta cuenta \"{name}\"? Esta acción no se puede deshacer.",
+    "deleteAccountError": "Error al eliminar la cuenta. Por favor intenta de nuevo.",
     "deleteAccountTitle": "Eliminar cuenta",
+    "deleteAccountSuccess": "Cuenta eliminada exitosamente.",
     "deletedAccount": "Cuenta eliminada",
     "description": "Ver y administrar tus cuentas",
     "editAccountError": "Error al editar la cuenta. Por favor verifica los datos e intenta de nuevo.",
@@ -43,6 +45,7 @@
     "title": "Presupuestos"
   },
   "categories": {
+    "addCategory": "Agregar categoría",
     "addCategoryError": "Error al agregar la categoría. Por favor, verifica los datos e inténtalo de nuevo.",
     "addCategorySuccess": "Categoría agregada exitosamente.",
     "category": "Categoría",
@@ -55,8 +58,18 @@
       "EXPENSE": "Gasto",
       "TRANSFER": "Transferencia"
     },
+    "categoryTypeLabel": "Tipo de categoría",
+    "categoryTypePlaceholder": "Selecciona el tipo de categoría",
     "createNew": "Crear nueva",
     "createNewCategory": "Crear nueva categoría",
+    "deleteCategoryError": "Error al eliminar la categoría. Por favor, inténtalo de nuevo.",
+    "deleteCategoryDescription": "¿Estás seguro de que deseas eliminar esta categoría \"{name}\"? Esta acción no se puede deshacer.",
+    "deleteCategorySuccess": "Categoría eliminada exitosamente.",
+    "deleteCategoryTitle": "Eliminar categoría",
+    "description": "Ver y gestionar tus categorías",
+    "editCategory": "Editar categoría",
+    "editCategoryError": "Error al editar la categoría. Por favor, verifica los datos e inténtalo de nuevo.",
+    "editCategorySuccess": "Categoría editada exitosamente.",
     "iconCategories": {
       "foodDining": "Comida y restaurantes",
       "transportation": "Transporte",
@@ -110,7 +123,9 @@
       "MapPin": "Pin de ubicación"
     },
     "loadCategoriesError": "Error al cargar las categorías. Por favor, inténtalo de nuevo más tarde.",
-    "searchIcons": "Buscar íconos..."
+    "noCategories": "Aún no tienes categorías. Crea tu primera categoría para comenzar.",
+    "searchIcons": "Buscar íconos...",
+    "title": "Categorías"
   },
   "common": {
     "back": "Atrás",

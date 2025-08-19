@@ -3,9 +3,14 @@ import { setFlash } from 'sveltekit-flash-message/server';
 import type { LayoutServerLoad } from './$types';
 import { $t } from '$lib/i18n';
 import type { CurrencyRates } from '$lib/types';
+import { redirect } from '@sveltejs/kit';
 
 export const load: LayoutServerLoad = async ({ locals, cookies, fetch }) => {
   const user = locals.user;
+
+  if (!user) {
+    throw redirect(302, '/signin');
+  }
 
   // Get the currency exhange rates
   let currencyRates: CurrencyRates | undefined = undefined;

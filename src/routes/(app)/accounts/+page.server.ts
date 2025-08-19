@@ -1,4 +1,4 @@
-import { fail, redirect, type Actions } from "@sveltejs/kit";
+import { fail, type Actions } from "@sveltejs/kit";
 import type { PageServerLoad } from "../$types";
 import { API_URL } from "$env/static/private";
 import { $t } from "$lib/i18n";
@@ -7,12 +7,7 @@ import { superValidate } from "sveltekit-superforms";
 import { zod4 } from "sveltekit-superforms/adapters";
 import { createAccountSchema } from "$lib/schemas/account.schema";
 
-export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
-  const { user } = locals;
-  if (!user) {
-    throw redirect(302, '/signin');
-  }
-
+export const load: PageServerLoad = async ({ cookies, fetch }) => {
   // Load accounts from the API
   let accounts = [];
   try {

@@ -57,11 +57,11 @@
 				onConfirm: () => {}
 			};
 
-			toast.success($t('transactions.deleteTransactionSuccess'));
+			toast.success($t('accounts.deleteAccountSuccess'));
 
 			invalidateAll();
 		} catch {
-			toast.error($t('transactions.deleteTransactionError'));
+			toast.error($t('accounts.deleteAccountError'));
 		}
 	}
 </script>

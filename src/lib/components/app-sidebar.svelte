@@ -5,6 +5,7 @@
 	import TrendingDownIcon from '@lucide/svelte/icons/trending-down';
 	import CalendarIcon from '@lucide/svelte/icons/calendar';
 	import WalletIcon from '@lucide/svelte/icons/wallet';
+	import TagsIcon from '@lucide/svelte/icons/tags';
 
 	const data = {
 		navMain: [
@@ -19,6 +20,12 @@
 				title: 'Accounts',
 				url: '/accounts',
 				icon: Building_2Icon
+			},
+			{
+				id: 'categories',
+				title: 'Categories',
+				url: '/categories',
+				icon: TagsIcon
 			},
 			{
 				id: 'transactions',

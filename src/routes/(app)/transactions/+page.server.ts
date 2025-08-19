@@ -2,20 +2,15 @@ import { API_URL } from "$env/static/private";
 import { setFlash } from "sveltekit-flash-message/server";
 import type { PageServerLoad } from "../$types";
 import { $t } from "$lib/i18n";
-import { fail, redirect, type Actions } from "@sveltejs/kit";
+import { fail, type Actions } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms";
 import { zod4 } from "sveltekit-superforms/adapters";
 import { createCategorySchema } from "$lib/schemas/category.schema";
 import { createTransactionSchema, createTransferSchema } from "$lib/schemas/transaction.schema";
 import type { Transaction } from "$lib/types/transactions.types";
 
-export const load: PageServerLoad = async ({ locals, cookies, fetch, url }) => {
+export const load: PageServerLoad = async ({ cookies, fetch, url }) => {
   const offset = url.searchParams.get('offset') ? parseInt(url.searchParams.get('offset') as string, 10) : 0;
-
-  const { user } = locals
-  if (!user) {
-    throw redirect(302, '/signin')
-  }
 
   // Load accounts from the API
   let accounts = [];

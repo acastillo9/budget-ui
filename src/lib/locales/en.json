@@ -23,7 +23,9 @@
     "addAccountSuccess": "Account added successfully.",
     "createAccount": "Create Account",
     "deleteAccountDescription": "Are you sure you want to delete this account \"{name}\"? This action cannot be undone.",
+    "deleteAccountError": "Error deleting account. Please try again later.",
     "deleteAccountTitle": "Delete Account",
+    "deleteAccountSuccess": "Account deleted successfully.",
     "deletedAccount": "Deleted Account",
     "description": "View and manage your accounts",
     "editAccountError": "Error editing account. Please check your details and try again.",
@@ -43,6 +45,7 @@
     "title": "Budgets"
   },
   "categories": {
+    "addCategory": "Add Category",
     "addCategoryError": "Error adding category. Please check your details and try again.",
     "addCategorySuccess": "Category added successfully.",
     "category": "Category",
@@ -55,8 +58,18 @@
       "EXPENSE": "Expense",
       "TRANSFER": "Transfer"
     },
+    "categoryTypeLabel": "Category Type",
+    "categoryTypePlaceholder": "Select category type",
     "createNew": "Create New",
     "createNewCategory": "Create New Category",
+    "deleteCategoryError": "Error deleting category. Please try again later.",
+    "deleteCategoryDescription": "Are you sure you want to delete this category \"{name}\"? This action cannot be undone.",
+    "deleteCategorySuccess": "Category deleted successfully.",
+    "deleteCategoryTitle": "Delete Category",
+    "description": "View and manage your categories",
+    "editCategory": "Edit Category",
+    "editCategoryError": "Error editing category. Please check your details and try again.",
+    "editCategorySuccess": "Category edited successfully.",
     "iconCategories": {
       "foodDining": "Food & Dining",
       "transportation": "Transportation",
@@ -110,7 +123,9 @@
       "MapPin": "Map Pin"
     },
     "loadCategoriesError": "Error loading categories. Please try again later.",
-    "searchIcons": "Search Icons..."
+    "noCategories": "No categories yet. Create your first category to get started.",
+    "searchIcons": "Search Icons...",
+    "title": "Categories"
   },
   "common": {
     "back": "Back",
