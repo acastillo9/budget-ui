@@ -56,6 +56,7 @@
 	let filteredCategories = $derived(
 		categories.filter((c: Category) => c.categoryType === categoryType)
 	);
+	let isEdit = $derived(!!transaction);
 
 	function goToNextStep() {
 		if (categoryType === 'TRANSFER') {
@@ -172,7 +173,13 @@
 	</Dialog.Trigger>
 	<Dialog.Content escapeKeydownBehavior="ignore" interactOutsideBehavior="ignore">
 		<Dialog.Header>
-			<Dialog.Title>{$t('transactions.addTransaction')}</Dialog.Title>
+			<Dialog.Title>
+				{#if isEdit}
+					{$t('transactions.editTransaction')}
+				{:else}
+					{$t('transactions.addTransaction')}
+				{/if}
+			</Dialog.Title>
 			<Dialog.Description>
 				{$t('transactions.stepOf', { values: { step: transactionStep, totalSteps: 3 } })}
 				{transactionStep === 1

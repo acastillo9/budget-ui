@@ -254,6 +254,7 @@
     "descriptionPlaceholder": "Enter transaction description",
     "descriptionTransferFrom": "{description} | Transfer from {account}",
     "descriptionTransferTo": "{description} | Transfer to {account}",
+    "editTransaction": "Edit Transaction",
     "editTransactionError": "Error editing transaction. Please check your details and try again.",
     "editTransactionSuccess": "Transaction edited successfully.",
     "expense": "Expense",
