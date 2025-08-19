@@ -8,12 +8,15 @@
 	import { toast } from 'svelte-sonner';
 	import { invalidateAll } from '$app/navigation';
 	import { getUserContext } from '$lib/context';
+	import * as Pagination from '$lib/components/ui/pagination';
 
+	const PER_PAGE = 10;
 	let { data }: PageProps = $props();
 
 	let isEditAccountDialogOpen = $state(false);
 	let selectedAccount: Account | undefined = $state(undefined);
 	const userState = getUserContext();
+	let page = $state(1);
 
 	let confirmationDialog = $state({
 		open: false,
@@ -94,7 +97,7 @@
 
 	<div class="container mx-auto">
 		<AccountList
-			accounts={data.accounts}
+			accounts={data.accounts.slice((page - 1) * PER_PAGE, page * PER_PAGE)}
 			rates={userState.currencyRates?.rates || {}}
 			editable
 			headless
@@ -104,6 +107,31 @@
 				isEditAccountDialogOpen = true;
 			}}
 		/>
+		<Pagination.Root count={data.accounts.length} perPage={PER_PAGE} bind:page>
+			{#snippet children({ pages, currentPage })}
+				<Pagination.Content>
+					<Pagination.Item>
+						<Pagination.PrevButton />
+					</Pagination.Item>
+					{#each pages as page (page.key)}
+						{#if page.type === 'ellipsis'}
+							<Pagination.Item>
+								<Pagination.Ellipsis />
+							</Pagination.Item>
+						{:else}
+							<Pagination.Item>
+								<Pagination.Link {page} isActive={currentPage === page.value}>
+									{page.value}
+								</Pagination.Link>
+							</Pagination.Item>
+						{/if}
+					{/each}
+					<Pagination.Item>
+						<Pagination.NextButton />
+					</Pagination.Item>
+				</Pagination.Content>
+			{/snippet}
+		</Pagination.Root>
 	</div>
 </section>
 
