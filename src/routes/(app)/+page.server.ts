@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
   // Load accounts from the API
   let accounts = [];
   try {
-    const response = await fetch(`${API_URL}/accounts`);
+    const response = await fetch(`${API_URL}/accounts?limit=5`);
     if (!response.ok) {
       throw new Error('Failed to load accounts');
     }
