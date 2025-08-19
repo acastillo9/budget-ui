@@ -35,6 +35,7 @@
 	const userState = getUserContext();
 	$formData.currencyCode = userState.user?.currencyCode || 'USD';
 	let selectedCurrencyData = $derived(getCurrencyByCode($formData.currencyCode));
+	let isEdit = $derived(!!account);
 
 	$effect(() => {
 		$formData.currencyCode = userState.user?.currencyCode || 'USD';
@@ -69,9 +70,19 @@
 	</Dialog.Trigger>
 	<Dialog.Content escapeKeydownBehavior="ignore" interactOutsideBehavior="ignore">
 		<Dialog.Header>
-			<Dialog.Title>{$t('accounts.addAccount')}</Dialog.Title>
+			<Dialog.Title>
+				{#if isEdit}
+					{$t('accounts.editAccount')}
+				{:else}
+					{$t('accounts.addAccount')}
+				{/if}
+			</Dialog.Title>
 			<Dialog.Description>
-				{$t('accounts.addAccountDescription')}
+				{#if isEdit}
+					{$t('accounts.editAccountDescription')}
+				{:else}
+					{$t('accounts.addAccountDescription')}
+				{/if}
 			</Dialog.Description>
 		</Dialog.Header>
 		<form id="addAccountForm" class="space-y-4" method="POST" action="?/addAccount" use:enhance>
@@ -163,7 +174,11 @@
 					!!$allErrors.length}
 			>
 				{#if $delayed}<LoaderCircle class="mr-1 animate-spin" />{/if}
-				{$t('accounts.createAccount')}
+				{#if isEdit}
+					{$t('common.save')}
+				{:else}
+					{$t('accounts.createAccount')}
+				{/if}
 			</Button>
 		</form>
 	</Dialog.Content>

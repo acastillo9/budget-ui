@@ -17,7 +17,6 @@
 		data,
 		categoryType = undefined,
 		category = undefined,
-		isEdit = false,
 		open = $bindable(false),
 		onClose = () => {}
 	} = $props();
@@ -42,6 +41,7 @@
 	});
 
 	const { form: formData, enhance, isTainted, tainted, allErrors, delayed, reset } = form;
+	let isEdit = $derived(!!category);
 
 	$effect(() => {
 		if (category) {

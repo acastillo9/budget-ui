@@ -28,6 +28,8 @@
     "deleteAccountSuccess": "Cuenta eliminada exitosamente.",
     "deletedAccount": "Cuenta eliminada",
     "description": "Ver y administrar tus cuentas",
+    "editAccount": "Editar cuenta",
+    "editAccountDescription": "Actualiza los detalles de tu cuenta",
     "editAccountError": "Error al editar la cuenta. Por favor verifica los datos e intenta de nuevo.",
     "editAcountSuccess": "Cuenta editada exitosamente.",
     "loadAccountTypesError": "Error al cargar los tipos de cuenta. Por favor intenta de nuevo más tarde.",

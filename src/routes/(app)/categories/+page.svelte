@@ -83,7 +83,6 @@
 					data={data.createCategoryForm}
 					category={selectedCategory}
 					bind:open={isEditCategoryDialogOpen}
-					isEdit={!!selectedCategory}
 					onClose={() => {
 						selectedCategory = undefined;
 					}}
