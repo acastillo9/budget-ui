@@ -34,6 +34,6 @@ export type Rates = {
 
 export type CurrencyRates = {
   baseCurrencyCode: string;
-  updatedAt: Date;
+  updatedAt: string;
   rates: Rates
 }

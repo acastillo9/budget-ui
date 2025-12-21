@@ -7,7 +7,6 @@ import { superValidate } from "sveltekit-superforms";
 import { zod4 } from "sveltekit-superforms/adapters";
 import { createCategorySchema } from "$lib/schemas/category.schema";
 import { createTransactionSchema, createTransferSchema } from "$lib/schemas/transaction.schema";
-import type { Transaction } from "$lib/types/transactions.types";
 
 export const load: PageServerLoad = async ({ cookies, fetch, url }) => {
   const offset = url.searchParams.get('offset') ? parseInt(url.searchParams.get('offset') as string, 10) : 0;
@@ -52,12 +51,7 @@ export const load: PageServerLoad = async ({ cookies, fetch, url }) => {
     // fetch the transactions from the API and parsing the date fields on the
     // result from string to date
     const { data, total, limit, offset, nextPage } = await response.json();
-    transactions.data = data.map((transaction: Transaction) => ({
-      ...transaction,
-      date: new Date(transaction.date),
-      createdAt: new Date(transaction.createdAt),
-      updatedAt: new Date(transaction.updatedAt)
-    }))
+    transactions.data = data;
     transactions.total = total;
     transactions.limit = limit;
     transactions.offset = offset;

@@ -33,9 +33,7 @@
 				{$t('currencies.exchangeRatesDescription', {
 					values: {
 						currency: `${baseCurrency?.flag} ${baseCurrency?.code}`,
-						date: currencyRates?.updatedAt
-							? new Date(currencyRates.updatedAt).toISOString().split('T')[0]
-							: '--'
+						date: currencyRates?.updatedAt ? currencyRates.updatedAt.split('T')[0] : '--'
 					}
 				})}
 			</Card.Description>

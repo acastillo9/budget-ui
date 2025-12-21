@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { Badge } from '$lib/components/ui/badge';
-	import Button from '../ui/button/button.svelte';
-	import CreateCategoryDialog from '../create-category-dialog.svelte';
 	import { iconMap } from '$lib/utils/icons';
 	import { t } from 'svelte-i18n';
+	import Button from './ui/button/button.svelte';
+	import CreateCategoryDialog from './create-category-dialog.svelte';
 
 	let { categoryType, createCategoryForm, categories, category = $bindable() } = $props();
 </script>

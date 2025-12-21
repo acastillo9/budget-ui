@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
-	import type { PageProps } from '../$types';
+	import type { PageProps } from './$types';
 	import AccountList from '$lib/components/account-list.svelte';
 	import AddAccountDialog from '$lib/components/add-account-dialog.svelte';
 	import ConfirmationDialog from '$lib/components/confirmation-dialog.svelte';

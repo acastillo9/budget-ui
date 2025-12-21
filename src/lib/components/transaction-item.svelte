@@ -6,6 +6,7 @@
 	import { t } from 'svelte-i18n';
 	import { getUserContext } from '$lib/context';
 	import Badge from './ui/badge/badge.svelte';
+	import { formatUTCStringDateWithLocal } from '$lib/utils/date';
 
 	let { transaction, rates, editable = false, onEdit, onDelete } = $props();
 	let isIncome = $derived(transaction.amount > 0);
@@ -52,7 +53,7 @@
 						<CategoryBadge category={transaction.category} />
 					{/if}
 					<Badge variant="outline">
-						{new Date(transaction.date).toLocaleDateString()}
+						{formatUTCStringDateWithLocal(transaction.date)}
 					</Badge>
 				</div>
 			</div>

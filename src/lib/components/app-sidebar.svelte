@@ -34,16 +34,16 @@
 				icon: ReceiptIcon
 			},
 			{
-				id: 'budgets',
-				title: 'Budgets',
-				url: '/budgets',
-				icon: TrendingDownIcon
-			},
-			{
 				id: 'bills',
 				title: 'Bills',
 				url: '/bills',
 				icon: CalendarIcon
+			},
+			{
+				id: 'budgets',
+				title: 'Budgets',
+				url: '/budgets',
+				icon: TrendingDownIcon
 			}
 		]
 	};

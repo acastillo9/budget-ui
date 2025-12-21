@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageProps } from '../$types';
+	import type { PageProps } from './$types';
 	import { t } from 'svelte-i18n';
 	import CreateTransactionDialog from '$lib/components/create-transaction-wizard/create-transaction-dialog.svelte';
 	import TransactionList from '$lib/components/transaction-list.svelte';

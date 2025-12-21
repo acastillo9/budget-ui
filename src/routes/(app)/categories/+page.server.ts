@@ -9,7 +9,6 @@ import { $t } from "$lib/i18n";
 import type { Category } from "$lib/types/category.types";
 
 export const load: PageServerLoad = async ({ cookies, fetch }) => {
-
   let categories: Category[] = []
   try {
     const response = await fetch(`${API_URL}/categories`);

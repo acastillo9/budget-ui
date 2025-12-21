@@ -10,7 +10,6 @@
 	import ArrowLeft from '@lucide/svelte/icons/arrow-left';
 	import ArrowRight from '@lucide/svelte/icons/arrow-right';
 	import SelectTransactionType from './select-transaction-type.svelte';
-	import ChooseCategory from './choose-category.svelte';
 	import {
 		createTransactionSchema,
 		createTransferSchema,
@@ -25,6 +24,7 @@
 	import type { Account } from '$lib/types/account.types';
 	import type { Transaction } from '$lib/types/transactions.types';
 	import CategoryBadge from '../category-badge.svelte';
+	import ChooseCategory from '../choose-category.svelte';
 
 	interface Props {
 		addTransactionForm: SuperValidated<CreateTransactionSchema>;
@@ -52,7 +52,7 @@
 
 	let transactionStep = $state(1);
 	let categoryType = $state('');
-	let category: Category | undefined = $derived(undefined);
+	let category: Category | undefined = $state(undefined);
 	let filteredCategories = $derived(
 		categories.filter((c: Category) => c.categoryType === categoryType)
 	);
@@ -131,7 +131,7 @@
 				$transferFormData.id = transaction.id;
 				$transferFormData.amount = Math.abs(transaction.amount);
 				// date should be formatted as string with the form '2025-07-04'
-				$transferFormData.date = transaction.date.toISOString().split('T')[0];
+				$transferFormData.date = transaction.date.split('T')[0];
 				$transferFormData.description = transaction.description;
 				$transferFormData.notes = transaction.notes;
 				// if the transaction is a transfer, the origin account is the account where the money comes from
@@ -146,7 +146,7 @@
 				$formData.id = transaction.id;
 				$formData.amount = Math.abs(transaction.amount);
 				// date should be formatted as string with the form '2025-07-04'
-				$formData.date = transaction.date.toISOString().split('T')[0];
+				$formData.date = transaction.date.split('T')[0];
 				$formData.description = transaction.description;
 				$formData.notes = transaction.notes;
 				$formData.account = transaction.account.id;

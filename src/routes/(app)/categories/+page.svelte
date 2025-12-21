@@ -1,7 +1,7 @@
 <script lang="ts">
 	import CreateCategoryDialog from '$lib/components/create-category-dialog.svelte';
 	import { t } from 'svelte-i18n';
-	import type { PageProps } from '../$types';
+	import type { PageProps } from './$types';
 	import CategoryList from '$lib/components/category-list.svelte';
 	import * as Pagination from '$lib/components/ui/pagination';
 	import type { Category } from '$lib/types/category.types';

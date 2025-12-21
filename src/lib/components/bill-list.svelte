@@ -1,0 +1,114 @@
+<script lang="ts">
+	import * as Card from '$lib/components/ui/card';
+	import { AlertTriangle, CheckCircle, Clock, Wallet } from '@lucide/svelte';
+	import { t } from 'svelte-i18n';
+	import { BillStatus, type Bill } from '$lib/types/bill.types';
+	import Badge from './ui/badge/badge.svelte';
+	import BillItem from './bill-item.svelte';
+
+	type Props = {
+		bills: Bill[];
+		headless?: boolean;
+		isPayingBill?: string | undefined;
+		isUnpayingBill?: string | undefined;
+		payBill?: (bill: Bill) => void;
+		unpayBill?: (bill: Bill) => void;
+		onEdit?: (bill: Bill) => void;
+	};
+	let {
+		bills,
+		headless = false,
+		isPayingBill = undefined,
+		isUnpayingBill = undefined,
+		payBill = () => {},
+		unpayBill = () => {},
+		onEdit = () => {}
+	}: Props = $props();
+
+	let upcomingBills = $derived(
+		bills.filter((bill) => bill.status === BillStatus.UPCOMING || bill.status === BillStatus.DUE)
+	);
+	let overdueBills = $derived(bills.filter((bill) => bill.status === BillStatus.OVERDUE));
+	let paidBills = $derived(bills.filter((bill) => bill.status === BillStatus.PAID));
+</script>
+
+<Card.Root class="mb-4">
+	{#if !headless}
+		<Card.Header>
+			<Card.Title>{$t('bills.yourBills')}</Card.Title>
+			<Card.Description>{$t('bills.yourBillsDescription')}</Card.Description>
+		</Card.Header>
+	{/if}
+	<Card.Content>
+		{#if bills.length === 0}
+			<div class="text-muted-foreground py-8 text-center">
+				<Wallet class="mx-auto mb-4 h-12 w-12 opacity-50" />
+				<p>{$t('bills.noBills')}</p>
+			</div>
+		{:else}
+			<div class="space-y-5">
+				<div class="space-y-3">
+					<div class="flex items-center gap-2">
+						<AlertTriangle class="h-5 w-5 text-red-600" />
+						<h3 class="text-lg font-semibold text-red-600">{$t('bills.overdueBills')}</h3>
+						<Badge variant="destructive" class="ml-2">
+							{overdueBills.length}
+						</Badge>
+					</div>
+					<div class="grid gap-3">
+						{#each overdueBills as bill (bill.id + bill.targetDate)}
+							<BillItem
+								{bill}
+								pay={(event: Bill) => payBill(event)}
+								isPaying={bill.id === isPayingBill}
+								onEdit={() => onEdit(bill)}
+							/>
+						{/each}
+					</div>
+				</div>
+				<div class="space-y-3">
+					<div class="flex items-center gap-2">
+						<Clock class="h-5 w-5 text-yellow-600" />
+						<h3 class="text-lg font-semibold text-yellow-700 dark:text-yellow-300">
+							{$t('bills.dueSoon')}
+						</h3>
+						<Badge variant="outline" class="border-yellow-300 text-yellow-700">
+							{upcomingBills.length}
+						</Badge>
+					</div>
+					<div class="grid gap-3">
+						{#each upcomingBills as bill (bill.id + bill.targetDate)}
+							<BillItem
+								{bill}
+								pay={(event: Bill) => payBill(event)}
+								isPaying={bill.id === isPayingBill}
+								onEdit={() => onEdit(bill)}
+							/>
+						{/each}
+					</div>
+				</div>
+				<div class="space-y-3">
+					<div class="flex items-center gap-2">
+						<CheckCircle class="h-5 w-5 text-green-600" />
+						<h3 class="text-lg font-semibold text-green-700 dark:text-green-300">
+							{$t('bills.paidBills')}
+						</h3>
+						<Badge variant="outline" class="ml-2 border-green-300 text-green-700">
+							{paidBills.length}
+						</Badge>
+					</div>
+					<div class="grid gap-3">
+						{#each paidBills as bill (bill.id + bill.targetDate)}
+							<BillItem
+								{bill}
+								onEdit={() => onEdit(bill)}
+								unpay={(event: Bill) => unpayBill(event)}
+								isUnpaying={bill.id === isUnpayingBill}
+							/>
+						{/each}
+					</div>
+				</div>
+			</div>
+		{/if}
+	</Card.Content>
+</Card.Root>

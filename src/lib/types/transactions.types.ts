@@ -3,12 +3,12 @@ import type { Category } from "./category.types";
 
 export type Transaction = {
   id: string;
-  date: Date;
+  date: string;
   amount: number;
   description: string;
   notes: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   isTransfer: boolean;
   category: Category;
   account: Account;
