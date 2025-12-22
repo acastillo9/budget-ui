@@ -107,7 +107,10 @@
     "title": "Facturas",
     "unpay": "No pagada",
     "yourBills": "Tus facturas",
-    "yourBillsDescription": "Visualiza y gestiona tus facturas"
+    "yourBillsDescription": "Visualiza y gestiona tus facturas",
+    "previousMonth": "Mes anterior",
+    "nextMonth": "Mes siguiente",
+    "goToCurrentMonth": "Ir al mes actual"
   },
   "budgets": {
     "title": "Presupuestos"

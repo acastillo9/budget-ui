@@ -107,7 +107,10 @@
     "title": "Bills",
     "unpay": "Unpay",
     "yourBills": "Your Bills",
-    "yourBillsDescription": "View and manage your upcoming bills and due dates"
+    "yourBillsDescription": "View and manage your upcoming bills and due dates",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "goToCurrentMonth": "Go to current month"
   },
   "budgets": {
     "title": "Budgets"

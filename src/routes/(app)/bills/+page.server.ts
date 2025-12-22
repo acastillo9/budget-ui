@@ -8,7 +8,7 @@ import { $t } from "$lib/i18n";
 import { fail, type Actions } from "@sveltejs/kit";
 import { createCategorySchema } from "$lib/schemas/category.schema";
 
-export const load: PageServerLoad = async ({ cookies, fetch }) => {
+export const load: PageServerLoad = async ({ cookies, fetch, url }) => {
   // Load accounts from the API
   let accounts = [];
   try {
@@ -33,11 +33,21 @@ export const load: PageServerLoad = async ({ cookies, fetch }) => {
     setFlash({ type: 'error', message: $t('categories.loadCategoriesError') }, cookies);
   }
 
-  // load bills from the API for the current month
+  // Parse month from URL query parameter (format: YYYY-MM) or use current month
+  const monthParam = url.searchParams.get('month');
+  let targetDate: Date;
+  
+  if (monthParam && /^\d{4}-\d{2}$/.test(monthParam)) {
+    const [year, month] = monthParam.split('-').map(Number);
+    targetDate = new Date(year, month - 1, 1);
+  } else {
+    targetDate = new Date();
+  }
+
+  // load bills from the API for the selected month
   let bills = [];
-  const currentDate = new Date();
-  const dateStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).toISOString().split('T')[0];
-  const dateEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).toISOString().split('T')[0];
+  const dateStart = new Date(targetDate.getFullYear(), targetDate.getMonth(), 1).toISOString().split('T')[0];
+  const dateEnd = new Date(targetDate.getFullYear(), targetDate.getMonth() + 1, 0).toISOString().split('T')[0];
 
   try {
     const response = await fetch(`${API_URL}/bills?dateStart=${dateStart}&dateEnd=${dateEnd}`);
@@ -49,12 +59,16 @@ export const load: PageServerLoad = async ({ cookies, fetch }) => {
     setFlash({ type: 'error', message: $t('bills.loadBillsError') }, cookies);
   }
 
+  // Return the current selected month for the UI
+  const selectedMonth = `${targetDate.getFullYear()}-${String(targetDate.getMonth() + 1).padStart(2, '0')}`;
+
   return {
     createBillForm: await superValidate(zod4(createBillSchema)),
     createCategoryForm: await superValidate(zod4(createCategorySchema)),
     accounts,
     bills,
-    categories
+    categories,
+    selectedMonth
   }
 }
 
