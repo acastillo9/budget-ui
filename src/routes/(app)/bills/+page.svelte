@@ -6,6 +6,11 @@
 	import type { Bill } from '$lib/types/bill.types';
 	import { toast } from 'svelte-sonner';
 	import { invalidateAll } from '$app/navigation';
+	import ConfirmationDialog from '$lib/components/confirmation-dialog.svelte';
+	import * as Card from '$lib/components/ui/card';
+	import { Calendar1 } from '@lucide/svelte';
+	import Label from '$lib/components/ui/label/label.svelte';
+	import Switch from '$lib/components/ui/switch/switch.svelte';
 
 	let { data }: PageProps = $props();
 
@@ -13,6 +18,7 @@
 	let selectedBill: Bill | undefined = $state(undefined);
 	let isPaying: string | undefined = $state(undefined);
 	let isUnpaying: string | undefined = $state(undefined);
+	let deleteSeries = $state(false);
 
 	async function payBill(bill: Bill) {
 		isPaying = bill.id;
@@ -60,6 +66,60 @@
 			isUnpaying = undefined;
 		}
 	}
+
+	let confirmationDialog = $state({
+		open: false,
+		loading: false,
+		title: '',
+		description: '',
+		onConfirm: () => {}
+	});
+
+	const confirmDeleteBill = (bill: Bill) => {
+		confirmationDialog = {
+			open: true,
+			loading: false,
+			title: $t('bills.deleteBillTitle'),
+			description: $t('bills.deleteBillDescription', {
+				values: { name: bill.name }
+			}),
+			onConfirm: () => {
+				deleteBill(bill);
+			}
+		};
+	};
+
+	async function deleteBill(bill: Bill) {
+		confirmationDialog.loading = true;
+		const targetDate = bill.targetDate || bill.dueDate;
+		try {
+			const uri = `/api/bills/${bill.id}/${targetDate.split('T')[0]}`;
+			const response = await fetch(uri, {
+				method: 'DELETE',
+				body: JSON.stringify({
+					applyToFuture: deleteSeries
+				})
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to delete bill');
+			}
+
+			confirmationDialog = {
+				open: false,
+				loading: false,
+				title: '',
+				description: '',
+				onConfirm: () => {}
+			};
+
+			toast.success($t('bills.deleteBillSuccess'));
+
+			invalidateAll();
+		} catch {
+			toast.error($t('bills.deleteBillError'));
+		}
+	}
 </script>
 
 <svelte:head>
@@ -101,6 +161,44 @@
 				selectedBill = event;
 				isEditBillDialogOpen = true;
 			}}
+			onDelete={confirmDeleteBill}
 		></BillList>
 	</div>
 </section>
+
+<ConfirmationDialog
+	open={confirmationDialog.open}
+	onOpenChange={(open: boolean) => (confirmationDialog.open = open)}
+	title={confirmationDialog.title}
+	description={confirmationDialog.description}
+	confirmText={$t('common.delete')}
+	cancelText={$t('common.cancel')}
+	variant="destructive"
+	onConfirm={confirmationDialog.onConfirm}
+	loading={confirmationDialog.loading}
+>
+	<Card.Root class="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
+		<Card.Header>
+			<Card.Title class="flex items-center gap-2 text-sm">
+				<Calendar1 class="h-4 w-4" />
+				{$t('bills.deleteScope')}
+			</Card.Title>
+			<Card.Description class="text-xs">{$t('bills.deleteScopeDescription')}</Card.Description>
+		</Card.Header>
+		<Card.Content class="pt-0">
+			<div class="flex items-center justify-between space-x-4">
+				<div class="flex-1">
+					<Label class="text-sm font-medium">
+						{!deleteSeries ? $t('bills.deleteSingleLabel') : $t('bills.deleteSeriesLabel')}
+					</Label>
+					<p class="text-muted-foreground mt-1 text-xs">
+						{!deleteSeries
+							? $t('bills.deleteSingleDescription')
+							: $t('bills.deleteSeriesDescription')}
+					</p>
+				</div>
+				<Switch bind:checked={deleteSeries} />
+			</div>
+		</Card.Content>
+	</Card.Root>
+</ConfirmationDialog>

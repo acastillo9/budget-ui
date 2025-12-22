@@ -19,7 +19,8 @@
 		parseDate,
 		today
 	} from '@internationalized/date';
-	import { AlertCircle, CalendarIcon } from '@lucide/svelte';
+	import { AlertCircle, Calendar1, CalendarIcon } from '@lucide/svelte';
+	import * as Card from '$lib/components/ui/card';
 
 	let { form, formData = $bindable(), enhance, accounts, isEdit = false } = $props();
 
@@ -41,21 +42,40 @@
 	<input hidden name="targetDate" value={formData.targetDate || ''} />
 	{#if isEdit}
 		<div class="space-y-3">
-			<Form.Field
-				{form}
-				name="applyToFuture"
-				class="flex flex-row items-center justify-between rounded-lg border p-4"
-			>
-				<Form.Control>
-					{#snippet children({ props })}
-						<div class="space-y-0.5">
-							<Form.Label>{$t('bills.editScopeLabel')}</Form.Label>
-							<Form.Description>{$t('bills.editScopeDescription')}</Form.Description>
-						</div>
-						<Switch {...props} aria-readonly bind:checked={formData.applyToFuture} />
-					{/snippet}
-				</Form.Control>
-			</Form.Field>
+			<Card.Root class="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950">
+				<Card.Header>
+					<Card.Title class="flex items-center gap-2 text-sm">
+						<Calendar1 class="h-4 w-4" />
+						{$t('bills.editScope')}
+					</Card.Title>
+					<Card.Description class="text-xs">{$t('bills.editScopeDescription')}</Card.Description>
+				</Card.Header>
+				<Card.Content class="pt-0">
+					<Form.Field
+						{form}
+						name="applyToFuture"
+						class="flex flex-row items-center justify-between"
+					>
+						<Form.Control>
+							{#snippet children({ props })}
+								<div class="mb-0 flex flex-col gap-1">
+									<Form.Label
+										>{formData.applyToFuture
+											? $t('bills.editScopeSeriesLabel')
+											: $t('bills.editScopeSingleLabel')}</Form.Label
+									>
+									<Form.Description
+										>{formData.applyToFuture
+											? $t('bills.editScopeSeriesDescription')
+											: $t('bills.editScopeSingleDescription')}</Form.Description
+									>
+								</div>
+								<Switch {...props} aria-readonly bind:checked={formData.applyToFuture} />
+							{/snippet}
+						</Form.Control>
+					</Form.Field>
+				</Card.Content>
+			</Card.Root>
 			{#if formData.applyToFuture}
 				<Alert.Root>
 					<AlertCircle class="h-4 w-4" />

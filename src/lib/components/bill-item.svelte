@@ -16,6 +16,7 @@
 		pay?: (bill: Bill) => void;
 		unpay?: (bill: Bill) => void;
 		onEdit?: () => void;
+		onDelete?: () => void;
 	};
 
 	let {
@@ -24,7 +25,8 @@
 		isUnpaying = false,
 		pay = () => {},
 		unpay = () => {},
-		onEdit = () => {}
+		onEdit = () => {},
+		onDelete = () => {}
 	}: Props = $props();
 
 	let daysDiff = Math.abs(
@@ -212,7 +214,7 @@
 			<Button
 				variant="ghost"
 				size="icon"
-				onclick={() => {}}
+				onclick={onDelete}
 				class="text-destructive hover:text-destructive"
 			>
 				<Trash2 class="h-4 w-4" />

@@ -3,6 +3,7 @@
 	import { AlertTriangle, Loader2Icon, Trash2 } from '@lucide/svelte';
 	import { t } from 'svelte-i18n';
 	import { buttonVariants } from './ui/button';
+	import type { Snippet } from 'svelte';
 
 	type Props = {
 		open: boolean;
@@ -14,6 +15,7 @@
 		variant?: 'destructive' | 'default';
 		loading: boolean;
 		onConfirm: () => void;
+		children?: Snippet;
 	};
 
 	let {
@@ -25,7 +27,8 @@
 		cancelText = $t('common.cancel'),
 		variant = 'destructive',
 		loading = false,
-		onConfirm
+		onConfirm,
+		children
 	}: Props = $props();
 
 	const handleConfirm = () => {
@@ -53,6 +56,7 @@
 			</div>
 			<AlertDialog.Description class="mt-2">{description}</AlertDialog.Description>
 		</AlertDialog.Header>
+		{@render children?.()}
 		<AlertDialog.Footer>
 			<AlertDialog.Cancel>{cancelText}</AlertDialog.Cancel>
 			<AlertDialog.Action

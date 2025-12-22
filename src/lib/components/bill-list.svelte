@@ -14,6 +14,7 @@
 		payBill?: (bill: Bill) => void;
 		unpayBill?: (bill: Bill) => void;
 		onEdit?: (bill: Bill) => void;
+		onDelete?: (bill: Bill) => void;
 	};
 	let {
 		bills,
@@ -22,7 +23,8 @@
 		isUnpayingBill = undefined,
 		payBill = () => {},
 		unpayBill = () => {},
-		onEdit = () => {}
+		onEdit = () => {},
+		onDelete = () => {}
 	}: Props = $props();
 
 	let upcomingBills = $derived(
@@ -62,6 +64,7 @@
 								pay={(event: Bill) => payBill(event)}
 								isPaying={bill.id === isPayingBill}
 								onEdit={() => onEdit(bill)}
+								onDelete={() => onDelete(bill)}
 							/>
 						{/each}
 					</div>
@@ -83,6 +86,7 @@
 								pay={(event: Bill) => payBill(event)}
 								isPaying={bill.id === isPayingBill}
 								onEdit={() => onEdit(bill)}
+								onDelete={() => onDelete(bill)}
 							/>
 						{/each}
 					</div>
@@ -104,6 +108,7 @@
 								onEdit={() => onEdit(bill)}
 								unpay={(event: Bill) => unpayBill(event)}
 								isUnpaying={bill.id === isUnpayingBill}
+								onDelete={() => onDelete(bill)}
 							/>
 						{/each}
 					</div>
