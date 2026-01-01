@@ -53,99 +53,105 @@
 			</div>
 		{:else}
 			<div class="space-y-5">
-				<div class="space-y-3">
-					<div class="flex items-center gap-2">
-						<AlertTriangle class="h-5 w-5 text-red-600" />
-						<h3 class="text-lg font-semibold text-red-600">{$t('bills.overdueBills')}</h3>
-						<Badge variant="destructive" class="ml-2">
-							{overdueBills.length}
-						</Badge>
+				{#if overdueBills.length > 0}
+					<div class="space-y-3">
+						<div class="flex items-center gap-2">
+							<AlertTriangle class="h-5 w-5 text-red-600" />
+							<h3 class="text-lg font-semibold text-red-600">{$t('bills.overdueBills')}</h3>
+							<Badge variant="destructive" class="ml-2">
+								{overdueBills.length}
+							</Badge>
+						</div>
+						<div class="grid gap-3">
+							{#each overdueBills as bill (bill.id + bill.targetDate)}
+								<BillItem
+									{bill}
+									pay={(event: Bill) => payBill(event)}
+									isPaying={bill.id === isPayingBill}
+									onEdit={() => onEdit(bill)}
+									onDelete={() => onDelete(bill)}
+								/>
+							{/each}
+						</div>
 					</div>
-					<div class="grid gap-3">
-						{#each overdueBills as bill (bill.id + bill.targetDate)}
-							<BillItem
-								{bill}
-								pay={(event: Bill) => payBill(event)}
-								isPaying={bill.id === isPayingBill}
-								onEdit={() => onEdit(bill)}
-								onDelete={() => onDelete(bill)}
-							/>
-						{/each}
+				{/if}
+				{#if pendingBills.length > 0}
+					{#if isCurrentMonth}
+						<!-- Due Soon section for current month -->
+						<div class="space-y-3">
+							<div class="flex items-center gap-2">
+								<Clock class="h-5 w-5 text-yellow-600" />
+								<h3 class="text-lg font-semibold text-yellow-700 dark:text-yellow-300">
+									{$t('bills.dueSoon')}
+								</h3>
+								<Badge variant="outline" class="border-yellow-300 text-yellow-700">
+									{pendingBills.length}
+								</Badge>
+							</div>
+							<div class="grid gap-3">
+								{#each pendingBills as bill (bill.id + bill.targetDate)}
+									<BillItem
+										{bill}
+										{isCurrentMonth}
+										pay={(event: Bill) => payBill(event)}
+										isPaying={bill.id === isPayingBill}
+										onEdit={() => onEdit(bill)}
+										onDelete={() => onDelete(bill)}
+									/>
+								{/each}
+							</div>
+						</div>
+					{:else}
+						<!-- Upcoming Bills section for other months -->
+						<div class="space-y-3">
+							<div class="flex items-center gap-2">
+								<CalendarClock class="h-5 w-5 text-blue-600" />
+								<h3 class="text-lg font-semibold text-blue-700 dark:text-blue-300">
+									{$t('bills.upcomingBills')}
+								</h3>
+								<Badge variant="outline" class="border-blue-300 text-blue-700">
+									{pendingBills.length}
+								</Badge>
+							</div>
+							<div class="grid gap-3">
+								{#each pendingBills as bill (bill.id + bill.targetDate)}
+									<BillItem
+										{bill}
+										{isCurrentMonth}
+										pay={(event: Bill) => payBill(event)}
+										isPaying={bill.id === isPayingBill}
+										onEdit={() => onEdit(bill)}
+										onDelete={() => onDelete(bill)}
+									/>
+								{/each}
+							</div>
+						</div>
+					{/if}
+				{/if}
+				{#if paidBills.length > 0}
+					<div class="space-y-3">
+						<div class="flex items-center gap-2">
+							<CheckCircle class="h-5 w-5 text-green-600" />
+							<h3 class="text-lg font-semibold text-green-700 dark:text-green-300">
+								{$t('bills.paidBills')}
+							</h3>
+							<Badge variant="outline" class="ml-2 border-green-300 text-green-700">
+								{paidBills.length}
+							</Badge>
+						</div>
+						<div class="grid gap-3">
+							{#each paidBills as bill (bill.id + bill.targetDate)}
+								<BillItem
+									{bill}
+									onEdit={() => onEdit(bill)}
+									unpay={(event: Bill) => unpayBill(event)}
+									isUnpaying={bill.id === isUnpayingBill}
+									onDelete={() => onDelete(bill)}
+								/>
+							{/each}
+						</div>
 					</div>
-				</div>
-				{#if isCurrentMonth}
-				<!-- Due Soon section for current month -->
-				<div class="space-y-3">
-					<div class="flex items-center gap-2">
-						<Clock class="h-5 w-5 text-yellow-600" />
-						<h3 class="text-lg font-semibold text-yellow-700 dark:text-yellow-300">
-							{$t('bills.dueSoon')}
-						</h3>
-						<Badge variant="outline" class="border-yellow-300 text-yellow-700">
-							{pendingBills.length}
-						</Badge>
-					</div>
-					<div class="grid gap-3">
-						{#each pendingBills as bill (bill.id + bill.targetDate)}
-							<BillItem
-								{bill}
-								{isCurrentMonth}
-								pay={(event: Bill) => payBill(event)}
-								isPaying={bill.id === isPayingBill}
-								onEdit={() => onEdit(bill)}
-								onDelete={() => onDelete(bill)}
-							/>
-						{/each}
-					</div>
-				</div>
-			{:else}
-				<!-- Upcoming Bills section for other months -->
-				<div class="space-y-3">
-					<div class="flex items-center gap-2">
-						<CalendarClock class="h-5 w-5 text-blue-600" />
-						<h3 class="text-lg font-semibold text-blue-700 dark:text-blue-300">
-							{$t('bills.upcomingBills')}
-						</h3>
-						<Badge variant="outline" class="border-blue-300 text-blue-700">
-							{pendingBills.length}
-						</Badge>
-					</div>
-					<div class="grid gap-3">
-						{#each pendingBills as bill (bill.id + bill.targetDate)}
-							<BillItem
-								{bill}
-								{isCurrentMonth}
-								pay={(event: Bill) => payBill(event)}
-								isPaying={bill.id === isPayingBill}
-								onEdit={() => onEdit(bill)}
-								onDelete={() => onDelete(bill)}
-							/>
-						{/each}
-					</div>
-				</div>
-			{/if}
-				<div class="space-y-3">
-					<div class="flex items-center gap-2">
-						<CheckCircle class="h-5 w-5 text-green-600" />
-						<h3 class="text-lg font-semibold text-green-700 dark:text-green-300">
-							{$t('bills.paidBills')}
-						</h3>
-						<Badge variant="outline" class="ml-2 border-green-300 text-green-700">
-							{paidBills.length}
-						</Badge>
-					</div>
-					<div class="grid gap-3">
-						{#each paidBills as bill (bill.id + bill.targetDate)}
-							<BillItem
-								{bill}
-								onEdit={() => onEdit(bill)}
-								unpay={(event: Bill) => unpayBill(event)}
-								isUnpaying={bill.id === isUnpayingBill}
-								onDelete={() => onDelete(bill)}
-							/>
-						{/each}
-					</div>
-				</div>
+				{/if}
 			</div>
 		{/if}
 	</Card.Content>
