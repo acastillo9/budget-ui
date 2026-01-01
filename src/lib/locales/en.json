@@ -101,6 +101,7 @@
     "noBills": "No bills yet. Add your first bill to get started.",
     "overdueBills": "Overdue Bills",
     "paidBills": "Paid Bills",
+    "upcomingBills": "Upcoming Bills",
     "paidOn": "Paid on {date}",
     "payNow": "Pay Now",
     "stepOf": "Step {step} of {totalSteps}:",

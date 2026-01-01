@@ -11,6 +11,7 @@
 
 	type Props = {
 		bill: Bill;
+		isCurrentMonth?: boolean;
 		isPaying?: boolean;
 		isUnpaying?: boolean;
 		pay?: (bill: Bill) => void;
@@ -21,6 +22,7 @@
 
 	let {
 		bill,
+		isCurrentMonth = true,
 		isPaying = false,
 		isUnpaying = false,
 		pay = () => {},
@@ -28,6 +30,13 @@
 		onEdit = () => {},
 		onDelete = () => {}
 	}: Props = $props();
+
+	// Determine the color theme based on status and current month
+	// Current month: UPCOMING uses yellow (same as DUE)
+	// Other months: UPCOMING uses blue
+	const useYellowForUpcoming = $derived(isCurrentMonth && bill.status === BillStatus.UPCOMING);
+	// Use this for color lookups - maps UPCOMING to DUE when in current month
+	const colorStatus = $derived(useYellowForUpcoming ? 'DUE' : bill.status);
 
 	let daysDiff = Math.abs(
 		Math.floor((new Date().getTime() - new Date(bill.dueDate).getTime()) / (1000 * 60 * 60 * 24))
@@ -37,8 +46,10 @@
 		let classes = 'flex items-center justify-between gap-4 rounded-lg border p-4 ';
 		if (bill.status === BillStatus.OVERDUE) {
 			classes += 'border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950';
-		} else if (bill.status === BillStatus.UPCOMING || bill.status === BillStatus.DUE) {
+		} else if (bill.status === BillStatus.DUE || useYellowForUpcoming) {
 			classes += 'border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950';
+		} else if (bill.status === BillStatus.UPCOMING) {
+			classes += 'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950';
 		} else {
 			classes += 'border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950';
 		}
@@ -56,9 +67,13 @@
 			<div class="rounded-full bg-red-100 p-2 dark:bg-red-900">
 				<Icon class="h-4 w-4 text-red-600" />
 			</div>
-		{:else if bill.status === 'UPCOMING' || bill.status === 'DUE'}
+		{:else if bill.status === 'DUE' || useYellowForUpcoming}
 			<div class="rounded-full bg-yellow-100 p-2 dark:bg-yellow-900">
 				<Icon class="h-4 w-4 text-yellow-600" />
+			</div>
+		{:else if bill.status === 'UPCOMING'}
+			<div class="rounded-full bg-blue-100 p-2 dark:bg-blue-900">
+				<Icon class="h-4 w-4 text-blue-600" />
 			</div>
 		{:else}
 			<div class="rounded-full bg-green-100 p-2 dark:bg-green-900">
@@ -70,16 +85,16 @@
 		>
 			<div class="flex-flex-col-gap-1">
 				<div>
-					<p
-						class={`font-medium ${
-							{
-								OVERDUE: 'text-red-900 dark:text-red-100',
-								DUE: 'text-yellow-900 dark:text-yellow-100',
-								UPCOMING: 'text-yellow-900 dark:text-yellow-100',
-								PAID: 'text-green-900 dark:text-green-100'
-							}[bill.status]
-						}`}
-					>
+				<p
+					class={`font-medium ${
+						{
+							OVERDUE: 'text-red-900 dark:text-red-100',
+							DUE: 'text-yellow-900 dark:text-yellow-100',
+							UPCOMING: 'text-blue-900 dark:text-blue-100',
+							PAID: 'text-green-900 dark:text-green-100'
+						}[colorStatus]
+					}`}
+				>
 						{bill.name}
 					</p>
 					<div
@@ -87,9 +102,9 @@
 							{
 								OVERDUE: 'text-red-700 dark:text-red-300',
 								DUE: 'text-yellow-700 dark:text-yellow-300',
-								UPCOMING: 'text-yellow-700 dark:text-yellow-300',
+								UPCOMING: 'text-blue-700 dark:text-blue-300',
 								PAID: 'text-green-700 dark:text-green-300'
-							}[bill.status]
+							}[colorStatus]
 						}`}
 					>
 						<span>{bill.account.name}</span>
@@ -145,9 +160,9 @@
 						{
 							OVERDUE: 'text-red-900 dark:text-red-100',
 							DUE: 'text-yellow-900 dark:text-yellow-100',
-							UPCOMING: 'text-yellow-900 dark:text-yellow-100',
+							UPCOMING: 'text-blue-900 dark:text-blue-100',
 							PAID: 'text-green-900 dark:text-green-100'
-						}[bill.status]
+						}[colorStatus]
 					}`}
 				>
 					{#if bill.account.currencyCode !== userState.user?.currencyCode}
@@ -161,9 +176,9 @@
 							{
 								OVERDUE: 'text-red-700 dark:text-red-300',
 								DUE: 'text-yellow-700 dark:text-yellow-300',
-								UPCOMING: 'text-yellow-700 dark:text-yellow-300',
+								UPCOMING: 'text-blue-700 dark:text-blue-300',
 								PAID: 'text-green-700 dark:text-green-300'
-							}[bill.status]
+							}[colorStatus]
 						}`}
 					>
 						≈ {userState.user?.currencyCode || 'USD'}
@@ -178,9 +193,9 @@
 						{
 							OVERDUE: 'text-red-700 dark:text-red-300',
 							DUE: 'text-yellow-700 dark:text-yellow-300',
-							UPCOMING: 'text-yellow-700 dark:text-yellow-300',
+							UPCOMING: 'text-blue-700 dark:text-blue-300',
 							PAID: 'text-green-700 dark:text-green-300'
-						}[bill.status]
+						}[colorStatus]
 					}`}
 				>
 					{$t(`bills.billFrequency.${bill.frequency}`)}

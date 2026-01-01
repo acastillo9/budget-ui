@@ -225,6 +225,7 @@
 		<BillList
 			bills={data.bills}
 			headless
+			{isCurrentMonth}
 			payBill={(e) => payBill(e)}
 			unpayBill={(e) => unpayBill(e)}
 			isPayingBill={isPaying}

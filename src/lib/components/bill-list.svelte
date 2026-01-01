@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
-	import { AlertTriangle, CheckCircle, Clock, Wallet } from '@lucide/svelte';
+	import { AlertTriangle, CalendarClock, CheckCircle, Clock, Wallet } from '@lucide/svelte';
 	import { t } from 'svelte-i18n';
 	import { BillStatus, type Bill } from '$lib/types/bill.types';
 	import Badge from './ui/badge/badge.svelte';
@@ -9,6 +9,7 @@
 	type Props = {
 		bills: Bill[];
 		headless?: boolean;
+		isCurrentMonth?: boolean;
 		isPayingBill?: string | undefined;
 		isUnpayingBill?: string | undefined;
 		payBill?: (bill: Bill) => void;
@@ -19,6 +20,7 @@
 	let {
 		bills,
 		headless = false,
+		isCurrentMonth = true,
 		isPayingBill = undefined,
 		isUnpayingBill = undefined,
 		payBill = () => {},
@@ -27,8 +29,10 @@
 		onDelete = () => {}
 	}: Props = $props();
 
-	let upcomingBills = $derived(
-		bills.filter((bill) => bill.status === BillStatus.UPCOMING || bill.status === BillStatus.DUE)
+	// For current month: show DUE and UPCOMING in "Due Soon"
+	// For other months: show DUE and UPCOMING in "Upcoming Bills"
+	let pendingBills = $derived(
+		bills.filter((bill) => bill.status === BillStatus.DUE || bill.status === BillStatus.UPCOMING)
 	);
 	let overdueBills = $derived(bills.filter((bill) => bill.status === BillStatus.OVERDUE));
 	let paidBills = $derived(bills.filter((bill) => bill.status === BillStatus.PAID));
@@ -69,6 +73,8 @@
 						{/each}
 					</div>
 				</div>
+				{#if isCurrentMonth}
+				<!-- Due Soon section for current month -->
 				<div class="space-y-3">
 					<div class="flex items-center gap-2">
 						<Clock class="h-5 w-5 text-yellow-600" />
@@ -76,13 +82,14 @@
 							{$t('bills.dueSoon')}
 						</h3>
 						<Badge variant="outline" class="border-yellow-300 text-yellow-700">
-							{upcomingBills.length}
+							{pendingBills.length}
 						</Badge>
 					</div>
 					<div class="grid gap-3">
-						{#each upcomingBills as bill (bill.id + bill.targetDate)}
+						{#each pendingBills as bill (bill.id + bill.targetDate)}
 							<BillItem
 								{bill}
+								{isCurrentMonth}
 								pay={(event: Bill) => payBill(event)}
 								isPaying={bill.id === isPayingBill}
 								onEdit={() => onEdit(bill)}
@@ -91,6 +98,32 @@
 						{/each}
 					</div>
 				</div>
+			{:else}
+				<!-- Upcoming Bills section for other months -->
+				<div class="space-y-3">
+					<div class="flex items-center gap-2">
+						<CalendarClock class="h-5 w-5 text-blue-600" />
+						<h3 class="text-lg font-semibold text-blue-700 dark:text-blue-300">
+							{$t('bills.upcomingBills')}
+						</h3>
+						<Badge variant="outline" class="border-blue-300 text-blue-700">
+							{pendingBills.length}
+						</Badge>
+					</div>
+					<div class="grid gap-3">
+						{#each pendingBills as bill (bill.id + bill.targetDate)}
+							<BillItem
+								{bill}
+								{isCurrentMonth}
+								pay={(event: Bill) => payBill(event)}
+								isPaying={bill.id === isPayingBill}
+								onEdit={() => onEdit(bill)}
+								onDelete={() => onDelete(bill)}
+							/>
+						{/each}
+					</div>
+				</div>
+			{/if}
 				<div class="space-y-3">
 					<div class="flex items-center gap-2">
 						<CheckCircle class="h-5 w-5 text-green-600" />

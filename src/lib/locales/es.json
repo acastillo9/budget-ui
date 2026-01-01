@@ -101,6 +101,7 @@
     "noBills": "Aún no tienes facturas. Crea tu primera factura para comenzar.",
     "overdueBills": "Facturas vencidas",
     "paidBills": "Facturas pagadas",
+    "upcomingBills": "Próximas facturas",
     "paidOn": "Pagada el {date}",
     "payNow": "Pagar ahora",
     "stepOf": "Paso {step} de {totalSteps}:",
