@@ -10,6 +10,7 @@
 	import CurrencyRatesCard from '$lib/components/currency-rates-card.svelte';
 	import { toast } from 'svelte-sonner';
 	import BalanceBreakdownCard from '$lib/components/balance-breakdown-card.svelte';
+	import UpcomingBillsCard from '$lib/components/upcoming-bills-card.svelte';
 	import type { AccountSummary } from '$lib/types/account.types';
 
 	let { data }: PageProps = $props();
@@ -140,12 +141,15 @@
 					/>
 				</div>
 			</div>
-			<div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+			<div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
 				<div>
 					<AccountList accounts={data.accounts} {rates} />
 				</div>
 				<div>
 					<TransactionList transactions={data.transactions} {rates} />
+				</div>
+				<div>
+					<UpcomingBillsCard bills={data.bills} />
 				</div>
 			</div>
 		</div>

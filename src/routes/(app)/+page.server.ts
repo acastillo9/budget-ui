@@ -87,6 +87,21 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
     setFlash({ type: 'error', message: $t('currencies.loadExchangeRatesError') }, cookies);
   }
 
+  // Load bills for the current month
+  let bills = [];
+  const currentDate = new Date();
+  const dateStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).toISOString().split('T')[0];
+  const dateEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).toISOString().split('T')[0];
+  try {
+    const response = await fetch(`${API_URL}/bills?dateStart=${dateStart}&dateEnd=${dateEnd}`);
+    if (!response.ok) {
+      throw new Error('Failed to load bills');
+    }
+    bills = await response.json();
+  } catch {
+    setFlash({ type: 'error', message: $t('bills.loadBillsError') }, cookies);
+  }
+
   return {
     addAccountForm: await superValidate(zod4(createAccountSchema)),
     createCategoryForm: await superValidate(zod4(createCategorySchema)),
@@ -98,6 +113,7 @@ export const load: PageServerLoad = async ({ locals, cookies, fetch }) => {
     transactionsSummary,
     accountsSummary,
     usdExchangeRates,
+    bills,
   }
 };
 

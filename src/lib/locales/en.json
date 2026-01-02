@@ -236,10 +236,14 @@
     "description": "Manage your accounts and track your spending",
     "netWorth": "Net Worth",
     "netWorthDescription": "Across {count} accounts • Converted to {currency}",
+    "noPendingBills": "All bills are paid! You're all caught up.",
     "title": "Dashboard",
     "totalExpenses": "Total Expenses",
     "totalIncome": "Total Income",
-    "totalTransactionsDescription": "This month • Converted to {currency}"
+    "totalTransactionsDescription": "This month • Converted to {currency}",
+    "upcomingBills": "Upcoming Bills",
+    "upcomingBillsDescription": "Bills due this month",
+    "viewAll": "View All"
   },
   "forgotPassword": {
     "description": "Enter your email to receive a password reset link.",
